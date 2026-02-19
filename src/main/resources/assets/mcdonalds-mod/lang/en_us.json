@@ -1,3 +1,6 @@
 {
-  "item.mcdonalds-mod.steel_ingot": "Steel Ingot"
+  "item.mcdonalds-mod.steel_ingot": "Steel Ingot",
+  "item.mcdonalds-mod.iridium_shard": "Iridium Shard",
+  "item.mcdonalds-mod.iridium": "Iridium",
+  "itemGroup.mcdonalds-mod.mcdonald_group": "McDonald's Mod"
 }

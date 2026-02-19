@@ -1,3 +1,6 @@
 {
-  "item.mcdonalds-mod.steel_ingot": "钢锭"
+  "item.mcdonalds-mod.steel_ingot": "钢锭",
+  "item.mcdonalds-mod.iridium_shard": "铱碎片",
+  "item.mcdonalds-mod.iridium": "铱",
+  "itemGroup.mcdonalds-mod.mcdonald_group": "麦当劳模组"
 }
