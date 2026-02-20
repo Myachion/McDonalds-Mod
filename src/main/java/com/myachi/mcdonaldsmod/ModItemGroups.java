@@ -19,6 +19,7 @@ public class ModItemGroups {
                 entries.add(ModItems.STEEL_INGOT);
                 entries.add(ModItems.IRIDIUM);
                 entries.add(ModItems.IRIDIUM_SHARD);
+                entries.add(ModBlocks.STEEL_BLOCK);
             })
             .build();
     public static void initializeModItemGroups () {

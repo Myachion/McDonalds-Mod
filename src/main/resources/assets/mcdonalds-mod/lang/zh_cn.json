@@ -2,5 +2,7 @@
   "item.mcdonalds-mod.steel_ingot": "钢锭",
   "item.mcdonalds-mod.iridium_shard": "铱碎片",
   "item.mcdonalds-mod.iridium": "铱",
-  "itemGroup.mcdonalds-mod.mcdonald_group": "麦当劳模组"
+  "itemGroup.mcdonalds-mod.mcdonald_group": "麦当劳模组",
+  "item.mcdonalds-mod.steel_ingot.tooltip": "其由铁锭在高炉中炼制",
+  "block.mcdonalds-mod.steel_block" : "钢块"
 }
