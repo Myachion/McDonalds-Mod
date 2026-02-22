@@ -2,7 +2,15 @@
   "item.mcdonalds-mod.steel_ingot": "Steel Ingot",
   "item.mcdonalds-mod.iridium_shard": "Iridium Shard",
   "item.mcdonalds-mod.iridium": "Iridium",
-  "itemGroup.mcdonalds-mod.mcdonald_group": "McDonald's Mod",
+  "item.mcdonalds-mod.cheese": "Cheese",
+  "item.mcdonalds-mod.tomato": "Tomato",
+  "item.mcdonalds-mod.cheese_hamburger": "Cheese Burger",
+  "item.mcdonalds-mod.salt": "Salt",
+  "item.mcdonalds-mod.onion": "Onion",
+
+  "block.mcdonalds-mod.steel_block" : "Steel Block",
+
   "item.mcdonalds-mod.steel_ingot.tooltip": "It is refined from iron ingots in a blast furnace",
-  "block.mcdonalds-mod.steel_block" : "Steel Block"
+  "itemGroup.mcdonalds-mod.mcdonald_group": "McDonald's Mod"
+
 }

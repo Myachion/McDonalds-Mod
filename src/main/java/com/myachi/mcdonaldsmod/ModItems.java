@@ -2,6 +2,9 @@ package com.myachi.mcdonaldsmod;
 
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.registry.FuelRegistryEvents;
+import net.minecraft.component.type.FoodComponent;
+import net.minecraft.component.type.FoodComponents;
 import net.minecraft.item.Item;
 
 
@@ -19,6 +22,14 @@ public class ModItems {
     public static final Item STEEL_INGOT = register("steel_ingot",Item::new,new Item.Settings());
     public static final Item IRIDIUM = register("iridium",Item::new,new Item.Settings());
     public static final Item IRIDIUM_SHARD = register("iridium_shard",Item::new,new Item.Settings());
+    public static final Item SALT = register("salt",Item::new,new Item.Settings());
+    public static final Item RAW_SALT = register("raw_salt",Item::new,new Item.Settings());
+    public static final Item SOYBEAN_OIL = register("soybean_oil",Item::new,new Item.Settings());
+
+    public static final Item CHEESE = register("cheese",Item::new, new Item.Settings().food(ModFoodComponent.CHEESE));
+    public static final Item TOMATO = register("tomato",Item::new, new Item.Settings().food(ModFoodComponent.TOMATO));
+    public static final Item ONION = register("onion",Item::new, new Item.Settings().food(ModFoodComponent.ONION));
+    public static final Item CHEESE_HAMBURGER = register("cheese_hamburger",Item::new, new Item.Settings().food(ModFoodComponent.CHEESE_HAMBURGER));
 
     private ModItems() {
     }
@@ -31,10 +42,9 @@ public class ModItems {
 /*    public static void registerToVanillaItemGroups() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content->{
             content.addAfter(Items.IRON_INGOT,STEEL_INGOT);
-            content.addAfter(Items.RAW_GOLD,IRIDIUM);
-            content.addAfter(Items.GOLD_NUGGET,IRIDIUM_SHARD);
         });
     }*/
+
 
     public static void itemTooltipInitializer(){
         ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, tooltipType, list) -> {
@@ -48,7 +58,7 @@ public class ModItems {
     public static void initializeMod() {
         //ModItems.registerToVanillaItemGroups();
         itemTooltipInitializer();
-        McDonaldsMod.LOGGER.info("Register TestItems!");
+        McDonaldsMod.LOGGER.info("Register ModItems!");
     }
 
 

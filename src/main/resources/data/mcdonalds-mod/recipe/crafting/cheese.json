@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:milk_bucket",
+    "minecraft:milk_bucket",
+    "minecraft:sugar",
+    "mcdonalds-mod:salt"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:cheese",
+    "count": 3
+  }
+}

@@ -25,6 +25,24 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.IRON)
     );
 
+    public static final Block SALT_ORE = register(
+            "salt_ore", Block::new ,
+            AbstractBlock.Settings.create()
+                    .requiresTool()
+                    .strength(3.0F, 3.0F)
+                    .sounds(BlockSoundGroup.STONE)
+    );
+
+    public static final Block DEEPSLATE_SALT_ORE = register(
+            "deepslate_salt_ore", Block::new ,
+            AbstractBlock.Settings.create()
+                    .requiresTool()
+                    .strength(4.5F, 6.0F)
+                    .sounds(BlockSoundGroup.DEEPSLATE)
+    );
+
+
+
     private static Block register(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
         final Identifier identifier = Identifier.of(McDonaldsMod.MOD_ID, path);
         final RegistryKey<Block> registryKey = RegistryKey.of(RegistryKeys.BLOCK, identifier);
