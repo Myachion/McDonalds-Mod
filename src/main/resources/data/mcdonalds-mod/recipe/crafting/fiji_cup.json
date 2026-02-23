@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TWW",
+    "R  ",
+    "TWW"
+  ],
+  "key": {
+    "W": "minecraft:resin_brick",
+    "R": "minecraft:creeper_head",
+    "T": "minecraft:green_dye"
+  },
+  "result": {
+    "id": "mcdonalds-mod:fiji_cup",
+    "count": 3
+  }
+}

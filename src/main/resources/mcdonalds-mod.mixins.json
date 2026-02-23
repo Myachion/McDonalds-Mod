@@ -3,7 +3,8 @@
 	"package": "com.myachi.mcdonaldsmod.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+        "VillagerEntityMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

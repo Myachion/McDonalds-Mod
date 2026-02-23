@@ -18,17 +18,80 @@ public class ModItemGroups {
             .entries((context,entries)-> {
                 entries.add(ModBlocks.SALT_ORE);
                 entries.add(ModBlocks.DEEPSLATE_SALT_ORE);
+                entries.add(ModItems.COAL_DUST);
+
                 entries.add(ModBlocks.STEEL_BLOCK);
                 entries.add(ModItems.RAW_SALT);
                 entries.add(ModItems.STEEL_INGOT);
+                entries.add(ModItems.STEEL_PLATE);
+                entries.add(ModItems.IRON_PLATE);
+                entries.add(ModItems.COPPER_PLATE);
+                entries.add(ModItems.COPPER_STRIPS);
+
                 entries.add(ModItems.IRIDIUM);
                 entries.add(ModItems.IRIDIUM_SHARD);
+                entries.add(ModItems.IRIDIUM_PLATE);
+                entries.add(ModItems.CIRCUIT_BOARD);
+
                 entries.add(ModItems.SALT);
                 entries.add(ModItems.SOYBEAN_OIL);
                 entries.add(ModItems.TOMATO);
                 entries.add(ModItems.ONION);
+                entries.add(ModItems.CORN);
+                entries.add(ModItems.BLUEBERRY);
+                entries.add(ModItems.TOMATO_SEEDS);
+                entries.add(ModItems.ONION_SEEDS);
+                entries.add(ModItems.CORN_SEEDS);
+                entries.add(ModItems.BLUEBERRY_BUSH);
+
                 entries.add(ModItems.CHEESE);
                 entries.add(ModItems.CHEESE_HAMBURGER);
+                entries.add(ModItems.CHICKEN_BURGER);
+
+
+                entries.add(ModItems.CHEESE_CAKE);
+                entries.add(ModItems.CHOCOLATE_CAKE);
+                entries.add(ModItems.APPLE_PIE);
+
+                entries.add(ModItems.COCOA_POWDER);
+                entries.add(ModItems.CHOCOLATE);
+                entries.add(ModItems.MILK_CHOCOLATE);
+                entries.add(ModItems.CREAM);
+                entries.add(ModItems.BUTTER);
+                entries.add(ModItems.APPLE_SANDWICH_COOKIE);
+
+                entries.add(ModItems.FRIED_FISH);
+                entries.add(ModItems.FRENCH_FRIES);
+                entries.add(ModItems.SAUSAGE);
+                entries.add(ModItems.COOKED_SAUSAGE);
+                entries.add(ModItems.COOKED_EGG);
+                entries.add(ModItems.COOKED_CORN);
+
+                entries.add(ModItems.SALAD);
+                entries.add(ModItems.CREAM_OF_MUSHROOM_SOUP);
+                entries.add(ModItems.BEEF_STEW);
+                entries.add(ModItems.PORRIDGE);
+
+                entries.add(ModItems.CEREAL);
+                entries.add(ModItems.VEGETABLE_SOUP);
+                entries.add(ModItems.CREAM_OF_VEGETABLE_SOUP);
+                entries.add(ModItems.PUMPKIN_SOUP);
+
+
+                entries.add(ModItems.HOT_DOG);
+                entries.add(ModItems.DOUGH);
+                entries.add(ModItems.SUGARY_DOUGH);
+
+
+                entries.add(ModItems.SOYBEANS);
+                entries.add(ModItems.BAKED_BEANS);
+                entries.add(ModItems.TOFU);
+                entries.add(ModItems.SOYBEAN_MILK);
+                entries.add(ModItems.SOYBEAN_MEAL);
+                entries.add(ModItems.POTATO_STRIPS);
+                entries.add(ModItems.TEA_LEAVES);
+                entries.add(ModItems.FLOUR);
+
             })
             .build();
 

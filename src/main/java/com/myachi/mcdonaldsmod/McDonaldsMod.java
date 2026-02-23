@@ -22,7 +22,9 @@ public class McDonaldsMod implements ModInitializer {
         ModItemGroups.initializeModItemGroups();
         ModBlocks.initializeModBlocks();
         ModFuels.initializeModFuels();
+        ModSounds.initializeModSounds();
 		LOGGER.info("Hello Fabric world!");
+
 
 	}
 }

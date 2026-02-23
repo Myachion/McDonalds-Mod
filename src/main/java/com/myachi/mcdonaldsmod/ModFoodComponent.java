@@ -8,4 +8,5 @@ public class ModFoodComponent {
     public static final FoodComponent TOMATO = new FoodComponent.Builder().nutrition(3).saturationModifier(0.4F).build();
     public static final FoodComponent ONION = new FoodComponent.Builder().nutrition(3).saturationModifier(0.3F).build();
     public static final FoodComponent CHEESE_HAMBURGER = new FoodComponent.Builder().nutrition(10).saturationModifier(0.8F).build();
+    public static final FoodComponent FULL_FIJI_CUP = new FoodComponent.Builder().nutrition(2).saturationModifier(0.1F).alwaysEdible().build();
 }

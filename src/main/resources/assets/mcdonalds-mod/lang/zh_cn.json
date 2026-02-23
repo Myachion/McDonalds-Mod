@@ -7,7 +7,11 @@
   "item.mcdonalds-mod.cheese_hamburger": "牛肉汉堡",
   "item.mcdonalds-mod.salt": "食盐",
   "item.mcdonalds-mod.onion": "洋葱",
+  "item.mcdonalds-mod.fiji_cup": "斐济杯",
+  "item.mcdonalds-mod.full_fiji_cup": "满的斐济杯",
+
   "itemGroup.mcdonalds-mod.mcdonald_group": "麦当劳模组",
   "item.mcdonalds-mod.steel_ingot.tooltip": "其由铁锭在高炉中炼制",
+
   "block.mcdonalds-mod.steel_block" : "钢块"
 }

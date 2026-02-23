@@ -1,0 +1,10 @@
+{
+  "villager_moan": {
+    "subtitle": "subtitles.mcdonalds-mod.villager_moan",
+    "sounds": ["mcdonalds-mod:villager_moan"]
+  },
+  "engine": {
+    "subtitle": "sound.mcdonalds-mod.engine",
+    "sounds": ["mcdonalds-mod:engine"]
+  }
+}
