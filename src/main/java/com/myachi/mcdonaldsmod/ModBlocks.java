@@ -41,6 +41,14 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.DEEPSLATE)
     );
 
+    public static final Block MACHINE_SHELL = register(
+            "machine_shell", Block::new ,
+            AbstractBlock.Settings.create()
+                    .requiresTool()
+                    .strength(3.0F, 3.0F)
+                    .sounds(BlockSoundGroup.IRON)
+    );
+
 
 
     private static Block register(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {

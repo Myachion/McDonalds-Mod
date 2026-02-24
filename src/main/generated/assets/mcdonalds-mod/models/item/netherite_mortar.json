@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "mcdonalds-mod:item/cream_of_vegetable_soup"
+    "layer0": "mcdonalds-mod:item/netherite_mortar"
   }
 }

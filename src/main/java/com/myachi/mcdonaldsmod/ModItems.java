@@ -1,7 +1,6 @@
 package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.specialItem.FIJI_CUP;
-import com.myachi.mcdonaldsmod.specialItem.FULL_FIJI_CUP;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.item.Item;
 
@@ -84,14 +83,20 @@ public class ModItems {
     public static final Item CREAM_OF_VEGETABLE_SOUP = register("cream_of_vegetable_soup",Item::new, new Item.Settings());
     public static final Item PUMPKIN_SOUP = register("pumpkin_soup",Item::new, new Item.Settings());
 
+    public static final Item CHUM = register("chum",Item::new, new Item.Settings());
+    public static final Item CHUM_ON_STICK = register("chum_on_stick",Item::new, new Item.Settings());
+
+    public static final Item STONE_MORTAR = register("stone_mortar",Item::new, new Item.Settings());
+    public static final Item STEEL_MORTAR = register("steel_mortar",Item::new, new Item.Settings());
+    public static final Item NETHERITE_MORTAR = register("netherite_mortar",Item::new, new Item.Settings());
 
 
     public static final Item FIJI_CUP = register("fiji_cup",FIJI_CUP::new,new FIJI_CUP.Settings().rarity(Rarity.EPIC));
-    public static final Item FULL_FIJI_CUP = register("full_fiji_cup",FULL_FIJI_CUP::new,new FULL_FIJI_CUP.Settings()
+    public static final Item FULL_FIJI_CUP = register("full_fiji_cup",Item::new,new Item.Settings()
             .rarity(Rarity.EPIC)
             .recipeRemainder(FIJI_CUP)
+            .useRemainder(FIJI_CUP)
             .food(ModFoodComponent.FULL_FIJI_CUP,ModConsumableComponents.FULL_FIJI_CUP));
-
 
     private ModItems() {
     }

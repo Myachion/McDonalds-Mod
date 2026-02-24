@@ -91,6 +91,16 @@ public class ModItemGroups {
                 entries.add(ModItems.POTATO_STRIPS);
                 entries.add(ModItems.TEA_LEAVES);
                 entries.add(ModItems.FLOUR);
+                entries.add(ModItems.CHUM);
+                entries.add(ModItems.CHUM_ON_STICK);
+                entries.add(ModItems.STONE_MORTAR);
+                entries.add(ModItems.STEEL_MORTAR);
+                entries.add(ModItems.NETHERITE_MORTAR);
+                entries.add(ModItems.FIJI_CUP);
+                entries.add(ModItems.FULL_FIJI_CUP);
+
+
+
 
             })
             .build();

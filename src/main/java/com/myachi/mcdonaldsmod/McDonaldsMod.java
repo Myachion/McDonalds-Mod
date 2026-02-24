@@ -22,6 +22,8 @@ public class McDonaldsMod implements ModInitializer {
         ModItemGroups.initializeModItemGroups();
         ModBlocks.initializeModBlocks();
         ModFuels.initializeModFuels();
+        ModBlockTags.initializeModBlockTags();
+        ModItemTags.initializeModItemTags();
         ModSounds.initializeModSounds();
 		LOGGER.info("Hello Fabric world!");
 
