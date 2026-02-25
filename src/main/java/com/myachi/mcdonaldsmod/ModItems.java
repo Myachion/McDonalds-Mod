@@ -29,8 +29,9 @@ public class ModItems {
     public static final Item IRIDIUM_PLATE = register("iridium_plate",Item::new,new Item.Settings());
     public static final Item CIRCUIT_BOARD = register("circuit_board",Item::new,new Item.Settings());
 
-    public static final Item CHEESE_CAKE = register("cheese_cake",Item::new,new Item.Settings());
-    public static final Item CHOCOLATE_CAKE = register("chocolate_cake",Item::new,new Item.Settings());
+//    public static final Item CHEESE_CAKE = register("cheese_cake",Item::new,new Item.Settings());
+//    public static final Item CHOCOLATE_CAKE = register("chocolate_cake",Item::new,new Item.Settings());
+
     public static final Item COCOA_POWDER = register("cocoa_powder",Item::new,new Item.Settings());
     public static final Item BUTTER = register("butter",Item::new,new Item.Settings());
     public static final Item CHOCOLATE = register("chocolate",Item::new,new Item.Settings());

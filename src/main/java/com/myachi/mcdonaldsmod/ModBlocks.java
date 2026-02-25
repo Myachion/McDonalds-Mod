@@ -1,10 +1,10 @@
 package com.myachi.mcdonaldsmod;
 
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
+import com.myachi.mcdonaldsmod.specialItem.CheeseCakeBlock;
+import com.myachi.mcdonaldsmod.specialItem.ChocolateCakeBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -47,6 +47,18 @@ public class ModBlocks {
                     .requiresTool()
                     .strength(3.0F, 3.0F)
                     .sounds(BlockSoundGroup.IRON)
+    );
+    public static final Block CHEESE_CAKE = register(
+            "cheese_cake", CheeseCakeBlock::new,
+            AbstractBlock.Settings.create().solid()
+                    .strength(0.5F).sounds(BlockSoundGroup.WOOL)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+    );
+    public static final Block CHOCOLATE_CAKE = register(
+            "chocolate_cake", ChocolateCakeBlock::new,
+            AbstractBlock.Settings.create().solid()
+                    .strength(0.5F).sounds(BlockSoundGroup.WOOL)
+                    .pistonBehavior(PistonBehavior.DESTROY)
     );
 
 

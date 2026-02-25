@@ -18,9 +18,10 @@ public class ModItemGroups {
             .entries((context,entries)-> {
                 entries.add(ModBlocks.SALT_ORE);
                 entries.add(ModBlocks.DEEPSLATE_SALT_ORE);
-                entries.add(ModItems.COAL_DUST);
-
                 entries.add(ModBlocks.STEEL_BLOCK);
+                entries.add(ModBlocks.MACHINE_SHELL);
+
+                entries.add(ModItems.COAL_DUST);
                 entries.add(ModItems.RAW_SALT);
                 entries.add(ModItems.STEEL_INGOT);
                 entries.add(ModItems.STEEL_PLATE);
@@ -49,8 +50,8 @@ public class ModItemGroups {
                 entries.add(ModItems.CHICKEN_BURGER);
 
 
-                entries.add(ModItems.CHEESE_CAKE);
-                entries.add(ModItems.CHOCOLATE_CAKE);
+                entries.add(ModBlocks.CHEESE_CAKE);
+                entries.add(ModBlocks.CHOCOLATE_CAKE);
                 entries.add(ModItems.APPLE_PIE);
 
                 entries.add(ModItems.COCOA_POWDER);
