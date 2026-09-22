@@ -1,17 +1,20 @@
 {
-  "item.mcdonalds-mod.steel_ingot": "钢锭",
-  "item.mcdonalds-mod.iridium_shard": "铱碎片",
-  "item.mcdonalds-mod.iridium": "铱",
-  "item.mcdonalds-mod.cheese": "吉士汉堡",
-  "item.mcdonalds-mod.tomato": "番茄",
-  "item.mcdonalds-mod.cheese_hamburger": "牛肉汉堡",
-  "item.mcdonalds-mod.salt": "食盐",
-  "item.mcdonalds-mod.onion": "洋葱",
-  "item.mcdonalds-mod.fiji_cup": "斐济杯",
-  "item.mcdonalds-mod.full_fiji_cup": "满的斐济杯",
-
-  "itemGroup.mcdonalds-mod.mcdonald_group": "麦当劳模组",
-  "item.mcdonalds-mod.steel_ingot.tooltip": "其由铁锭在高炉中炼制",
-
-  "block.mcdonalds-mod.steel_block" : "钢块"
+	"item.mcdonalds-mod.steel_ingot": "钢锭",
+	"item.mcdonalds-mod.iridium_shard": "铱碎片",
+	"item.mcdonalds-mod.iridium": "铱",
+	"item.mcdonalds-mod.cheese": "吉士汉堡",
+	"item.mcdonalds-mod.tomato": "番茄",
+	"item.mcdonalds-mod.cheese_hamburger": "牛肉汉堡",
+	"item.mcdonalds-mod.salt": "食盐",
+	"item.mcdonalds-mod.onion": "洋葱",
+	"item.mcdonalds-mod.fiji_cup": "斐济杯",
+	"item.mcdonalds-mod.full_fiji_cup": "满的斐济杯",
+	"itemGroup.mcdonalds-mod.mcdonald_group": "麦当劳模组",
+	"item.mcdonalds-mod.steel_ingot.tooltip": "其由铁锭在高炉中炼制",
+	"block.mcdonalds-mod.steel_block": "钢块",
+	"effect.mcdonalds-mod.flight": "飞行",
+	"gamerule.mcdonalds-mod.beacon_flight": "信标飞行",
+	"gamerule.mcdonalds-mod.beacon_flight.description": "满级 16 层信标是否提供创造模式飞行。",
+	"mcdonalds-mod.beacon.level_requirement": " | 需要 %s 级",
+	"block.minecraft.beacon.tertiary": "三级效果"
 }

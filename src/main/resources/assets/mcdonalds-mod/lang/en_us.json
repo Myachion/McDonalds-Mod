@@ -1,18 +1,20 @@
 {
-  "item.mcdonalds-mod.steel_ingot": "Steel Ingot",
-  "item.mcdonalds-mod.iridium_shard": "Iridium Shard",
-  "item.mcdonalds-mod.iridium": "Iridium",
-  "item.mcdonalds-mod.cheese": "Cheese",
-  "item.mcdonalds-mod.tomato": "Tomato",
-  "item.mcdonalds-mod.cheese_hamburger": "Cheese Burger",
-  "item.mcdonalds-mod.salt": "Salt",
-  "item.mcdonalds-mod.onion": "Onion",
-  "item.mcdonalds-mod.fiji_cup": "Fiji Cup",
-  "item.mcdonalds-mod.full_fiji_cup": "Full Fiji Cup",
-
-  "block.mcdonalds-mod.steel_block" : "Steel Block",
-
-  "item.mcdonalds-mod.steel_ingot.tooltip": "It is refined from iron ingots in a blast furnace",
-  "itemGroup.mcdonalds-mod.mcdonald_group": "McDonald's Mod"
-
+	"item.mcdonalds-mod.steel_ingot": "Steel Ingot",
+	"item.mcdonalds-mod.iridium_shard": "Iridium Shard",
+	"item.mcdonalds-mod.iridium": "Iridium",
+	"item.mcdonalds-mod.cheese": "Cheese",
+	"item.mcdonalds-mod.tomato": "Tomato",
+	"item.mcdonalds-mod.cheese_hamburger": "Cheese Burger",
+	"item.mcdonalds-mod.salt": "Salt",
+	"item.mcdonalds-mod.onion": "Onion",
+	"item.mcdonalds-mod.fiji_cup": "Fiji Cup",
+	"item.mcdonalds-mod.full_fiji_cup": "Full Fiji Cup",
+	"block.mcdonalds-mod.steel_block": "Steel Block",
+	"item.mcdonalds-mod.steel_ingot.tooltip": "It is refined from iron ingots in a blast furnace",
+	"itemGroup.mcdonalds-mod.mcdonald_group": "McDonald's Mod",
+	"effect.mcdonalds-mod.flight": "Flight",
+	"gamerule.mcdonalds-mod.beacon_flight": "Beacon flight",
+	"gamerule.mcdonalds-mod.beacon_flight.description": "Whether a full 16 level beacon grants creative flight.",
+	"mcdonalds-mod.beacon.level_requirement": " | Level %s",
+	"block.minecraft.beacon.tertiary": "Tertiary Power"
 }

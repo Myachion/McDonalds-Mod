@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:dandelion",
+    "minecraft:dandelion",
+    "minecraft:wheat_seeds"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:salad",
+    "count": 1
+  }
+}

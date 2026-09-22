@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "#mcdonalds-mod:mushroom",
+    "mcdonalds-mod:cream"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:cream_of_mushroom_soup",
+    "count": 1
+  }
+}

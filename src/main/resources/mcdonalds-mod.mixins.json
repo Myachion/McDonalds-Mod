@@ -4,12 +4,23 @@
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"ExampleMixin",
-        "VillagerEntityMixin"
+		"VillagerEntityMixin",
+		"RepairItemRecipeMixin",
+		"BeaconBlockEntityMixin",
+		"BeaconScreenHandlerMixin",
+		"ServerPlayerEntityMixin",
+		"EnchantmentHelperMixin",
+		"ApplyBonusLootFunctionMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
 	},
 	"overwrites": {
 		"requireAnnotations": true
-	}
+	},
+	"client": [
+		"BeaconScreenMixin",
+		"BeaconEffectButtonMixin",
+		"StatusEffectsDisplayMixin"
+	]
 }

@@ -21,5 +21,15 @@ public class ModConsumableComponents {
                     )
             )
             .build();
+    public static final ConsumableComponent CHUM = ConsumableComponents.food()
+            .consumeEffect(
+                    new ApplyEffectsConsumeEffect(
+                            List.of(
+                                    new StatusEffectInstance(StatusEffects.POISON, 300, 3),
+                                    new StatusEffectInstance(StatusEffects.NAUSEA, 800, 0)
+                            )
+                    )
+            )
+            .build();
 
 }

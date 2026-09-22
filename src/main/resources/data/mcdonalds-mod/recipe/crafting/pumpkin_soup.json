@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:pumpkin",
+    "mcdonalds-mod:salt"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:pumpkin_soup",
+    "count": 1
+  }
+}

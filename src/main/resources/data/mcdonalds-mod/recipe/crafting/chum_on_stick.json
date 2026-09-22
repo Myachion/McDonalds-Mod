@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "mcdonalds-mod:chum",
+    "minecraft:stick"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mcdonalds-mod:chum_on_stick"
+  }
+}

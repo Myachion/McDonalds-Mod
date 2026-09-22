@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AD ",
+    "BD ",
+    "C  "
+  ],
+  "key": {
+    "A": "minecraft:beef",
+    "B": "minecraft:porkchop",
+    "C": "minecraft:chicken",
+    "D": "mcdonalds-mod:salt"
+  },
+  "result": {
+    "id": "mcdonalds-mod:sausage",
+    "count": 4
+  }
+}

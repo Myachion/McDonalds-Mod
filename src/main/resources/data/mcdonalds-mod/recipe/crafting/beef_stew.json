@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "#mcdonalds-mod:mushroom",
+    "minecraft:potato",
+    "minecraft:cooked_beef"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:beef_stew",
+    "count": 1
+  }
+}

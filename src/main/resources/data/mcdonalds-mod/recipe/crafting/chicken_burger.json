@@ -3,12 +3,12 @@
   "ingredients": [
     "minecraft:bread",
     "mcdonalds-mod:tomato",
-    "minecraft:cooked_beef",
+    "minecraft:cooked_chicken",
     "mcdonalds-mod:cheese",
     "mcdonalds-mod:onion"
   ],
   "result": {
-    "id": "mcdonalds-mod:cheese_hamburger",
+    "id": "mcdonalds-mod:chicken_burger",
     "count": 2
   }
 }

@@ -21,9 +21,9 @@
 		"fabric-datagen": [
 			"com.myachi.mcdonaldsmod.McDonaldsModDataGenerator"
 		],
-        "client" : [
-          "com.myachi.mcdonaldsmod.McDonaldsModClient"
-        ]
+		"client": [
+			"com.myachi.mcdonaldsmod.McDonaldsModClient"
+		]
 	},
 	"mixins": [
 		"mcdonalds-mod.mixins.json"
@@ -33,5 +33,6 @@
 		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*"
-	}
+	},
+	"accessWidener": "mcdonalds-mod.accesswidener"
 }

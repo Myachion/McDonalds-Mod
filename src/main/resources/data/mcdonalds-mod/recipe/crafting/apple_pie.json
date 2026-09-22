@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:apple",
+    "minecraft:apple",
+    "mcdonalds-mod:sugary_dough"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:apple_pie",
+    "count": 1
+  }
+}

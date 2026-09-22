@@ -1,0 +1,6 @@
+accessWidener v2 named
+
+# Needed to subclass the beacon effect button in order to add the level III button.
+extendable class net/minecraft/client/gui/screen/ingame/BeaconScreen$EffectButtonWidget
+# Needed to move the beacon payment slot off screen, which removes the item cost.
+accessible class net/minecraft/screen/BeaconScreenHandler$PaymentSlot

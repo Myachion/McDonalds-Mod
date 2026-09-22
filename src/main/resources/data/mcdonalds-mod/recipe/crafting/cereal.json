@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:wheat_seeds",
+    "minecraft:wheat",
+    "minecraft:milk_bucket"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:cereal",
+    "count": 1
+  }
+}

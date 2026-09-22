@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:water_bucket",
+    "mcdonalds-mod:flour"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:dough",
+    "count": 1
+  }
+}

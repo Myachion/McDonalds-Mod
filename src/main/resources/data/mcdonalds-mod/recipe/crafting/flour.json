@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#mcdonalds-mod:mortar",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mcdonalds-mod:flour"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "   ",
+    "   "
+  ],
+  "key": {
+    "B": "minecraft:apple",
+    "A": "mcdonalds-mod:sugary_dough"
+  },
+  "result": {
+    "id": "mcdonalds-mod:apple_sandwich_cookie",
+    "count": 8
+  }
+}

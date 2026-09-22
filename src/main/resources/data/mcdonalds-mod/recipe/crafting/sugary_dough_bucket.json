@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:water_bucket",
+    "mcdonalds-mod:flour",
+    "mcdonalds-mod:butter",
+    "minecraft:sugar",
+    "#minecraft:eggs"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:sugary_dough",
+    "count": 2
+  }
+}

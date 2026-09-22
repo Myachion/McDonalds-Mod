@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 
 public class ModItemTags {
 
-
+    public static final TagKey<Item> MORTAR = of("mortar");
 
     private static TagKey<Item> of(String id) {
         return TagKey.of(RegistryKeys.ITEM, Identifier.of(McDonaldsMod.MOD_ID,id));

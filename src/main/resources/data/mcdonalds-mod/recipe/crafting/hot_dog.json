@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bread",
+    "mcdonalds-mod:cooked_sausage",
+    "mcdonalds-mod:tomato"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:hot_dog",
+    "count": 1
+  }
+}

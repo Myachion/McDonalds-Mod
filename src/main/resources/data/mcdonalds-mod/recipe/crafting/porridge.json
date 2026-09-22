@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:wheat_seeds",
+    "minecraft:wheat_seeds",
+    "mcdonalds-mod:blueberry"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:porridge",
+    "count": 1
+  }
+}

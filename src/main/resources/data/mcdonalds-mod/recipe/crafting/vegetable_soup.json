@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:bowl",
+    "minecraft:potato",
+    "minecraft:carrot",
+    "mcdonalds-mod:onion",
+    "mcdonalds-mod:tomato"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:vegetable_soup",
+    "count": 1
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "mcdonalds-mod:cocoa_powder",
+    "mcdonalds-mod:cocoa_powder",
+    "minecraft:sugar",
+    "mcdonalds-mod:butter"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:chocolate",
+    "count": 3
+  }
+}

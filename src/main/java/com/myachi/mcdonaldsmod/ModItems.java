@@ -1,7 +1,9 @@
 package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.specialItem.FIJI_CUP;
+import com.myachi.mcdonaldsmod.specialItem.Mortar;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.minecraft.item.Item;
 
 
@@ -30,63 +32,66 @@ public class ModItems {
     public static final Item CIRCUIT_BOARD = register("circuit_board",Item::new,new Item.Settings());
 
     public static final Item COCOA_POWDER = register("cocoa_powder",Item::new,new Item.Settings());
-    public static final Item BUTTER = register("butter",Item::new,new Item.Settings());
-    public static final Item CHOCOLATE = register("chocolate",Item::new,new Item.Settings());
-    public static final Item FRIED_FISH = register("fried_fish",Item::new,new Item.Settings());
-    public static final Item MILK_CHOCOLATE = register("milk_chocolate",Item::new,new Item.Settings());
-    public static final Item SAUSAGE = register("sausage",Item::new,new Item.Settings());
-    public static final Item COOKED_SAUSAGE = register("cooked_sausage",Item::new,new Item.Settings());
-    public static final Item FRENCH_FRIES = register("french_fries",Item::new,new Item.Settings());
+    public static final Item BUTTER = register("butter",Item::new,new Item.Settings().food(ModFoodComponent.BUTTER));
+    public static final Item CHOCOLATE = register("chocolate",Item::new,new Item.Settings().food(ModFoodComponent.CHOCOLATE));
+    public static final Item FRIED_FISH = register("fried_fish",Item::new,new Item.Settings().food(ModFoodComponent.FRIED_FISH));
+    public static final Item MILK_CHOCOLATE = register("milk_chocolate",Item::new,new Item.Settings().food(ModFoodComponent.MILK_CHOCOLATE));
+    public static final Item SAUSAGE = register("sausage",Item::new,new Item.Settings().food(ModFoodComponent.SAUSAGE));
+    public static final Item COOKED_SAUSAGE = register("cooked_sausage",Item::new,new Item.Settings().food(ModFoodComponent.COOKED_SAUSAGE));
+    public static final Item FRENCH_FRIES = register("french_fries",Item::new,new Item.Settings().food(ModFoodComponent.FRENCH_FRIES));
 
-    public static final Item COOKED_EGG = register("cooked_egg",Item::new,new Item.Settings());
-    public static final Item SALAD = register("salad",Item::new,new Item.Settings());
-    public static final Item CREAM_OF_MUSHROOM_SOUP = register("cream_of_mushroom_soup",Item::new,new Item.Settings());
-    public static final Item BEEF_STEW = register("beef_stew",Item::new,new Item.Settings());
-    public static final Item PORRIDGE = register("porridge",Item::new,new Item.Settings());
+    public static final Item COOKED_EGG = register("cooked_egg",Item::new,new Item.Settings().food(ModFoodComponent.COOKED_EGG));
+    public static final Item SALAD = register("salad",Item::new,new Item.Settings().food(ModFoodComponent.SALAD).useRemainder(Items.BOWL).maxCount(8));
+    public static final Item CREAM_OF_MUSHROOM_SOUP = register("cream_of_mushroom_soup",Item::new,new Item.Settings().food(ModFoodComponent.CREAM_OF_MUSHROOM_SOUP).useRemainder(Items.BOWL).maxCount(8));
+    public static final Item BEEF_STEW = register("beef_stew",Item::new,new Item.Settings().food(ModFoodComponent.BEEF_STEW).useRemainder(Items.BOWL).maxCount(8));
+    public static final Item PORRIDGE = register("porridge",Item::new,new Item.Settings().food(ModFoodComponent.PORRIDGE).useRemainder(Items.BOWL).maxCount(8));
 
-    public static final Item TOFU = register("tofu",Item::new,new Item.Settings());
-    public static final Item BAKED_BEANS = register("baked_beans",Item::new,new Item.Settings());
-    public static final Item HOT_DOG = register("hot_dog",Item::new,new Item.Settings());
+    public static final Item TOFU = register("tofu",Item::new,new Item.Settings().food(ModFoodComponent.TOFU));
+    public static final Item BAKED_BEANS = register("baked_beans",Item::new,new Item.Settings().food(ModFoodComponent.BAKED_BEANS));
+    public static final Item HOT_DOG = register("hot_dog",Item::new,new Item.Settings().food(ModFoodComponent.HOT_DOG));
 
     public static final Item CHEESE = register("cheese",Item::new, new Item.Settings().food(ModFoodComponent.CHEESE));
     public static final Item TOMATO = register("tomato",Item::new, new Item.Settings().food(ModFoodComponent.TOMATO));
     public static final Item ONION = register("onion",Item::new, new Item.Settings().food(ModFoodComponent.ONION));
     public static final Item CHEESE_HAMBURGER = register("cheese_hamburger",Item::new, new Item.Settings().food(ModFoodComponent.CHEESE_HAMBURGER));
-    public static final Item CHICKEN_BURGER = register("chicken_burger",Item::new, new Item.Settings());
+    public static final Item CHICKEN_BURGER = register("chicken_burger",Item::new, new Item.Settings().food(ModFoodComponent.CHICKEN_BURGER));
 
     public static final Item FLOUR = register("flour",Item::new, new Item.Settings());
     public static final Item TOMATO_SEEDS = register("tomato_seeds",Item::new, new Item.Settings());
     public static final Item ONION_SEEDS = register("onion_seeds",Item::new, new Item.Settings());
 
     public static final Item TEA_LEAVES = register("tea_leaves",Item::new, new Item.Settings());
-    public static final Item CREAM = register("cream",Item::new, new Item.Settings());
-    public static final Item POTATO_STRIPS = register("potato_strips",Item::new, new Item.Settings());
+    public static final Item CREAM = register("cream",Item::new, new Item.Settings().food(ModFoodComponent.CREAM));
+    public static final Item POTATO_STRIPS = register("potato_strips",Item::new, new Item.Settings().food(ModFoodComponent.POTATO_STRIPS));
     public static final Item SOYBEANS = register("soybeans",Item::new, new Item.Settings());
     public static final Item SOYBEAN_OIL = register("soybean_oil",Item::new,new Item.Settings());
-    public static final Item SOYBEAN_MILK = register("soybean_milk",Item::new, new Item.Settings());
-    public static final Item SOYBEAN_MEAL = register("soybean_meal",Item::new, new Item.Settings());
+    public static final Item SOYBEAN_MILK = register("soybean_milk",Item::new, new Item.Settings().food(ModFoodComponent.SOYBEANS_MILK));
+    public static final Item SOYBEAN_MEAL = register("soybean_meal",Item::new, new Item.Settings().food(ModFoodComponent.SOYBEAN_MEAL));
 
-    public static final Item APPLE_PIE = register("apple_pie",Item::new, new Item.Settings());
-    public static final Item APPLE_SANDWICH_COOKIE = register("apple_sandwich_cookie",Item::new, new Item.Settings());
-    public static final Item BLUEBERRY = register("blueberry",Item::new, new Item.Settings());
+    public static final Item APPLE_PIE = register("apple_pie",Item::new, new Item.Settings().food(ModFoodComponent.APPLE_PIE));
+    public static final Item APPLE_SANDWICH_COOKIE = register("apple_sandwich_cookie",Item::new, new Item.Settings().food(ModFoodComponent.APPLE_SANDWICH_COOKIE));
+    public static final Item BLUEBERRY = register("blueberry",Item::new, new Item.Settings().food(ModFoodComponent.BLUEBERRY));
     public static final Item BLUEBERRY_BUSH = register("blueberry_bush",Item::new, new Item.Settings());
 
-    public static final Item CORN = register("corn",Item::new, new Item.Settings());
+    public static final Item CORN = register("corn",Item::new, new Item.Settings().food(ModFoodComponent.CORN));
     public static final Item CORN_SEEDS = register("corn_seeds",Item::new, new Item.Settings());
-    public static final Item COOKED_CORN = register("cooked_corn",Item::new, new Item.Settings());
+    public static final Item COOKED_CORN = register("cooked_corn",Item::new, new Item.Settings().food(ModFoodComponent.COOKED_CORN));
     public static final Item DOUGH = register("dough",Item::new, new Item.Settings());
     public static final Item SUGARY_DOUGH = register("sugary_dough",Item::new, new Item.Settings());
-    public static final Item CEREAL = register("cereal",Item::new, new Item.Settings());
-    public static final Item VEGETABLE_SOUP = register("vegetable_soup",Item::new, new Item.Settings());
-    public static final Item CREAM_OF_VEGETABLE_SOUP = register("cream_of_vegetable_soup",Item::new, new Item.Settings());
-    public static final Item PUMPKIN_SOUP = register("pumpkin_soup",Item::new, new Item.Settings());
+    public static final Item CEREAL = register("cereal",Item::new, new Item.Settings().food(ModFoodComponent.CEREAL).useRemainder(Items.BOWL).maxCount(8));
+    public static final Item VEGETABLE_SOUP = register("vegetable_soup",Item::new, new Item.Settings().food(ModFoodComponent.VEGETABLE_SOUP).useRemainder(Items.BOWL).maxCount(8));
+    public static final Item CREAM_OF_VEGETABLE_SOUP = register("cream_of_vegetable_soup",Item::new, new Item.Settings().food(ModFoodComponent.CREAM_OF_VEGETABLE_SOUP).useRemainder(Items.BOWL).maxCount(8));
+    public static final Item PUMPKIN_SOUP = register("pumpkin_soup",Item::new, new Item.Settings().food(ModFoodComponent.PUMPKIN_SOUP).useRemainder(Items.BOWL).maxCount(8));
 
-    public static final Item CHUM = register("chum",Item::new, new Item.Settings());
-    public static final Item CHUM_ON_STICK = register("chum_on_stick",Item::new, new Item.Settings());
+    public static final Item CHUM = register("chum",Item::new, new Item.Settings().food(ModFoodComponent.CHUM,ModConsumableComponents.CHUM));
+    public static final Item CHUM_ON_STICK = register("chum_on_stick",Item::new, new Item.Settings().food(ModFoodComponent.CHUM_ON_STICK,ModConsumableComponents.CHUM).useRemainder(Items.STICK));
 
-    public static final Item STONE_MORTAR = register("stone_mortar",Item::new, new Item.Settings());
-    public static final Item STEEL_MORTAR = register("steel_mortar",Item::new, new Item.Settings());
-    public static final Item NETHERITE_MORTAR = register("netherite_mortar",Item::new, new Item.Settings());
+    public static final Item STONE_MORTAR = register("stone_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(197));
+    public static final Item STEEL_MORTAR = register("steel_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(563));
+    public static final Item NETHERITE_MORTAR = register("netherite_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(2267));
+
+
+
 
 
     public static final Item FIJI_CUP = register("fiji_cup",FIJI_CUP::new,new FIJI_CUP.Settings().rarity(Rarity.EPIC));
@@ -109,8 +114,6 @@ public class ModItems {
             content.addAfter(Items.IRON_INGOT,STEEL_INGOT);
         });
     }*/
-
-
 
 
     public static void initializeMod() {

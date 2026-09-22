@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "CCC",
+    "BBB"
+  ],
+  "key": {
+    "A": "mcdonalds-mod:cream",
+    "B": "mcdonalds-mod:sugary_dough",
+    "C": "mcdonalds-mod:cheese"
+  },
+  "result": {
+    "id": "mcdonalds-mod:cheese_cake",
+    "count": 1
+  }
+}
