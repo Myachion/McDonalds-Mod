@@ -28,6 +28,9 @@ public class ModItemGroups {
                 entries.add(ModItems.IRON_PLATE);
                 entries.add(ModItems.COPPER_PLATE);
                 entries.add(ModItems.COPPER_STRIPS);
+                entries.add(ModItems.STEEL_CABLE);
+                entries.add(ModItems.IRON_CABLE);
+                entries.add(ModItems.COPPER_CABLE);
 
                 entries.add(ModItems.IRIDIUM);
                 entries.add(ModItems.IRIDIUM_SHARD);
@@ -97,6 +100,8 @@ public class ModItemGroups {
                 entries.add(ModItems.STONE_MORTAR);
                 entries.add(ModItems.STEEL_MORTAR);
                 entries.add(ModItems.NETHERITE_MORTAR);
+                entries.add(ModItems.STEEL_HAMMER);
+                entries.add(ModItems.STEEL_CUTTER);
                 entries.add(ModItems.FIJI_CUP);
                 entries.add(ModItems.FULL_FIJI_CUP);
 

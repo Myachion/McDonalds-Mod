@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "SFS",
+    "SSS"
+  ],
+  "key": {
+    "F": "minecraft:flint",
+    "S": "minecraft:stone"
+  },
+  "result": {
+    "id": "mcdonalds-mod:stone_mortar",
+    "count": 1
+  }
+}

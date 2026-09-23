@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " Q ",
+    "TQT",
+    "TTT"
+  ],
+  "key": {
+    "Q": "minecraft:quartz",
+    "T": "mcdonalds-mod:steel_ingot"
+  },
+  "result": {
+    "id": "mcdonalds-mod:steel_mortar",
+    "count": 1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "mcdonalds-mod:steel_cutter",
+    "mcdonalds-mod:steel_plate"
+  ],
+  "result": {
+    "count": 3,
+    "id": "mcdonalds-mod:steel_cable"
+  }
+}

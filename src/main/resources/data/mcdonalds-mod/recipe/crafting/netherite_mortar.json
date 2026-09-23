@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "ODO",
+    "NNN"
+  ],
+  "key": {
+    "D": "minecraft:diamond",
+    "O": "minecraft:obsidian",
+    "N": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "id": "mcdonalds-mod:netherite_mortar",
+    "count": 1
+  }
+}

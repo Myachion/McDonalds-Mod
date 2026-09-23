@@ -3,6 +3,7 @@
   "values": [
     "mcdonalds-mod:steel_block",
     "mcdonalds-mod:deepslate_salt_ore",
-    "mcdonalds-mod:salt_ore"
+    "mcdonalds-mod:salt_ore",
+    "mcdonalds-mod:machine_shell"
   ]
 }

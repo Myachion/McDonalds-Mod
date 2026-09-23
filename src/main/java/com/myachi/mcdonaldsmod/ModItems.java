@@ -1,6 +1,7 @@
 package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.specialItem.FIJI_CUP;
+import com.myachi.mcdonaldsmod.specialItem.DurableCraftingTool;
 import com.myachi.mcdonaldsmod.specialItem.Mortar;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
@@ -26,6 +27,11 @@ public class ModItems {
     public static final Item STEEL_PLATE = register("steel_plate",Item::new,new Item.Settings());
     public static final Item IRON_PLATE = register("iron_plate",Item::new,new Item.Settings());
     public static final Item COPPER_PLATE = register("copper_plate",Item::new,new Item.Settings());
+
+    public static final Item STEEL_CABLE = register("steel_cable",Item::new,new Item.Settings());
+    public static final Item IRON_CABLE = register("iron_cable",Item::new,new Item.Settings());
+    public static final Item COPPER_CABLE = register("copper_cable",Item::new,new Item.Settings());
+
     public static final Item COPPER_STRIPS = register("copper_strips",Item::new,new Item.Settings());
     public static final Item COAL_DUST = register("coal_dust",Item::new,new Item.Settings());
     public static final Item IRIDIUM_PLATE = register("iridium_plate",Item::new,new Item.Settings());
@@ -89,6 +95,9 @@ public class ModItems {
     public static final Item STONE_MORTAR = register("stone_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(197));
     public static final Item STEEL_MORTAR = register("steel_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(563));
     public static final Item NETHERITE_MORTAR = register("netherite_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(2267));
+
+    public static final Item STEEL_HAMMER = register("steel_hammer",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
+    public static final Item STEEL_CUTTER = register("steel_cutter",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
 
 
 
