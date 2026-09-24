@@ -20,6 +20,8 @@ public class ModItemGroups {
                 entries.add(ModBlocks.DEEPSLATE_SALT_ORE);
                 entries.add(ModBlocks.STEEL_BLOCK);
                 entries.add(ModBlocks.MACHINE_SHELL);
+                entries.add(ModBlocks.TEST_GENERATOR);
+                entries.add(ModBlocks.TEST_BATTERY_BOX);
 
                 entries.add(ModItems.COAL_DUST);
                 entries.add(ModItems.RAW_SALT);
@@ -28,9 +30,12 @@ public class ModItemGroups {
                 entries.add(ModItems.IRON_PLATE);
                 entries.add(ModItems.COPPER_PLATE);
                 entries.add(ModItems.COPPER_STRIPS);
-                entries.add(ModItems.STEEL_CABLE);
-                entries.add(ModItems.IRON_CABLE);
+                entries.add(ModItems.TIN_CABLE);
                 entries.add(ModItems.COPPER_CABLE);
+                entries.add(ModItems.STEEL_CABLE);
+                entries.add(ModItems.GOLD_CABLE);
+                entries.add(ModItems.IRON_CABLE);
+                entries.add(ModItems.FIBERGLASS_CABLE);
 
                 entries.add(ModItems.IRIDIUM);
                 entries.add(ModItems.IRIDIUM_SHARD);

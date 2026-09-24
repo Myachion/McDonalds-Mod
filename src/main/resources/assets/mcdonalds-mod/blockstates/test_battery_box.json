@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mcdonalds-mod:block/test_battery_box"
+    }
+  }
+}

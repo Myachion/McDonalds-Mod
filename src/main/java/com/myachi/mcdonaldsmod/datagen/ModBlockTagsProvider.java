@@ -21,6 +21,8 @@ public class ModBlockTagsProvider extends FabricTagProvider.BlockTagProvider {
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
         valueLookupBuilder(ModBlockTags.MACHINE)
                 .add(ModBlocks.MACHINE_SHELL)
+                .add(ModBlocks.TEST_GENERATOR)
+                .add(ModBlocks.TEST_BATTERY_BOX)
                 .setReplace(true);
 
 

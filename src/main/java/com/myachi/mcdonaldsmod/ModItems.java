@@ -28,9 +28,13 @@ public class ModItems {
     public static final Item IRON_PLATE = register("iron_plate",Item::new,new Item.Settings());
     public static final Item COPPER_PLATE = register("copper_plate",Item::new,new Item.Settings());
 
-    public static final Item STEEL_CABLE = register("steel_cable",Item::new,new Item.Settings());
-    public static final Item IRON_CABLE = register("iron_cable",Item::new,new Item.Settings());
+    // 线缆按电压等级排列：锡 32V / 铜·钢 128V / 金 512V / 铁 2048V / 玻璃纤维 8192V
+    public static final Item TIN_CABLE = register("tin_cable",Item::new,new Item.Settings());
     public static final Item COPPER_CABLE = register("copper_cable",Item::new,new Item.Settings());
+    public static final Item STEEL_CABLE = register("steel_cable",Item::new,new Item.Settings());
+    public static final Item GOLD_CABLE = register("gold_cable",Item::new,new Item.Settings());
+    public static final Item IRON_CABLE = register("iron_cable",Item::new,new Item.Settings());
+    public static final Item FIBERGLASS_CABLE = register("fiberglass_cable",Item::new,new Item.Settings());
 
     public static final Item COPPER_STRIPS = register("copper_strips",Item::new,new Item.Settings());
     public static final Item COAL_DUST = register("coal_dust",Item::new,new Item.Settings());

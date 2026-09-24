@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "mcdonalds-mod:block/test_generator/inactive_north",
+    "up": "mcdonalds-mod:block/test_generator/inactive_up",
+    "down": "mcdonalds-mod:block/test_generator/inactive_down",
+    "north": "mcdonalds-mod:block/test_generator/inactive_north",
+    "south": "mcdonalds-mod:block/test_generator/inactive_south",
+    "east": "mcdonalds-mod:block/test_generator/inactive_east",
+    "west": "mcdonalds-mod:block/test_generator/inactive_west"
+  }
+}

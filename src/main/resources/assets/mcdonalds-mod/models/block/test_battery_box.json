@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "particle": "mcdonalds-mod:block/test_battery_box/side",
+    "top": "mcdonalds-mod:block/test_battery_box/up",
+    "side": "mcdonalds-mod:block/test_battery_box/side",
+    "bottom": "mcdonalds-mod:block/test_battery_box/down"
+  }
+}

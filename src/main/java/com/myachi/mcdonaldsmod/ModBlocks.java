@@ -6,6 +6,7 @@ import com.myachi.mcdonaldsmod.crop.CornCropBlock;
 import com.myachi.mcdonaldsmod.crop.BlueberryBushBlock;
 import com.myachi.mcdonaldsmod.crop.OnionCropBlock;
 import com.myachi.mcdonaldsmod.crop.TomatoCropBlock;
+import com.myachi.mcdonaldsmod.machine.TestGeneratorBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.block.piston.PistonBehavior;
@@ -47,6 +48,23 @@ public class ModBlocks {
 
     public static final Block MACHINE_SHELL = register(
             "machine_shell", Block::new ,
+            AbstractBlock.Settings.create()
+                    .requiresTool()
+                    .strength(3.0F, 3.0F)
+                    .sounds(BlockSoundGroup.IRON)
+    );
+
+    // 电网测试用的两个方块：数据暂时照抄机器外壳，暂时没有任何交互。
+    public static final Block TEST_GENERATOR = register(
+            "test_generator", TestGeneratorBlock::new,
+            AbstractBlock.Settings.create()
+                    .requiresTool()
+                    .strength(3.0F, 3.0F)
+                    .sounds(BlockSoundGroup.IRON)
+    );
+
+    public static final Block TEST_BATTERY_BOX = register(
+            "test_battery_box", Block::new,
             AbstractBlock.Settings.create()
                     .requiresTool()
                     .strength(3.0F, 3.0F)
