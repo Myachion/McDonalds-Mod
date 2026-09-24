@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "mcdonalds-mod:block/onion_stage_3"
+  }
+}

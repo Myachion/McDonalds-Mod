@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "mcdonalds-mod:steel_hammer",
+    "mcdonalds-mod:copper_plate"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mcdonalds-mod:copper_strips"
+  }
+}

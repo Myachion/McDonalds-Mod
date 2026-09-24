@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "mcdonalds-mod:item/soybean_oil"
+    "layer0": "mcdonalds-mod:item/vegetable_oil"
   }
 }

@@ -4,3 +4,5 @@ accessWidener v2 named
 extendable class net/minecraft/client/gui/screen/ingame/BeaconScreen$EffectButtonWidget
 # Needed to move the beacon payment slot off screen, which removes the item cost.
 accessible class net/minecraft/screen/BeaconScreenHandler$PaymentSlot
+# Needed by CornCropBlock (a TallPlantBlock subclass) to reuse CropBlock's growth-speed calculation.
+accessible method net/minecraft/block/CropBlock getAvailableMoisture (Lnet/minecraft/block/Block;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)F

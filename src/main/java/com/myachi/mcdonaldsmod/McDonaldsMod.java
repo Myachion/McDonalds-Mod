@@ -1,6 +1,7 @@
 package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.beacon.ModBeaconFeatures;
+import com.myachi.mcdonaldsmod.worldgen.ModOreGeneration;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class McDonaldsMod implements ModInitializer {
         ModItemTags.initializeModItemTags();
         ModSounds.initializeModSounds();
         ModBeaconFeatures.initialize();
+        ModOreGeneration.initialize();
 
 		LOGGER.info("Hello Fabric world!");
 

@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "mcdonalds-mod:item/soybean_oil"
+    "model": "mcdonalds-mod:item/vegetable_oil"
   }
 }

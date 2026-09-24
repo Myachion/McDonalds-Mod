@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:block_interact",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "mcdonalds-mod:blueberry",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2.0,
+                "max": 3.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "mcdonalds-mod:harvest/blueberry_bush"
+}

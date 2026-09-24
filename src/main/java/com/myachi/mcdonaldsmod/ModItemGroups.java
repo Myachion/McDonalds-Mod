@@ -38,7 +38,7 @@ public class ModItemGroups {
                 entries.add(ModItems.CIRCUIT_BOARD);
 
                 entries.add(ModItems.SALT);
-                entries.add(ModItems.SOYBEAN_OIL);
+                entries.add(ModItems.VEGETABLE_OIL);
                 entries.add(ModItems.TOMATO);
                 entries.add(ModItems.ONION);
                 entries.add(ModItems.CORN);

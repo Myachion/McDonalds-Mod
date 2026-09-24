@@ -3,8 +3,8 @@ package com.myachi.mcdonaldsmod;
 import com.myachi.mcdonaldsmod.specialItem.FIJI_CUP;
 import com.myachi.mcdonaldsmod.specialItem.DurableCraftingTool;
 import com.myachi.mcdonaldsmod.specialItem.Mortar;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 
 
@@ -63,24 +63,33 @@ public class ModItems {
     public static final Item CHICKEN_BURGER = register("chicken_burger",Item::new, new Item.Settings().food(ModFoodComponent.CHICKEN_BURGER));
 
     public static final Item FLOUR = register("flour",Item::new, new Item.Settings());
-    public static final Item TOMATO_SEEDS = register("tomato_seeds",Item::new, new Item.Settings());
-    public static final Item ONION_SEEDS = register("onion_seeds",Item::new, new Item.Settings());
+    // 种子是方块物品：种在耕地上会长出对应作物（useItemPrefixedTranslationKey 保证名称仍是 item.* 而不是 block.*）。
+    public static final Item TOMATO_SEEDS = register("tomato_seeds",
+            settings -> new BlockItem(ModBlocks.TOMATO_CROP, settings.useItemPrefixedTranslationKey()), new Item.Settings());
+    public static final Item ONION_SEEDS = register("onion_seeds",
+            settings -> new BlockItem(ModBlocks.ONION_CROP, settings.useItemPrefixedTranslationKey()), new Item.Settings());
 
     public static final Item TEA_LEAVES = register("tea_leaves",Item::new, new Item.Settings());
     public static final Item CREAM = register("cream",Item::new, new Item.Settings().food(ModFoodComponent.CREAM));
     public static final Item POTATO_STRIPS = register("potato_strips",Item::new, new Item.Settings().food(ModFoodComponent.POTATO_STRIPS));
     public static final Item SOYBEANS = register("soybeans",Item::new, new Item.Settings());
-    public static final Item SOYBEAN_OIL = register("soybean_oil",Item::new,new Item.Settings());
+    public static final Item VEGETABLE_OIL = register("vegetable_oil",Item::new,new Item.Settings());
     public static final Item SOYBEAN_MILK = register("soybean_milk",Item::new, new Item.Settings().food(ModFoodComponent.SOYBEANS_MILK));
     public static final Item SOYBEAN_MEAL = register("soybean_meal",Item::new, new Item.Settings().food(ModFoodComponent.SOYBEAN_MEAL));
 
     public static final Item APPLE_PIE = register("apple_pie",Item::new, new Item.Settings().food(ModFoodComponent.APPLE_PIE));
     public static final Item APPLE_SANDWICH_COOKIE = register("apple_sandwich_cookie",Item::new, new Item.Settings().food(ModFoodComponent.APPLE_SANDWICH_COOKIE));
-    public static final Item BLUEBERRY = register("blueberry",Item::new, new Item.Settings().food(ModFoodComponent.BLUEBERRY));
-    public static final Item BLUEBERRY_BUSH = register("blueberry_bush",Item::new, new Item.Settings());
+    // 蓝莓既是食物，也是"种子"：右键泥土/草方块就能种出蓝莓丛（与原版甜浆果一致）。
+    public static final Item BLUEBERRY = register("blueberry",
+            settings -> new BlockItem(ModBlocks.BLUEBERRY_BUSH, settings.useItemPrefixedTranslationKey()),
+            new Item.Settings().food(ModFoodComponent.BLUEBERRY));
+    // 蓝莓丛物品：精准采集才掉，放下来和用蓝莓种出来一样，都是 age 0。
+    public static final Item BLUEBERRY_BUSH = register("blueberry_bush",
+            settings -> new BlockItem(ModBlocks.BLUEBERRY_BUSH, settings.useItemPrefixedTranslationKey()), new Item.Settings());
 
     public static final Item CORN = register("corn",Item::new, new Item.Settings().food(ModFoodComponent.CORN));
-    public static final Item CORN_SEEDS = register("corn_seeds",Item::new, new Item.Settings());
+    public static final Item CORN_SEEDS = register("corn_seeds",
+            settings -> new BlockItem(ModBlocks.CORN_CROP, settings.useItemPrefixedTranslationKey()), new Item.Settings());
     public static final Item COOKED_CORN = register("cooked_corn",Item::new, new Item.Settings().food(ModFoodComponent.COOKED_CORN));
     public static final Item DOUGH = register("dough",Item::new, new Item.Settings());
     public static final Item SUGARY_DOUGH = register("sugary_dough",Item::new, new Item.Settings());
@@ -127,7 +136,6 @@ public class ModItems {
 
     public static void initializeMod() {
         //ModItems.registerToVanillaItemGroups();
-        ModTooltips.itemTooltipInitializer();
         McDonaldsMod.LOGGER.info("Register ModItems!");
     }
 

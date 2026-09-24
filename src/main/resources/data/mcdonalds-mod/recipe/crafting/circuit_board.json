@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CQC",
+    "CSC",
+    "CRC"
+  ],
+  "key": {
+    "C": "mcdonalds-mod:copper_cable",
+    "Q": "minecraft:quartz",
+    "S": "mcdonalds-mod:copper_strips",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "mcdonalds-mod:circuit_board",
+    "count": 1
+  }
+}

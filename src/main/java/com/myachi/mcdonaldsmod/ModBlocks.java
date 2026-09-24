@@ -2,6 +2,10 @@ package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.specialItem.CheeseCakeBlock;
 import com.myachi.mcdonaldsmod.specialItem.ChocolateCakeBlock;
+import com.myachi.mcdonaldsmod.crop.CornCropBlock;
+import com.myachi.mcdonaldsmod.crop.BlueberryBushBlock;
+import com.myachi.mcdonaldsmod.crop.OnionCropBlock;
+import com.myachi.mcdonaldsmod.crop.TomatoCropBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.block.piston.PistonBehavior;
@@ -61,6 +65,29 @@ public class ModBlocks {
                     .pistonBehavior(PistonBehavior.DESTROY)
     );
 
+    // 作物：方块本身不注册同名物品，种子物品由 ModItems 以 BlockItem 的形式注册。
+    public static final Block TOMATO_CROP = registerBlockOnly(
+            "tomato_crop", TomatoCropBlock::new, cropSettings()
+    );
+
+    public static final Block ONION_CROP = registerBlockOnly(
+            "onion_crop", OnionCropBlock::new, cropSettings()
+    );
+
+    public static final Block CORN_CROP = registerBlockOnly(
+            "corn_crop", CornCropBlock::new, cropSettings()
+    );
+
+    // 蓝莓丛：像甜浆果一样种在泥土/草方块上（不是耕地），所以用 PlantBlock 的默认判定。
+    public static final Block BLUEBERRY_BUSH = registerBlockOnly(
+            "blueberry_bush", BlueberryBushBlock::new,
+            AbstractBlock.Settings.create()
+                    .mapColor(MapColor.DARK_GREEN)
+                    .ticksRandomly()
+                    .noCollision()
+                    .sounds(BlockSoundGroup.SWEET_BERRY_BUSH)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+    );
 
 
     private static Block register(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
@@ -70,6 +97,28 @@ public class ModBlocks {
         final Block block = Blocks.register(registryKey, factory, settings);
         Items.register(block);
         return block;
+    }
+
+    /**
+     * 只注册方块，不生成与方块同名的物品。
+     * 作物方块的物品是种子（{@code tomato_seeds} 等），在 {@link ModItems} 里以 BlockItem 注册。
+     */
+    private static Block registerBlockOnly(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
+        final Identifier identifier = Identifier.of(McDonaldsMod.MOD_ID, path);
+        final RegistryKey<Block> registryKey = RegistryKey.of(RegistryKeys.BLOCK, identifier);
+
+        return Blocks.register(registryKey, factory, settings);
+    }
+
+    /** 与小麦等原版作物一致的方块属性。 */
+    private static AbstractBlock.Settings cropSettings() {
+        return AbstractBlock.Settings.create()
+                .mapColor(MapColor.DARK_GREEN)
+                .noCollision()
+                .ticksRandomly()
+                .breakInstantly()
+                .sounds(BlockSoundGroup.CROP)
+                .pistonBehavior(PistonBehavior.DESTROY);
     }
 
     public static void initializeModBlocks() {
