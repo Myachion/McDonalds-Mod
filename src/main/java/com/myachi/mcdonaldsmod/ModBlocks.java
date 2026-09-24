@@ -6,7 +6,10 @@ import com.myachi.mcdonaldsmod.crop.CornCropBlock;
 import com.myachi.mcdonaldsmod.crop.BlueberryBushBlock;
 import com.myachi.mcdonaldsmod.crop.OnionCropBlock;
 import com.myachi.mcdonaldsmod.crop.TomatoCropBlock;
+import com.myachi.mcdonaldsmod.energy.CableBlock;
+import com.myachi.mcdonaldsmod.energy.CableConnections;
 import com.myachi.mcdonaldsmod.machine.TestGeneratorBlock;
+import com.myachi.mcdonaldsmod.machine.TestBatteryBoxBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.block.piston.PistonBehavior;
@@ -64,12 +67,54 @@ public class ModBlocks {
     );
 
     public static final Block TEST_BATTERY_BOX = register(
-            "test_battery_box", Block::new,
+            "test_battery_box", TestBatteryBoxBlock::new,
             AbstractBlock.Settings.create()
                     .requiresTool()
                     .strength(3.0F, 3.0F)
                     .sounds(BlockSoundGroup.IRON)
     );
+
+    /*
+     * 电缆方块：细杆状小方块，六向自动连接。
+     * 括号里是电压等级（单位 V）：锡 32 / 铜·钢 128 / 金 512 / 铁 2048 / 玻璃纤维 8192。
+     * 物品形式就是这些方块的 BlockItem，注册名和以前的导线物品完全一样。
+     */
+    public static final Block TIN_CABLE = register(
+            "tin_cable",
+            settings -> new CableBlock(32, settings),
+            cableSettings(MapColor.LIGHT_GRAY)
+    );
+
+    public static final Block COPPER_CABLE = register(
+            "copper_cable",
+            settings -> new CableBlock(128, settings),
+            cableSettings(MapColor.ORANGE)
+    );
+
+    public static final Block STEEL_CABLE = register(
+            "steel_cable",
+            settings -> new CableBlock(128, CableBlock.THICK, settings),
+            cableSettings(MapColor.IRON_GRAY)
+    );
+
+    public static final Block GOLD_CABLE = register(
+            "gold_cable",
+            settings -> new CableBlock(512, settings),
+            cableSettings(MapColor.GOLD)
+    );
+
+    public static final Block IRON_CABLE = register(
+            "iron_cable",
+            settings -> new CableBlock(2048, CableBlock.THICK, settings),
+            cableSettings(MapColor.STONE_GRAY)
+    );
+
+    public static final Block FIBERGLASS_CABLE = register(
+            "fiberglass_cable",
+            settings -> new CableBlock(8192, settings),
+            cableSettings(MapColor.LIGHT_BLUE)
+    );
+
     public static final Block CHEESE_CAKE = register(
             "cheese_cake", CheeseCakeBlock::new,
             AbstractBlock.Settings.create().solid()
@@ -139,7 +184,33 @@ public class ModBlocks {
                 .pistonBehavior(PistonBehavior.DESTROY);
     }
 
+    /**
+     * 电缆方块属性：不遮光、一挖就掉，被活塞推动时直接破坏而不是推走。
+     * 碰撞箱不在这里设置——{@link CableBlock#getCollisionShape} 会跟着连接状态返回
+     * 与外形完全一致的形状（中心块 + 已连接的臂）。
+     */
+    private static AbstractBlock.Settings cableSettings(MapColor mapColor) {
+        return AbstractBlock.Settings.create()
+                .mapColor(mapColor)
+                .nonOpaque()
+                .breakInstantly()
+                .sounds(BlockSoundGroup.COPPER)
+                .pistonBehavior(PistonBehavior.DESTROY);
+    }
+
     public static void initializeModBlocks() {
+        /*
+         * 电缆接线登记：想让新机器能被电缆连接，在这里加一行就行。
+         *
+         *   CableConnections.always(ModBlocks.MY_MACHINE);                 // 六面都能接
+         *   CableConnections.only(ModBlocks.MY_MACHINE, Direction.UP);     // 只有顶面能接
+         *   CableConnections.custom(ModBlocks.MY_MACHINE,                  // 只有正面能接
+         *           CableConnectable.facing(MyMachineBlock.FACING));
+         *
+         * 不登记 = 不能接电缆。测试电池盒走的是数据包标签那一套
+         * （data/mcdonalds-mod/tags/block/cable_connectable.json），效果同样是六面可连。
+         */
+        CableConnections.always(TEST_GENERATOR);
     }
 
 }

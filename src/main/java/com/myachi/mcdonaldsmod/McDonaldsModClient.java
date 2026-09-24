@@ -1,10 +1,13 @@
 package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.beacon.BeaconNetwork;
+import com.myachi.mcdonaldsmod.client.TestBatteryBoxScreen;
+import com.myachi.mcdonaldsmod.client.TestGeneratorScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.render.BlockRenderLayer;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 
 public class McDonaldsModClient implements ClientModInitializer {
 
@@ -21,6 +24,19 @@ public class McDonaldsModClient implements ClientModInitializer {
                 ModBlocks.ONION_CROP,
                 ModBlocks.CORN_CROP,
                 ModBlocks.BLUEBERRY_BUSH);
+
+        // 电缆是细杆模型，玻璃纤维的贴图还带透明像素，同样必须走 CUTOUT。
+        BlockRenderLayerMap.putBlocks(BlockRenderLayer.CUTOUT,
+                ModBlocks.TIN_CABLE,
+                ModBlocks.COPPER_CABLE,
+                ModBlocks.STEEL_CABLE,
+                ModBlocks.GOLD_CABLE,
+                ModBlocks.IRON_CABLE,
+                ModBlocks.FIBERGLASS_CABLE);
+
+        // 机器界面
+        HandledScreens.register(ModScreenHandlers.TEST_GENERATOR, TestGeneratorScreen::new);
+        HandledScreens.register(ModScreenHandlers.TEST_BATTERY_BOX, TestBatteryBoxScreen::new);
 
         // Declaring a receiver on this channel tells the server this client knows the
         // mod, which is what allows it to safely receive the beacon flight effect.

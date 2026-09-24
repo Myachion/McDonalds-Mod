@@ -23,6 +23,8 @@ public class McDonaldsMod implements ModInitializer {
         ModItems.initializeMod();
         ModItemGroups.initializeModItemGroups();
         ModBlocks.initializeModBlocks();
+        ModBlockEntities.initializeModBlockEntities();
+        ModScreenHandlers.initializeModScreenHandlers();
         ModFuels.initializeModFuels();
         ModBlockTags.initializeModBlockTags();
         ModItemTags.initializeModItemTags();

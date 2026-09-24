@@ -29,12 +29,13 @@ public class ModItems {
     public static final Item COPPER_PLATE = register("copper_plate",Item::new,new Item.Settings());
 
     // 线缆按电压等级排列：锡 32V / 铜·钢 128V / 金 512V / 铁 2048V / 玻璃纤维 8192V
-    public static final Item TIN_CABLE = register("tin_cable",Item::new,new Item.Settings());
-    public static final Item COPPER_CABLE = register("copper_cable",Item::new,new Item.Settings());
-    public static final Item STEEL_CABLE = register("steel_cable",Item::new,new Item.Settings());
-    public static final Item GOLD_CABLE = register("gold_cable",Item::new,new Item.Settings());
-    public static final Item IRON_CABLE = register("iron_cable",Item::new,new Item.Settings());
-    public static final Item FIBERGLASS_CABLE = register("fiberglass_cable",Item::new,new Item.Settings());
+    // 电缆是可放置的方块，物品就是对应方块的 BlockItem（注册名不变）。
+    public static final Item TIN_CABLE = ModBlocks.TIN_CABLE.asItem();
+    public static final Item COPPER_CABLE = ModBlocks.COPPER_CABLE.asItem();
+    public static final Item STEEL_CABLE = ModBlocks.STEEL_CABLE.asItem();
+    public static final Item GOLD_CABLE = ModBlocks.GOLD_CABLE.asItem();
+    public static final Item IRON_CABLE = ModBlocks.IRON_CABLE.asItem();
+    public static final Item FIBERGLASS_CABLE = ModBlocks.FIBERGLASS_CABLE.asItem();
 
     public static final Item COPPER_STRIPS = register("copper_strips",Item::new,new Item.Settings());
     public static final Item COAL_DUST = register("coal_dust",Item::new,new Item.Settings());

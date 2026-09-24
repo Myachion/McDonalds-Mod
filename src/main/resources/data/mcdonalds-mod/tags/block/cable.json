@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "mcdonalds-mod:tin_cable",
+    "mcdonalds-mod:copper_cable",
+    "mcdonalds-mod:steel_cable",
+    "mcdonalds-mod:gold_cable",
+    "mcdonalds-mod:iron_cable",
+    "mcdonalds-mod:fiberglass_cable"
+  ]
+}
