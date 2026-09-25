@@ -22,6 +22,23 @@ public class ModItemGroups {
                 entries.add(ModBlocks.MACHINE_SHELL);
                 entries.add(ModBlocks.TEST_GENERATOR);
                 entries.add(ModBlocks.TEST_BATTERY_BOX);
+                entries.add(ModBlocks.TIN_ORE);
+                entries.add(ModBlocks.LEAD_ORE);
+                entries.add(ModBlocks.DEEPSLATE_LEAD_ORE);
+                entries.add(ModBlocks.ALUMINUM_ORE);
+                entries.add(ModBlocks.URANIUM_ORE);
+                entries.add(ModBlocks.DEEPSLATE_URANIUM_ORE);
+
+                entries.add(ModItems.RAW_TIN);
+                entries.add(ModItems.RAW_LEAD);
+                entries.add(ModItems.RAW_ALUMINUM);
+                entries.add(ModItems.RAW_URANIUM);
+                entries.add(ModItems.TIN_INGOT);
+                entries.add(ModItems.LEAD_INGOT);
+                entries.add(ModItems.ALUMINUM_INGOT);
+                entries.add(ModItems.URANIUM_INGOT);
+                entries.add(ModItems.BRONZE_INGOT);
+                entries.add(ModItems.SILVER_INGOT);
 
                 entries.add(ModItems.COAL_DUST);
                 entries.add(ModItems.RAW_SALT);

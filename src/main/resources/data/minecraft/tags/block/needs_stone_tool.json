@@ -5,6 +5,10 @@
     "mcdonalds-mod:salt_ore",
     "mcdonalds-mod:machine_shell",
     "mcdonalds-mod:test_generator",
-    "mcdonalds-mod:test_battery_box"
+    "mcdonalds-mod:test_battery_box",
+    "mcdonalds-mod:tin_ore",
+    "mcdonalds-mod:lead_ore",
+    "mcdonalds-mod:deepslate_lead_ore",
+    "mcdonalds-mod:aluminum_ore"
   ]
 }

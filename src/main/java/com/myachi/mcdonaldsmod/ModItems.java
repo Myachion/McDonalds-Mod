@@ -28,6 +28,19 @@ public class ModItems {
     public static final Item IRON_PLATE = register("iron_plate",Item::new,new Item.Settings());
     public static final Item COPPER_PLATE = register("copper_plate",Item::new,new Item.Settings());
 
+    // 矿石产物：粗矿 + 锭。锡/铝没有深层矿石，铅/铀有。
+    public static final Item RAW_TIN = register("raw_tin",Item::new,new Item.Settings());
+    public static final Item RAW_LEAD = register("raw_lead",Item::new,new Item.Settings());
+    public static final Item RAW_ALUMINUM = register("raw_aluminum",Item::new,new Item.Settings());
+    public static final Item RAW_URANIUM = register("raw_uranium",Item::new,new Item.Settings());
+
+    public static final Item TIN_INGOT = register("tin_ingot",Item::new,new Item.Settings());
+    public static final Item LEAD_INGOT = register("lead_ingot",Item::new,new Item.Settings());
+    public static final Item ALUMINUM_INGOT = register("aluminum_ingot",Item::new,new Item.Settings());
+    public static final Item URANIUM_INGOT = register("uranium_ingot",Item::new,new Item.Settings());
+    public static final Item BRONZE_INGOT = register("bronze_ingot",Item::new,new Item.Settings());
+    public static final Item SILVER_INGOT = register("silver_ingot",Item::new,new Item.Settings());
+
     // 线缆按电压等级排列：锡 32V / 铜·钢 128V / 金 512V / 铁 2048V / 玻璃纤维 8192V
     // 电缆是可放置的方块，物品就是对应方块的 BlockItem（注册名不变）。
     public static final Item TIN_CABLE = ModBlocks.TIN_CABLE.asItem();

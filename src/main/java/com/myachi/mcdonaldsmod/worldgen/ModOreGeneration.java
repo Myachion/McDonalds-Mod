@@ -35,6 +35,16 @@ public final class ModOreGeneration {
     /** 低盐：丛林、沼泽、蘑菇岛与极寒生物群系。count 4 / size 9。 */
     public static final RegistryKey<PlacedFeature> SALT_ORE_SPARSE = placedFeature("salt_ore_sparse");
 
+    // 金属矿石：全主世界统一生成（不像盐矿那样分档）
+    /** 锡：size 9 / count 12 / 高度 0~112。 */
+    public static final RegistryKey<PlacedFeature> TIN_ORE = placedFeature("tin_ore");
+    /** 铅：size 8 / count 8 / 高度 -32~64，含深层变种。 */
+    public static final RegistryKey<PlacedFeature> LEAD_ORE = placedFeature("lead_ore");
+    /** 铝：size 9 / count 6 / 高度 0~96，无深层变种。 */
+    public static final RegistryKey<PlacedFeature> ALUMINUM_ORE = placedFeature("aluminum_ore");
+    /** 铀：size 4 / count 2 / 高度 -64~16 三角分布，含深层变种。 */
+    public static final RegistryKey<PlacedFeature> URANIUM_ORE = placedFeature("uranium_ore");
+
     public static final TagKey<Biome> DENSE_BIOMES = biomeTag("salt_ore_dense");
     public static final TagKey<Biome> NORMAL_BIOMES = biomeTag("salt_ore_normal");
     public static final TagKey<Biome> SPARSE_BIOMES = biomeTag("salt_ore_sparse");
@@ -47,7 +57,21 @@ public final class ModOreGeneration {
         addFeature(NORMAL_BIOMES, SALT_ORE_NORMAL);
         addFeature(SPARSE_BIOMES, SALT_ORE_SPARSE);
 
+        // 金属矿石在主世界所有生物群系里都生成
+        addOverworldFeature(TIN_ORE);
+        addOverworldFeature(LEAD_ORE);
+        addOverworldFeature(ALUMINUM_ORE);
+        addOverworldFeature(URANIUM_ORE);
+
         McDonaldsMod.LOGGER.info("Registry ModOreGeneration!");
+    }
+
+    private static void addOverworldFeature(RegistryKey<PlacedFeature> placedFeature) {
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInOverworld(),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                placedFeature
+        );
     }
 
     private static void addFeature(TagKey<Biome> biomes, RegistryKey<PlacedFeature> placedFeature) {

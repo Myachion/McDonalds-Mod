@@ -49,6 +49,34 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.DEEPSLATE)
     );
 
+    /*
+     * 金属矿石。锡和铝不做深层变种，铅和铀有。
+     * 生成参数见 ModOreGeneration 和 worldgen 下的数据文件。
+     */
+    public static final Block TIN_ORE = register(
+            "tin_ore", Block::new,
+            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+
+    public static final Block LEAD_ORE = register(
+            "lead_ore", Block::new,
+            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+
+    public static final Block DEEPSLATE_LEAD_ORE = register(
+            "deepslate_lead_ore", Block::new,
+            AbstractBlock.Settings.create().requiresTool().strength(4.5F, 3.0F).sounds(BlockSoundGroup.DEEPSLATE));
+
+    public static final Block ALUMINUM_ORE = register(
+            "aluminum_ore", Block::new,
+            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+
+    public static final Block URANIUM_ORE = register(
+            "uranium_ore", Block::new,
+            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+
+    public static final Block DEEPSLATE_URANIUM_ORE = register(
+            "deepslate_uranium_ore", Block::new,
+            AbstractBlock.Settings.create().requiresTool().strength(4.5F, 3.0F).sounds(BlockSoundGroup.DEEPSLATE));
+
     public static final Block MACHINE_SHELL = register(
             "machine_shell", Block::new ,
             AbstractBlock.Settings.create()
