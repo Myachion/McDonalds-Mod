@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#mcdonalds-mod:mortar",
+    "mcdonalds-mod:bronze_ingot"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mcdonalds-mod:bronze_dust"
+  }
+}

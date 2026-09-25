@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "mcdonalds-mod:copper_dust",
+    "mcdonalds-mod:copper_dust",
+    "mcdonalds-mod:copper_dust",
+    "mcdonalds-mod:tin_dust"
+  ],
+  "result": {
+    "count": 4,
+    "id": "mcdonalds-mod:bronze_dust"
+  }
+}

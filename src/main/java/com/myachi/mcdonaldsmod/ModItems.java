@@ -19,12 +19,12 @@ import java.util.function.Function;
 
 public class ModItems {
 
-    public static final Item STEEL_INGOT = register("steel_ingot",Item::new,new Item.Settings());
+    public static final Item IRON_REFINED_INGOT = register("iron_refined_ingot",Item::new,new Item.Settings());
     public static final Item IRIDIUM = register("iridium",Item::new,new Item.Settings());
     public static final Item IRIDIUM_SHARD = register("iridium_shard",Item::new,new Item.Settings());
     public static final Item SALT = register("salt",Item::new,new Item.Settings());
     public static final Item RAW_SALT = register("raw_salt",Item::new,new Item.Settings());
-    public static final Item STEEL_PLATE = register("steel_plate",Item::new,new Item.Settings());
+    public static final Item IRON_REFINED_PLATE = register("iron_refined_plate",Item::new,new Item.Settings());
     public static final Item IRON_PLATE = register("iron_plate",Item::new,new Item.Settings());
     public static final Item COPPER_PLATE = register("copper_plate",Item::new,new Item.Settings());
 
@@ -41,11 +41,52 @@ public class ModItems {
     public static final Item BRONZE_INGOT = register("bronze_ingot",Item::new,new Item.Settings());
     public static final Item SILVER_INGOT = register("silver_ingot",Item::new,new Item.Settings());
 
+    // 板材。青金石/黑曜石/红石/钻石这四种做不出来（暂时没有配方），只能靠其他途径获得。
+    public static final Item BRONZE_PLATE = register("bronze_plate",Item::new,new Item.Settings());
+    public static final Item GOLD_PLATE = register("gold_plate",Item::new,new Item.Settings());
+    public static final Item LAPIS_PLATE = register("lapis_plate",Item::new,new Item.Settings());
+    public static final Item LEAD_PLATE = register("lead_plate",Item::new,new Item.Settings());
+    public static final Item OBSIDIAN_PLATE = register("obsidian_plate",Item::new,new Item.Settings());
+    public static final Item REDSTONE_PLATE = register("redstone_plate",Item::new,new Item.Settings());
+    public static final Item SILVER_PLATE = register("silver_plate",Item::new,new Item.Settings());
+    public static final Item TIN_PLATE = register("tin_plate",Item::new,new Item.Settings());
+    public static final Item ALUMINUM_PLATE = register("aluminum_plate",Item::new,new Item.Settings());
+    public static final Item DIAMOND_PLATE = register("diamond_plate",Item::new,new Item.Settings());
+
+    /*
+     * 粉末。带配方的那批（铝/铜/绿宝石/末地石/金/铁/青金石/铅/地狱岩/下界石英/银/锡）
+     * 用研钵研磨对应材料得到，其余暂时只能从创造模式或以后的其他途径获取。
+     */
+    public static final Item ALUMINUM_DUST = register("aluminum_dust",Item::new,new Item.Settings());
+    public static final Item ASH_DUST = register("ash_dust",Item::new,new Item.Settings());
+    public static final Item BRONZE_DUST = register("bronze_dust",Item::new,new Item.Settings());
+    public static final Item CARBON_DUST = register("carbon_dust",Item::new,new Item.Settings());
+    public static final Item CLAY_DUST = register("clay_dust",Item::new,new Item.Settings());
+    public static final Item WET_CARBON_DUST = register("wet_carbon_dust",Item::new,new Item.Settings());
+    public static final Item COPPER_DUST = register("copper_dust",Item::new,new Item.Settings());
+    public static final Item DIAMOND_DUST = register("diamond_dust",Item::new,new Item.Settings());
+    public static final Item EMERALD_DUST = register("emerald_dust",Item::new,new Item.Settings());
+    public static final Item END_STONE_DUST = register("end_stone_dust",Item::new,new Item.Settings());
+    public static final Item GOLD_DUST = register("gold_dust",Item::new,new Item.Settings());
+    public static final Item IRON_DUST = register("iron_dust",Item::new,new Item.Settings());
+    public static final Item LAPIS_DUST = register("lapis_dust",Item::new,new Item.Settings());
+    public static final Item LEAD_DUST = register("lead_dust",Item::new,new Item.Settings());
+    public static final Item LITHIUM_DUST = register("lithium_dust",Item::new,new Item.Settings());
+    public static final Item NETHERRACK_DUST = register("netherrack_dust",Item::new,new Item.Settings());
+    public static final Item OBSIDIAN_DUST = register("obsidian_dust",Item::new,new Item.Settings());
+    public static final Item PHOSPHORUS_DUST = register("phosphorus_dust",Item::new,new Item.Settings());
+    public static final Item QUARTZ_DUST = register("quartz_dust",Item::new,new Item.Settings());
+    public static final Item RED_ALLOY_DUST = register("red_alloy_dust",Item::new,new Item.Settings());
+    public static final Item SILICON_DIOXIDE_DUST = register("silicon_dioxide_dust",Item::new,new Item.Settings());
+    public static final Item SILVER_DUST = register("silver_dust",Item::new,new Item.Settings());
+    public static final Item STONE_DUST = register("stone_dust",Item::new,new Item.Settings());
+    public static final Item TIN_DUST = register("tin_dust",Item::new,new Item.Settings());
+
     // 线缆按电压等级排列：锡 32V / 铜·钢 128V / 金 512V / 铁 2048V / 玻璃纤维 8192V
     // 电缆是可放置的方块，物品就是对应方块的 BlockItem（注册名不变）。
     public static final Item TIN_CABLE = ModBlocks.TIN_CABLE.asItem();
     public static final Item COPPER_CABLE = ModBlocks.COPPER_CABLE.asItem();
-    public static final Item STEEL_CABLE = ModBlocks.STEEL_CABLE.asItem();
+    public static final Item IRON_REFINED_CABLE = ModBlocks.IRON_REFINED_CABLE.asItem();
     public static final Item GOLD_CABLE = ModBlocks.GOLD_CABLE.asItem();
     public static final Item IRON_CABLE = ModBlocks.IRON_CABLE.asItem();
     public static final Item FIBERGLASS_CABLE = ModBlocks.FIBERGLASS_CABLE.asItem();
@@ -120,11 +161,11 @@ public class ModItems {
     public static final Item CHUM_ON_STICK = register("chum_on_stick",Item::new, new Item.Settings().food(ModFoodComponent.CHUM_ON_STICK,ModConsumableComponents.CHUM).useRemainder(Items.STICK));
 
     public static final Item STONE_MORTAR = register("stone_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(197));
-    public static final Item STEEL_MORTAR = register("steel_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(563));
+    public static final Item IRON_REFINED_MORTAR = register("iron_refined_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(563));
     public static final Item NETHERITE_MORTAR = register("netherite_mortar",Mortar::new, new Item.Settings().maxCount(1).maxDamage(2267));
 
-    public static final Item STEEL_HAMMER = register("steel_hammer",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
-    public static final Item STEEL_CUTTER = register("steel_cutter",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
+    public static final Item IRON_REFINED_HAMMER = register("iron_refined_hammer",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
+    public static final Item IRON_REFINED_CUTTER = register("iron_refined_cutter",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
 
     /** 万用表：右键电缆查看电网状态。 */
     public static final Item METER = register("meter", com.myachi.mcdonaldsmod.machine.MeterItem::new, new Item.Settings().maxCount(1));
@@ -150,7 +191,7 @@ public class ModItems {
 
 /*    public static void registerToVanillaItemGroups() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.INGREDIENTS).register(content->{
-            content.addAfter(Items.IRON_INGOT,STEEL_INGOT);
+            content.addAfter(Items.IRON_INGOT,IRON_REFINED_INGOT);
         });
     }*/
 

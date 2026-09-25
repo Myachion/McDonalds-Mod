@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "ingredient": "minecraft:iron_ingot",
+  "cookingtime": 300,
+  "experience": 0.6,
+  "result": {
+    "id": "mcdonalds-mod:iron_refined_ingot"
+  }
+}

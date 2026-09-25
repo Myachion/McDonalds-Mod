@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mcdonalds-mod:steel_block",
+    "mcdonalds-mod:iron_refined_block",
     "mcdonalds-mod:uranium_ore",
     "mcdonalds-mod:deepslate_uranium_ore"
   ]

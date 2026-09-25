@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#mcdonalds-mod:mortar",
+    "minecraft:emerald"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mcdonalds-mod:emerald_dust"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "W": "mcdonalds-mod:iron_refined_ingot"
+  },
+  "result": {
+    "id": "mcdonalds-mod:iron_refined_block",
+    "count": 1
+  }
+}

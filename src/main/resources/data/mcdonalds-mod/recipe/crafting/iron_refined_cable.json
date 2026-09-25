@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "mcdonalds-mod:iron_refined_cutter",
+    "mcdonalds-mod:iron_refined_plate"
+  ],
+  "result": {
+    "count": 3,
+    "id": "mcdonalds-mod:iron_refined_cable"
+  }
+}

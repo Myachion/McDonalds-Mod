@@ -1,7 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
-    "mcdonalds-mod:steel_hammer",
+    "mcdonalds-mod:iron_refined_hammer",
     "mcdonalds-mod:copper_plate"
   ],
   "result": {

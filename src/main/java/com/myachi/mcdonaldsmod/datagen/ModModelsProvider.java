@@ -23,7 +23,7 @@ public class ModModelsProvider extends FabricModelProvider {
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
         itemModelGenerator.register(ModItems.CHUM, Models.GENERATED);
         itemModelGenerator.register(ModItems.CHUM_ON_STICK, Models.GENERATED);
-        itemModelGenerator.register(ModItems.STEEL_MORTAR, Models.GENERATED);
+        itemModelGenerator.register(ModItems.IRON_REFINED_MORTAR, Models.GENERATED);
         itemModelGenerator.register(ModItems.STONE_MORTAR, Models.GENERATED);
         itemModelGenerator.register(ModItems.NETHERITE_MORTAR, Models.GENERATED);
     }

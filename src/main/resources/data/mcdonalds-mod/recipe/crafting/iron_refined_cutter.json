@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "P P",
+    " T ",
+    "T T"
+  ],
+  "key": {
+    "P": "mcdonalds-mod:iron_refined_plate",
+    "T": "mcdonalds-mod:iron_refined_ingot"
+  },
+  "result": {
+    "id": "mcdonalds-mod:iron_refined_cutter",
+    "count": 1
+  }
+}

@@ -23,8 +23,8 @@ import java.util.function.Function;
 
 public class ModBlocks {
     //Register Function
-    public static final Block STEEL_BLOCK = register(
-            "steel_block", Block::new ,
+    public static final Block IRON_REFINED_BLOCK = register(
+            "iron_refined_block", Block::new ,
             AbstractBlock.Settings.create()
                     .mapColor(MapColor.IRON_GRAY)
                     .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
@@ -121,8 +121,8 @@ public class ModBlocks {
             cableSettings(MapColor.ORANGE)
     );
 
-    public static final Block STEEL_CABLE = register(
-            "steel_cable",
+    public static final Block IRON_REFINED_CABLE = register(
+            "iron_refined_cable",
             settings -> new CableBlock(512, CableBlock.THICK, 16, 100, settings),
             cableSettings(MapColor.IRON_GRAY)
     );

@@ -10,8 +10,8 @@ import net.minecraft.util.Formatting;
 public class ModTooltips {
     public static void itemTooltipInitializer(){
         ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, tooltipType, list) -> {
-            if (itemStack.isOf(ModItems.STEEL_INGOT)) {
-                list.add(Text.translatable("item.mcdonalds-mod.steel_ingot.tooltip"));
+            if (itemStack.isOf(ModItems.IRON_REFINED_INGOT)) {
+                list.add(Text.translatable("item.mcdonalds-mod.iron_refined_ingot.tooltip"));
             }
             // 电缆：把承载能力和线损写在提示里，方便挑线
             if (itemStack.getItem() instanceof BlockItem blockItem
