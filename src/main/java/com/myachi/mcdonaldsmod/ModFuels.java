@@ -7,6 +7,8 @@ public class ModFuels {
         FuelRegistryEvents.BUILD.register(((builder, context) -> {
             builder.add(ModItems.VEGETABLE_OIL,1200);
             builder.add(ModItems.COAL_DUST, 2000);
+            // 和原版煤炭块一样：16000 tick（可烧炼 80 个物品）
+            builder.add(ModBlocks.CHARCOAL_BLOCK, 16000);
         }));
     }
 

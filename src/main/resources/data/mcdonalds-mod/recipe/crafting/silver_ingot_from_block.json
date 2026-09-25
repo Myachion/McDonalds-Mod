@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "mcdonalds-mod:silver_block"
+  ],
+  "result": {
+    "id": "mcdonalds-mod:silver_ingot",
+    "count": 9
+  }
+}

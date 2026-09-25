@@ -12,6 +12,14 @@
     "mcdonalds-mod:deepslate_lead_ore",
     "mcdonalds-mod:aluminum_ore",
     "mcdonalds-mod:uranium_ore",
-    "mcdonalds-mod:deepslate_uranium_ore"
+    "mcdonalds-mod:deepslate_uranium_ore",
+    "mcdonalds-mod:aluminum_block",
+    "mcdonalds-mod:bronze_block",
+    "mcdonalds-mod:charcoal_block",
+    "mcdonalds-mod:lead_block",
+    "mcdonalds-mod:silver_block",
+    "mcdonalds-mod:steel_block",
+    "mcdonalds-mod:tin_block",
+    "mcdonalds-mod:uranium_block"
   ]
 }

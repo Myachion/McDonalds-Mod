@@ -19,6 +19,14 @@ public class ModItemGroups {
                 entries.add(ModBlocks.SALT_ORE);
                 entries.add(ModBlocks.DEEPSLATE_SALT_ORE);
                 entries.add(ModBlocks.IRON_REFINED_BLOCK);
+                entries.add(ModBlocks.ALUMINUM_BLOCK);
+                entries.add(ModBlocks.BRONZE_BLOCK);
+                entries.add(ModBlocks.CHARCOAL_BLOCK);
+                entries.add(ModBlocks.LEAD_BLOCK);
+                entries.add(ModBlocks.SILVER_BLOCK);
+                entries.add(ModBlocks.STEEL_BLOCK);
+                entries.add(ModBlocks.TIN_BLOCK);
+                entries.add(ModBlocks.URANIUM_BLOCK);
                 entries.add(ModBlocks.MACHINE_SHELL);
                 entries.add(ModBlocks.TEST_GENERATOR);
                 entries.add(ModBlocks.TEST_BATTERY_BOX);

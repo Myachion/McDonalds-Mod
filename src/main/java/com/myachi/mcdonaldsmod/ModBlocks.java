@@ -33,6 +33,48 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.IRON)
     );
 
+    /*
+     * 材料块：九个锭压成一个块，也能拆回九个锭。
+     * 钢块目前没有配方（钢锭还没添加），只作为方块存在。
+     * 木炭块和原版煤炭块一样可以当燃料烧 16000 tick。
+     */
+    public static final Block ALUMINUM_BLOCK = register(
+            "aluminum_block", Block::new,
+            metalBlockSettings(MapColor.LIGHT_BLUE_GRAY));
+
+    public static final Block BRONZE_BLOCK = register(
+            "bronze_block", Block::new,
+            metalBlockSettings(MapColor.ORANGE));
+
+    public static final Block CHARCOAL_BLOCK = register(
+            "charcoal_block", Block::new,
+            AbstractBlock.Settings.create()
+                    .mapColor(MapColor.BLACK)
+                    .instrument(NoteBlockInstrument.BASEDRUM)
+                    .requiresTool()
+                    .strength(5.0F, 6.0F)
+                    .sounds(BlockSoundGroup.STONE));
+
+    public static final Block LEAD_BLOCK = register(
+            "lead_block", Block::new,
+            metalBlockSettings(MapColor.DEEPSLATE_GRAY));
+
+    public static final Block SILVER_BLOCK = register(
+            "silver_block", Block::new,
+            metalBlockSettings(MapColor.LIGHT_GRAY));
+
+    public static final Block STEEL_BLOCK = register(
+            "steel_block", Block::new,
+            metalBlockSettings(MapColor.IRON_GRAY));
+
+    public static final Block TIN_BLOCK = register(
+            "tin_block", Block::new,
+            metalBlockSettings(MapColor.WHITE_GRAY));
+
+    public static final Block URANIUM_BLOCK = register(
+            "uranium_block", Block::new,
+            metalBlockSettings(MapColor.LICHEN_GREEN));
+
     public static final Block SALT_ORE = register(
             "salt_ore", Block::new ,
             AbstractBlock.Settings.create()
@@ -214,11 +256,21 @@ public class ModBlocks {
                 .pistonBehavior(PistonBehavior.DESTROY);
     }
 
+    /** 金属材料块：硬度、抗爆、音色都和原版铁块一致，需要镐子才掉落。 */
+    private static AbstractBlock.Settings metalBlockSettings(MapColor mapColor) {
+        return AbstractBlock.Settings.create()
+                .mapColor(mapColor)
+                .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                .requiresTool()
+                .strength(5.0F, 6.0F)
+                .sounds(BlockSoundGroup.METAL);
+    }
+
     /**
      * 电缆方块属性：不遮光、一挖就掉，被活塞推动时直接破坏而不是推走。
-     * 碰撞箱不在这里设置——{@link CableBlock#getCollisionShape} 会跟着连接状态返回
-     * 与外形完全一致的形状（中心块 + 已连接的臂）。
-     */
+      * 碰撞箱不在这里设置——{@link CableBlock#getCollisionShape} 会跟着连接状态返回
+      * 与外形完全一致的形状（中心块 + 已连接的臂）。
+      */
     private static AbstractBlock.Settings cableSettings(MapColor mapColor) {
         return AbstractBlock.Settings.create()
                 .mapColor(mapColor)

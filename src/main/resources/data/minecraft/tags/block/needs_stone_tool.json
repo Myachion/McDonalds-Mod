@@ -9,6 +9,11 @@
     "mcdonalds-mod:tin_ore",
     "mcdonalds-mod:lead_ore",
     "mcdonalds-mod:deepslate_lead_ore",
-    "mcdonalds-mod:aluminum_ore"
+    "mcdonalds-mod:aluminum_ore",
+    "mcdonalds-mod:aluminum_block",
+    "mcdonalds-mod:bronze_block",
+    "mcdonalds-mod:lead_block",
+    "mcdonalds-mod:silver_block",
+    "mcdonalds-mod:tin_block"
   ]
 }
