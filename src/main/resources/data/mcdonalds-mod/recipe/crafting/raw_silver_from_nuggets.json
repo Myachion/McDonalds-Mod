@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "raw_silver",
+  "key": {
+    "#": "mcdonalds-mod:raw_silver_nugget"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mcdonalds-mod:raw_silver"
+  }
+}

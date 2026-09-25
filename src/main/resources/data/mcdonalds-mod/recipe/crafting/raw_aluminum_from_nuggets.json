@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "raw_aluminum",
+  "key": {
+    "#": "mcdonalds-mod:raw_aluminum_nugget"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mcdonalds-mod:raw_aluminum"
+  }
+}

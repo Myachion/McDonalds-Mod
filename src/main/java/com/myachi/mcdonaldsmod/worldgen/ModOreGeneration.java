@@ -44,6 +44,12 @@ public final class ModOreGeneration {
     public static final RegistryKey<PlacedFeature> ALUMINUM_ORE = placedFeature("aluminum_ore");
     /** 铀：size 4 / count 2 / 高度 -64~16 三角分布，含深层变种。 */
     public static final RegistryKey<PlacedFeature> URANIUM_ORE = placedFeature("uranium_ore");
+    /** 银：size 7 / count 3 / 高度 -48~48 梯形分布，含深层变种。 */
+    public static final RegistryKey<PlacedFeature> SILVER_ORE = placedFeature("silver_ore");
+    /** 下界铝：size 8 / count 8 / 高度 10~(顶-10)，只长在地狱岩里。 */
+    public static final RegistryKey<PlacedFeature> NETHER_ALUMINUM_ORE = placedFeature("nether_aluminum_ore");
+    /** 下界银：size 6 / count 4 / 高度 10~(顶-10)。 */
+    public static final RegistryKey<PlacedFeature> NETHER_SILVER_ORE = placedFeature("nether_silver_ore");
 
     public static final TagKey<Biome> DENSE_BIOMES = biomeTag("salt_ore_dense");
     public static final TagKey<Biome> NORMAL_BIOMES = biomeTag("salt_ore_normal");
@@ -61,7 +67,12 @@ public final class ModOreGeneration {
         addOverworldFeature(TIN_ORE);
         addOverworldFeature(LEAD_ORE);
         addOverworldFeature(ALUMINUM_ORE);
+        addOverworldFeature(SILVER_ORE);
         addOverworldFeature(URANIUM_ORE);
+
+        // 下界矿石：全下界生物群系
+        addNetherFeature(NETHER_ALUMINUM_ORE);
+        addNetherFeature(NETHER_SILVER_ORE);
 
         McDonaldsMod.LOGGER.info("Registry ModOreGeneration!");
     }
@@ -69,6 +80,14 @@ public final class ModOreGeneration {
     private static void addOverworldFeature(RegistryKey<PlacedFeature> placedFeature) {
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInOverworld(),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                placedFeature
+        );
+    }
+
+    private static void addNetherFeature(RegistryKey<PlacedFeature> placedFeature) {
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInTheNether(),
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 placedFeature
         );

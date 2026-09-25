@@ -33,6 +33,11 @@ public class ModItems {
     public static final Item RAW_LEAD = register("raw_lead",Item::new,new Item.Settings());
     public static final Item RAW_ALUMINUM = register("raw_aluminum",Item::new,new Item.Settings());
     public static final Item RAW_URANIUM = register("raw_uranium",Item::new,new Item.Settings());
+    public static final Item RAW_SILVER = register("raw_silver",Item::new,new Item.Settings());
+
+    // 粗矿粒：只在下界矿掉落，九个合成一个粗矿（同原版金粒/铁粒的用法）。
+    public static final Item RAW_ALUMINUM_NUGGET = register("raw_aluminum_nugget",Item::new,new Item.Settings());
+    public static final Item RAW_SILVER_NUGGET = register("raw_silver_nugget",Item::new,new Item.Settings());
 
     public static final Item TIN_INGOT = register("tin_ingot",Item::new,new Item.Settings());
     public static final Item LEAD_INGOT = register("lead_ingot",Item::new,new Item.Settings());

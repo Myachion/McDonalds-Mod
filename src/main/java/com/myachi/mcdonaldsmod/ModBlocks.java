@@ -18,6 +18,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
 
 import java.util.function.Function;
 
@@ -76,7 +77,7 @@ public class ModBlocks {
             metalBlockSettings(MapColor.LICHEN_GREEN));
 
     public static final Block SALT_ORE = register(
-            "salt_ore", Block::new ,
+            "salt_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 1), settings),
             AbstractBlock.Settings.create()
                     .requiresTool()
                     .strength(3.0F, 3.0F)
@@ -84,7 +85,7 @@ public class ModBlocks {
     );
 
     public static final Block DEEPSLATE_SALT_ORE = register(
-            "deepslate_salt_ore", Block::new ,
+            "deepslate_salt_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 1), settings),
             AbstractBlock.Settings.create()
                     .requiresTool()
                     .strength(4.5F, 6.0F)
@@ -92,32 +93,54 @@ public class ModBlocks {
     );
 
     /*
-     * 金属矿石。锡和铝不做深层变种，铅和铀有。
+     * 金属矿石。全部用 ExperienceDroppingBlock 注册，挖掉会掉经验（原版矿石同样如此：
+     * 煤 0~2、青金石 2~5、钻石 3~7…），数值就写在构造函数里。
+     * 锡和铝不做深层变种，铅、铀、银有；铝和银另外各有一张下界矿。
      * 生成参数见 ModOreGeneration 和 worldgen 下的数据文件。
      */
     public static final Block TIN_ORE = register(
-            "tin_ore", Block::new,
-            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+            "tin_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
+            oreSettings());
 
     public static final Block LEAD_ORE = register(
-            "lead_ore", Block::new,
-            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+            "lead_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
+            oreSettings());
 
     public static final Block DEEPSLATE_LEAD_ORE = register(
-            "deepslate_lead_ore", Block::new,
-            AbstractBlock.Settings.create().requiresTool().strength(4.5F, 3.0F).sounds(BlockSoundGroup.DEEPSLATE));
+            "deepslate_lead_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
+            deepslateOreSettings());
 
     public static final Block ALUMINUM_ORE = register(
-            "aluminum_ore", Block::new,
-            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+            "aluminum_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
+            oreSettings());
+
+    /** 银矿：主世界（含深层变种）。每区块次数比铅少，比金多。 */
+    public static final Block SILVER_ORE = register(
+            "silver_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 3), settings),
+            oreSettings());
+
+    public static final Block DEEPSLATE_SILVER_ORE = register(
+            "deepslate_silver_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 3), settings),
+            deepslateOreSettings());
 
     public static final Block URANIUM_ORE = register(
-            "uranium_ore", Block::new,
-            AbstractBlock.Settings.create().requiresTool().strength(3.0F, 3.0F).sounds(BlockSoundGroup.STONE));
+            "uranium_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 4), settings),
+            oreSettings());
 
     public static final Block DEEPSLATE_URANIUM_ORE = register(
-            "deepslate_uranium_ore", Block::new,
-            AbstractBlock.Settings.create().requiresTool().strength(4.5F, 3.0F).sounds(BlockSoundGroup.DEEPSLATE));
+            "deepslate_uranium_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 4), settings),
+            deepslateOreSettings());
+
+    /*
+     * 下界矿石：嵌在地狱岩里，掉对应的粗金属粒（4~7 个），掉落表见 loot_table/blocks/。
+     */
+    public static final Block NETHER_ALUMINUM_ORE = register(
+            "nether_aluminum_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
+            netherOreSettings());
+
+    public static final Block NETHER_SILVER_ORE = register(
+            "nether_silver_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 3), settings),
+            netherOreSettings());
 
     public static final Block MACHINE_SHELL = register(
             "machine_shell", Block::new ,
@@ -264,6 +287,30 @@ public class ModBlocks {
                 .requiresTool()
                 .strength(5.0F, 6.0F)
                 .sounds(BlockSoundGroup.METAL);
+    }
+
+    /** 石头里的矿石：和原版石头矿一致的硬度与音效。 */
+    private static AbstractBlock.Settings oreSettings() {
+        return AbstractBlock.Settings.create()
+                .requiresTool()
+                .strength(3.0F, 3.0F)
+                .sounds(BlockSoundGroup.STONE);
+    }
+
+    /** 深板岩里的矿石：和原版深层矿一致。 */
+    private static AbstractBlock.Settings deepslateOreSettings() {
+        return AbstractBlock.Settings.create()
+                .requiresTool()
+                .strength(4.5F, 3.0F)
+                .sounds(BlockSoundGroup.DEEPSLATE);
+    }
+
+    /** 下界矿石：嵌在地狱岩里，音效同原版下界矿。 */
+    private static AbstractBlock.Settings netherOreSettings() {
+        return AbstractBlock.Settings.create()
+                .requiresTool()
+                .strength(3.0F, 3.0F)
+                .sounds(BlockSoundGroup.NETHER_ORE);
     }
 
     /**

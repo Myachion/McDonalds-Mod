@@ -34,12 +34,19 @@ public class ModItemGroups {
                 entries.add(ModBlocks.LEAD_ORE);
                 entries.add(ModBlocks.DEEPSLATE_LEAD_ORE);
                 entries.add(ModBlocks.ALUMINUM_ORE);
+                entries.add(ModBlocks.SILVER_ORE);
+                entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
+                entries.add(ModBlocks.NETHER_ALUMINUM_ORE);
+                entries.add(ModBlocks.NETHER_SILVER_ORE);
                 entries.add(ModBlocks.URANIUM_ORE);
                 entries.add(ModBlocks.DEEPSLATE_URANIUM_ORE);
 
                 entries.add(ModItems.RAW_TIN);
                 entries.add(ModItems.RAW_LEAD);
                 entries.add(ModItems.RAW_ALUMINUM);
+                entries.add(ModItems.RAW_ALUMINUM_NUGGET);
+                entries.add(ModItems.RAW_SILVER);
+                entries.add(ModItems.RAW_SILVER_NUGGET);
                 entries.add(ModItems.RAW_URANIUM);
                 entries.add(ModItems.TIN_INGOT);
                 entries.add(ModItems.LEAD_INGOT);
