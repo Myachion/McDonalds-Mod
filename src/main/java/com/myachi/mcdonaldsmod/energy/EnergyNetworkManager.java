@@ -3,7 +3,10 @@ package com.myachi.mcdonaldsmod.energy;
 import com.myachi.mcdonaldsmod.ModBlockTags;
 import com.myachi.mcdonaldsmod.McDonaldsMod;
 import net.minecraft.block.BlockState;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -27,6 +30,8 @@ import java.util.Set;
 public final class EnergyNetworkManager {
     /** 超过额定电流多久才烧毁：3 秒。 */
     private static final int BURNOUT_TICKS = 60;
+    /** 从什么时候开始冒烟预警（1.5 秒）。 */
+    private static final int WARNING_TICKS = 30;
     /** 临时诊断用：最多打多少行过载日志。 */
     private static int debugBurnoutLogs = 0;
 
@@ -92,6 +97,11 @@ public final class EnergyNetworkManager {
             int ticks = this.overloadTicks.merge(pos, 1, Integer::sum);
             if (ticks >= BURNOUT_TICKS) {
                 burnt.add(pos);
+            } else if (ticks >= WARNING_TICKS && ticks % 4 == 0) {
+                // 快撑不住了：冒点烟提醒玩家这根线在发烫
+                this.world.spawnParticles(ParticleTypes.SMOKE,
+                        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                        2, 0.12, 0.12, 0.12, 0.01);
             }
         }
         // 不再过载的电缆缓慢降温，而不是立刻清零。
@@ -111,12 +121,28 @@ public final class EnergyNetworkManager {
         }
         for (BlockPos pos : burnt) {
             this.overloadTicks.remove(pos);
+            spawnBurnoutEffects(pos);
             // 直接移除，不掉落任何东西
             this.world.removeBlock(pos, false);
         }
         if (!burnt.isEmpty()) {
             this.dirty = true;
         }
+    }
+
+    /** 烧断瞬间：大烟、火苗、岩浆火球、电火花一起上，再配一声滋滋。 */
+    private void spawnBurnoutEffects(BlockPos pos) {
+        double x = pos.getX() + 0.5;
+        double y = pos.getY() + 0.5;
+        double z = pos.getZ() + 0.5;
+        ServerWorld world = this.world;
+        world.spawnParticles(ParticleTypes.LARGE_SMOKE, x, y, z, 24, 0.25, 0.25, 0.25, 0.02);
+        world.spawnParticles(ParticleTypes.SMOKE, x, y, z, 16, 0.3, 0.3, 0.3, 0.03);
+        world.spawnParticles(ParticleTypes.FLAME, x, y, z, 18, 0.2, 0.2, 0.2, 0.06);
+        world.spawnParticles(ParticleTypes.LAVA, x, y, z, 6, 0.2, 0.2, 0.2, 0.0);
+        world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 20, 0.3, 0.3, 0.3, 0.15);
+        world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.7F, 1.4F);
+        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.8F);
     }
 
     /** 查某根电缆属于哪张网（没接网就是 null）。 */
