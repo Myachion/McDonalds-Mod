@@ -53,9 +53,12 @@ public class TestGeneratorScreenHandler extends ScreenHandler {
         return this.properties.get(index);
     }
 
-    /** 缓存电量，单位焦耳（同步值是按 100 J 一格的）。 */
-    public int getStoredEnergy() {
-        return get(TestGeneratorBlockEntity.INDEX_ENERGY) * TestGeneratorBlockEntity.ENERGY_UNIT;
+    /** 缓存电量（毫焦）。三个 15 位字段在服务端拆开、客户端拼回来。 */
+    public long getStoredEnergyMilliJoules() {
+        return LongPropertyCodec.combine(
+                get(TestGeneratorBlockEntity.INDEX_ENERGY_LOW),
+                get(TestGeneratorBlockEntity.INDEX_ENERGY_MID),
+                get(TestGeneratorBlockEntity.INDEX_ENERGY_HIGH));
     }
 
     public long getOutputPower() {
@@ -64,6 +67,23 @@ public class TestGeneratorScreenHandler extends ScreenHandler {
 
     public long getGenerationPower() {
         return (long) get(TestGeneratorBlockEntity.INDEX_GENERATION_VOLTAGE) * get(TestGeneratorBlockEntity.INDEX_GENERATION_CURRENT);
+    }
+
+    /** 实际输出功率（mW）= 电网回填的实际输出电压 × 实际输出电流。 */
+    public long getMeasuredOutputPowerMilliWatts() {
+        return (long) get(TestGeneratorBlockEntity.INDEX_MEASURED_OUTPUT_VOLTAGE)
+                * getMeasuredOutputCurrentMilliAmps();
+    }
+
+    public int getMeasuredOutputVoltage() {
+        return get(TestGeneratorBlockEntity.INDEX_MEASURED_OUTPUT_VOLTAGE);
+    }
+
+    public int getMeasuredOutputCurrentMilliAmps() {
+        return (int) LongPropertyCodec.combine(
+                get(TestGeneratorBlockEntity.INDEX_MEASURED_CURRENT_LOW),
+                get(TestGeneratorBlockEntity.INDEX_MEASURED_CURRENT_MID),
+                get(TestGeneratorBlockEntity.INDEX_MEASURED_CURRENT_HIGH));
     }
 
     @Override

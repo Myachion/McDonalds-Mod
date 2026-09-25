@@ -2,6 +2,8 @@ package com.myachi.mcdonaldsmod.machine;
 
 import com.myachi.mcdonaldsmod.ModBlockEntities;
 import com.myachi.mcdonaldsmod.ModScreenHandlers;
+import com.myachi.mcdonaldsmod.energy.EnergyNetworks;
+import com.myachi.mcdonaldsmod.energy.EnergyStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,40 +11,49 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 /**
- * 测试电池盒的数据：储电量 + 输入/输出 的电压/电流。
+ * 测试电池盒：一个大号缓冲区，本身体内就是储能池（没有额外的"缓冲区里的缓冲区"）。
  *
- * <p>储电量**没有上限**（就是 long 能装多少，约 9.2e18 焦），所以同步时把它拆成
- * 三个 15 位字段（见 {@link LongPropertyCodec}）。实际读数暂时不参与能量传输。
+ * <p>储电量没有上限（long 装多少算多少），额定输入/输出电压和电流决定它两个方向的功率上限。
+ * 每 tick 由电网结算调用 {@link #insertEnergy(long)} / {@link #extractEnergy(long)}，
+ * 同时把实际流动的电压电流回填到界面上那几个"实测"读数里。
+ *
+ * <p>能量单位毫焦，电流对外用毫安，界面显示时再换算。
  */
-public class TestBatteryBoxBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
+public class TestBatteryBoxBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, EnergyStorage {
     public static final int INDEX_ENERGY_LOW = 0;
     public static final int INDEX_ENERGY_MID = 1;
     public static final int INDEX_ENERGY_HIGH = 2;
-    /** 下面四个是"当前实际"的读数，等电网接进来才会动。 */
+    /** 下面四个是"当前实际"的读数（V / mA）。 */
     public static final int INDEX_INPUT_VOLTAGE = 3;
-    public static final int INDEX_INPUT_CURRENT = 4;
-    public static final int INDEX_OUTPUT_VOLTAGE = 5;
-    public static final int INDEX_OUTPUT_CURRENT = 6;
-    /** 下面四个是界面上可以调的"额定"数值。 */
-    public static final int INDEX_RATED_INPUT_VOLTAGE = 7;
-    public static final int INDEX_RATED_INPUT_CURRENT = 8;
-    public static final int INDEX_RATED_OUTPUT_VOLTAGE = 9;
-    public static final int INDEX_RATED_OUTPUT_CURRENT = 10;
-    public static final int PROPERTY_COUNT = 11;
+    /** 电流可能超过 32767 mA（16 位同步上限），所以拆三个字段。 */
+    public static final int INDEX_INPUT_CURRENT_LOW = 4;
+    public static final int INDEX_INPUT_CURRENT_MID = 5;
+    public static final int INDEX_INPUT_CURRENT_HIGH = 6;
+    public static final int INDEX_OUTPUT_VOLTAGE = 7;
+    public static final int INDEX_OUTPUT_CURRENT_LOW = 8;
+    public static final int INDEX_OUTPUT_CURRENT_MID = 9;
+    public static final int INDEX_OUTPUT_CURRENT_HIGH = 10;
+    /** 下面四个是界面上可以调的"额定"数值（V / A）。 */
+    public static final int INDEX_RATED_INPUT_VOLTAGE = 11;
+    public static final int INDEX_RATED_INPUT_CURRENT = 12;
+    public static final int INDEX_RATED_OUTPUT_VOLTAGE = 13;
+    public static final int INDEX_RATED_OUTPUT_CURRENT = 14;
+    public static final int PROPERTY_COUNT = 15;
 
-    /** 储电量（焦耳），没有上限。 */
+    /** 储电量，单位毫焦，没有上限。 */
     private long storedEnergy = 0;
-    // 实际读数（暂时恒为 0）
+    // 实际读数
     private int inputVoltage = 0;
-    private int inputCurrent = 0;
+    private int inputCurrentMilliAmps = 0;
     private int outputVoltage = 0;
-    private int outputCurrent = 0;
+    private int outputCurrentMilliAmps = 0;
     // 额定设定值
     private int ratedInputVoltage = 128;
     private int ratedInputCurrent = 0;
@@ -57,9 +68,13 @@ public class TestBatteryBoxBlockEntity extends BlockEntity implements NamedScree
                 case INDEX_ENERGY_MID -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.storedEnergy, 1);
                 case INDEX_ENERGY_HIGH -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.storedEnergy, 2);
                 case INDEX_INPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.inputVoltage;
-                case INDEX_INPUT_CURRENT -> TestBatteryBoxBlockEntity.this.inputCurrent;
+                case INDEX_INPUT_CURRENT_LOW -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.inputCurrentMilliAmps, 0);
+                case INDEX_INPUT_CURRENT_MID -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.inputCurrentMilliAmps, 1);
+                case INDEX_INPUT_CURRENT_HIGH -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.inputCurrentMilliAmps, 2);
                 case INDEX_OUTPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.outputVoltage;
-                case INDEX_OUTPUT_CURRENT -> TestBatteryBoxBlockEntity.this.outputCurrent;
+                case INDEX_OUTPUT_CURRENT_LOW -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.outputCurrentMilliAmps, 0);
+                case INDEX_OUTPUT_CURRENT_MID -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.outputCurrentMilliAmps, 1);
+                case INDEX_OUTPUT_CURRENT_HIGH -> LongPropertyCodec.field(TestBatteryBoxBlockEntity.this.outputCurrentMilliAmps, 2);
                 case INDEX_RATED_INPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.ratedInputVoltage;
                 case INDEX_RATED_INPUT_CURRENT -> TestBatteryBoxBlockEntity.this.ratedInputCurrent;
                 case INDEX_RATED_OUTPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.ratedOutputVoltage;
@@ -71,18 +86,12 @@ public class TestBatteryBoxBlockEntity extends BlockEntity implements NamedScree
         @Override
         public void set(int index, int value) {
             switch (index) {
-                case INDEX_ENERGY_LOW, INDEX_ENERGY_MID, INDEX_ENERGY_HIGH -> {
-                    // 客户端只会往数组里写，这里不用管
-                }
-                case INDEX_INPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.inputVoltage = value;
-                case INDEX_INPUT_CURRENT -> TestBatteryBoxBlockEntity.this.inputCurrent = value;
-                case INDEX_OUTPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.outputVoltage = value;
-                case INDEX_OUTPUT_CURRENT -> TestBatteryBoxBlockEntity.this.outputCurrent = value;
                 case INDEX_RATED_INPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.ratedInputVoltage = value;
                 case INDEX_RATED_INPUT_CURRENT -> TestBatteryBoxBlockEntity.this.ratedInputCurrent = value;
                 case INDEX_RATED_OUTPUT_VOLTAGE -> TestBatteryBoxBlockEntity.this.ratedOutputVoltage = value;
                 case INDEX_RATED_OUTPUT_CURRENT -> TestBatteryBoxBlockEntity.this.ratedOutputCurrent = value;
                 default -> {
+                    // 其余的都是服务端写、客户端读
                 }
             }
         }
@@ -105,21 +114,22 @@ public class TestBatteryBoxBlockEntity extends BlockEntity implements NamedScree
         return this.storedEnergy;
     }
 
-    /** 往储电池里加电（电网接入后会用到）。 */
-    public void addEnergy(long joules) {
-        if (joules <= 0) {
+    /** 服务端每 tick 登记一次，让电网知道这里有台机器。 */
+    public void tick() {
+        if (this.world instanceof ServerWorld serverWorld) {
+            EnergyNetworks.get(serverWorld).registerMachine(this.pos);
+        }
+    }
+
+    /** 往储电池加电（也供测试脚本灌电用）。 */
+    public void addEnergy(long millijoules) {
+        if (millijoules <= 0) {
             return;
         }
-        this.storedEnergy = joules > Long.MAX_VALUE - this.storedEnergy ? Long.MAX_VALUE : this.storedEnergy + joules;
+        this.storedEnergy = millijoules > Long.MAX_VALUE - this.storedEnergy
+                ? Long.MAX_VALUE
+                : this.storedEnergy + millijoules;
         this.markDirty();
-    }
-
-    public long getInputPower() {
-        return (long) this.inputVoltage * this.inputCurrent;
-    }
-
-    public long getOutputPower() {
-        return (long) this.outputVoltage * this.outputCurrent;
     }
 
     /** 额定电压在等级表里挪一格（循环）。 */
@@ -146,14 +156,90 @@ public class TestBatteryBoxBlockEntity extends BlockEntity implements NamedScree
         this.markDirty();
     }
 
+    // ------------------------------------------------------------------
+    // 电网接口
+    // ------------------------------------------------------------------
+
+    @Override
+    public long getStoredEnergyMilliJoules() {
+        return this.storedEnergy;
+    }
+
+    @Override
+    public long insertEnergy(long millijoules) {
+        if (millijoules <= 0) {
+            return 0;
+        }
+        addEnergy(millijoules);
+        return millijoules;
+    }
+
+    @Override
+    public long extractEnergy(long millijoules) {
+        if (millijoules <= 0) {
+            return 0;
+        }
+        long taken = Math.min(millijoules, this.storedEnergy);
+        if (taken > 0) {
+            this.storedEnergy -= taken;
+            this.markDirty();
+        }
+        return taken;
+    }
+
+    @Override
+    public int getRatedInputVoltage() {
+        return this.ratedInputVoltage;
+    }
+
+    @Override
+    public int getRatedInputCurrent() {
+        return this.ratedInputCurrent * 1000;
+    }
+
+    @Override
+    public int getRatedOutputVoltage() {
+        return this.ratedOutputVoltage;
+    }
+
+    @Override
+    public int getRatedOutputCurrent() {
+        return this.ratedOutputCurrent * 1000;
+    }
+
+    /**
+     * 只有四个侧面能往外输电 —— 也就是材质上画了圆形端口的那四面。
+     * 上下两面不是输出口。
+     */
+    @Override
+    public boolean canProvideEnergyFrom(net.minecraft.util.math.Direction side) {
+        return side.getAxis().isHorizontal() && canProvideEnergy();
+    }
+
+    /**
+     * 只有上下两面能充电。侧面虽然也能接电缆，但那是输出口，电只能往外走。
+     */
+    @Override
+    public boolean canReceiveEnergyOn(net.minecraft.util.math.Direction side) {
+        return side.getAxis() == net.minecraft.util.math.Direction.Axis.Y && canReceiveEnergy();
+    }
+
+    @Override
+    public void setMeasuredInput(int voltage, int currentMilliAmps) {
+        this.inputVoltage = voltage;
+        this.inputCurrentMilliAmps = currentMilliAmps;
+    }
+
+    @Override
+    public void setMeasuredOutput(int voltage, int currentMilliAmps) {
+        this.outputVoltage = voltage;
+        this.outputCurrentMilliAmps = currentMilliAmps;
+    }
+
     @Override
     protected void readData(ReadView view) {
         super.readData(view);
-        this.storedEnergy = Math.max(0, view.getLong("stored_energy", 0));
-        this.inputVoltage = view.getInt("input_voltage", 0);
-        this.inputCurrent = view.getInt("input_current", 0);
-        this.outputVoltage = view.getInt("output_voltage", 0);
-        this.outputCurrent = view.getInt("output_current", 0);
+        this.storedEnergy = Math.max(0L, view.getLong("stored_energy", 0L));
         this.ratedInputVoltage = EnergyLevels.snap(EnergyLevels.VOLTAGE, view.getInt("rated_input_voltage", 128));
         this.ratedInputCurrent = EnergyLevels.snap(EnergyLevels.CURRENT, view.getInt("rated_input_current", 0));
         this.ratedOutputVoltage = EnergyLevels.snap(EnergyLevels.VOLTAGE, view.getInt("rated_output_voltage", 128));
@@ -163,10 +249,6 @@ public class TestBatteryBoxBlockEntity extends BlockEntity implements NamedScree
     @Override
     protected void writeData(WriteView view) {
         view.putLong("stored_energy", this.storedEnergy);
-        view.putInt("input_voltage", this.inputVoltage);
-        view.putInt("input_current", this.inputCurrent);
-        view.putInt("output_voltage", this.outputVoltage);
-        view.putInt("output_current", this.outputCurrent);
         view.putInt("rated_input_voltage", this.ratedInputVoltage);
         view.putInt("rated_input_current", this.ratedInputCurrent);
         view.putInt("rated_output_voltage", this.ratedOutputVoltage);

@@ -1,8 +1,11 @@
 package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.beacon.ModBeaconFeatures;
+import com.myachi.mcdonaldsmod.energy.EnergyNetworks;
+import com.myachi.mcdonaldsmod.energy.EnergyConfig;
 import com.myachi.mcdonaldsmod.worldgen.ModOreGeneration;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,10 @@ public class McDonaldsMod implements ModInitializer {
         ModSounds.initializeModSounds();
         ModBeaconFeatures.initialize();
         ModOreGeneration.initialize();
+
+        // 电网：每 tick 结算一次（网络结构只在方块增删时重算）
+        EnergyConfig.load();
+        ServerTickEvents.END_WORLD_TICK.register(world -> EnergyNetworks.get(world).tick());
 
 		LOGGER.info("Hello Fabric world!");
 

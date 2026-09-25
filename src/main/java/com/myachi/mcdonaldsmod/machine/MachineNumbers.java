@@ -7,9 +7,34 @@ public final class MachineNumbers {
     private MachineNumbers() {
     }
 
-    /** 能量，统一用 kJ 显示。 */
-    public static String energy(long joules) {
-        return trim(joules / 1000.0) + " kJ";
+    /** 能量，输入毫焦，统一用 kJ 显示。 */
+    public static String energy(long millijoules) {
+        if (millijoules % 1_000_000L == 0) {
+            return (millijoules / 1_000_000L) + " kJ";
+        }
+        return trim(millijoules / 1_000_000.0) + " kJ";
+    }
+
+    /** 电流，输入毫安，最多显示两位小数。 */
+    public static String current(int milliamps) {
+        if (milliamps % 1000 == 0) {
+            return (milliamps / 1000) + " A";
+        }
+        return trim(milliamps / 1000.0) + " A";
+    }
+
+    /** 电阻，输入毫欧，最多显示三位小数。 */
+    public static String ohms(int milliohms) {
+        if (milliohms == 0) {
+            return "0";
+        }
+        if (milliohms % 1000 == 0) {
+            return String.valueOf(milliohms / 1000);
+        }
+        if (milliohms % 10 == 0) {
+            return String.format(Locale.ROOT, "%.2f", milliohms / 1000.0);
+        }
+        return String.format(Locale.ROOT, "%.3f", milliohms / 1000.0);
     }
 
     /** 能量占容量的百分比，用来画进度条。 */

@@ -76,42 +76,44 @@ public class ModBlocks {
 
     /*
      * 电缆方块：细杆状小方块，六向自动连接。
-     * 括号里是电压等级（单位 V）：锡 32 / 铜·钢 128 / 金 512 / 铁 2048 / 玻璃纤维 8192。
+     * 参数依次是：额定电压(V) / 横截面(像素) / 额定电流(A) / 每格电阻(毫欧)。
+     * 目前加入的六种：锡 32V / 铜 128V / 钢 512V / 金 512V / 铁 2048V / 玻璃纤维 8192V。
+     * （铝、超导、以及各种"x2"加粗版还没做。）
      * 物品形式就是这些方块的 BlockItem，注册名和以前的导线物品完全一样。
      */
     public static final Block TIN_CABLE = register(
             "tin_cable",
-            settings -> new CableBlock(32, settings),
+            settings -> new CableBlock(32, CableBlock.THIN, 8, 100, settings),
             cableSettings(MapColor.LIGHT_GRAY)
     );
 
     public static final Block COPPER_CABLE = register(
             "copper_cable",
-            settings -> new CableBlock(128, settings),
+            settings -> new CableBlock(128, CableBlock.THIN, 16, 50, settings),
             cableSettings(MapColor.ORANGE)
     );
 
     public static final Block STEEL_CABLE = register(
             "steel_cable",
-            settings -> new CableBlock(128, CableBlock.THICK, settings),
+            settings -> new CableBlock(512, CableBlock.THICK, 16, 100, settings),
             cableSettings(MapColor.IRON_GRAY)
     );
 
     public static final Block GOLD_CABLE = register(
             "gold_cable",
-            settings -> new CableBlock(512, settings),
+            settings -> new CableBlock(512, CableBlock.THIN, 32, 50, settings),
             cableSettings(MapColor.GOLD)
     );
 
     public static final Block IRON_CABLE = register(
             "iron_cable",
-            settings -> new CableBlock(2048, CableBlock.THICK, settings),
+            settings -> new CableBlock(2048, CableBlock.THICK, 64, 60, settings),
             cableSettings(MapColor.STONE_GRAY)
     );
 
     public static final Block FIBERGLASS_CABLE = register(
             "fiberglass_cable",
-            settings -> new CableBlock(8192, settings),
+            settings -> new CableBlock(8192, CableBlock.THIN, 64, 10, settings),
             cableSettings(MapColor.LIGHT_BLUE)
     );
 

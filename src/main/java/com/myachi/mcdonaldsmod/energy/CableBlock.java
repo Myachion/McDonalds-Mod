@@ -16,6 +16,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 import org.jspecify.annotations.Nullable;
@@ -59,8 +60,12 @@ public class CableBlock extends Block {
     );
 
     private final MapCodec<CableBlock> codec;
-    /** 电网参数，第一阶段只作为数据保存，能量层会用到。 */
+    /** 额定电压（V）。 */
     private final int voltage;
+    /** 额定电流（mA），超过它会开始过热。 */
+    private final int ratedCurrentMilliAmps;
+    /** 每格电阻（毫欧），用来算线路压降和损耗。 */
+    private final int resistanceMilliOhms;
     /** 横截面宽度（像素）：中心块和各条臂都用这个尺寸。 */
     private final int thickness;
     /** 中心块。 */
@@ -71,14 +76,20 @@ public class CableBlock extends Block {
     private final Map<BlockState, VoxelShape> outlineShapes = new HashMap<>();
 
     public CableBlock(int voltage, AbstractBlock.Settings settings) {
-        this(voltage, THIN, settings);
+        this(voltage, THIN, 16, 50, settings);
     }
 
     public CableBlock(int voltage, int thickness, AbstractBlock.Settings settings) {
+        this(voltage, thickness, 16, 50, settings);
+    }
+
+    public CableBlock(int voltage, int thickness, int ratedCurrentAmps, int resistanceMilliOhms, AbstractBlock.Settings settings) {
         super(settings);
         this.voltage = voltage;
         this.thickness = thickness;
-        this.codec = createCodec(settings1 -> new CableBlock(voltage, thickness, settings1));
+        this.ratedCurrentMilliAmps = ratedCurrentAmps * 1000;
+        this.resistanceMilliOhms = resistanceMilliOhms;
+        this.codec = createCodec(settings1 -> new CableBlock(voltage, thickness, ratedCurrentAmps, resistanceMilliOhms, settings1));
 
         double min = (16.0 - thickness) / 2.0;
         double max = 16.0 - min;
@@ -109,6 +120,16 @@ public class CableBlock extends Block {
 
     public int getThickness() {
         return this.thickness;
+    }
+
+    /** 额定电流（mA）。 */
+    public int getRatedCurrentMilliAmps() {
+        return this.ratedCurrentMilliAmps;
+    }
+
+    /** 每格电阻（毫欧）。 */
+    public int getResistanceMilliOhms() {
+        return this.resistanceMilliOhms;
     }
 
     @Override
@@ -210,5 +231,21 @@ public class CableBlock extends Block {
     protected BlockState getStateForNeighborUpdate(BlockState state, WorldView world, ScheduledTickView tickView, BlockPos pos,
                                                    Direction direction, BlockPos neighborPos, BlockState neighborState, Random random) {
         return this.withConnections(state, world, pos);
+    }
+
+    /** 电缆放下时告诉电网：网络结构要重算。 */
+    @Override
+    protected void onBlockAdded(BlockState state, net.minecraft.world.World world, BlockPos pos, BlockState oldState, boolean notify) {
+        super.onBlockAdded(state, world, pos, oldState, notify);
+        if (world instanceof ServerWorld serverWorld) {
+            EnergyNetworks.get(serverWorld).markCable(pos, true);
+        }
+    }
+
+    /** 电缆被拆掉时同理。 */
+    @Override
+    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+        EnergyNetworks.get(world).markCable(pos, false);
+        super.onStateReplaced(state, world, pos, moved);
     }
 }

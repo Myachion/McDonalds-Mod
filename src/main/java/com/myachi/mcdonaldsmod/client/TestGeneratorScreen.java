@@ -13,7 +13,7 @@ import net.minecraft.text.Text;
 @Environment(EnvType.CLIENT)
 public class TestGeneratorScreen extends MachineScreen<TestGeneratorScreenHandler> {
     private static final int PANEL_WIDTH = 210;
-    private static final int PANEL_HEIGHT = 152;
+    private static final int PANEL_HEIGHT = 170;
     private static final int BAR_X = 12;
     private static final int BAR_Y = 36;
     private static final int BAR_WIDTH = 186;
@@ -51,7 +51,7 @@ public class TestGeneratorScreen extends MachineScreen<TestGeneratorScreenHandle
         MachineScreenStyle.divider(context, 8, 24, PANEL_WIDTH - 16);
 
         // 缓存能量
-        int energy = handler.getStoredEnergy();
+        long energy = handler.getStoredEnergyMilliJoules();
         String energyText = MachineNumbers.energy(energy) + " / " + MachineNumbers.energy(TestGeneratorBlockEntity.CAPACITY);
         MachineScreenStyle.label(context, this.textRenderer, "gui.mcdonalds-mod.energy_buffer", energyText, 12, 26);
         MachineScreenStyle.bar(context, BAR_X, BAR_Y, BAR_WIDTH, BAR_HEIGHT,
@@ -70,10 +70,20 @@ public class TestGeneratorScreen extends MachineScreen<TestGeneratorScreenHandle
         drawButtons(context, mouseX, mouseY);
 
         MachineScreenStyle.divider(context, 8, 132, PANEL_WIDTH - 16);
-        String power = MachineNumbers.power(handler.getOutputPower());
+        // 设定值和实际值分开显示，避免"设了 2.56 kW 就以为真的在输出 2.56 kW"
         context.drawText(this.textRenderer,
-                Text.translatable("gui.mcdonalds-mod.total_output_power").getString() + ":", 12, 140, MachineScreenStyle.TEXT, false);
-        context.drawText(this.textRenderer, power, 112, 140, MachineScreenStyle.TEXT_VALUE, false);
+                Text.translatable("gui.mcdonalds-mod.rated_output_power").getString() + ":", 12, 140,
+                MachineScreenStyle.TEXT, false);
+        context.drawText(this.textRenderer, MachineNumbers.power(handler.getOutputPower()), 130, 140,
+                MachineScreenStyle.TEXT_DIM, false);
+
+        String actual = MachineNumbers.power(handler.getMeasuredOutputPowerMilliWatts() / 1000L)
+                + "  (" + handler.getMeasuredOutputVoltage() + " V "
+                + MachineNumbers.current(handler.getMeasuredOutputCurrentMilliAmps()) + ")";
+        context.drawText(this.textRenderer,
+                Text.translatable("gui.mcdonalds-mod.actual_output_power").getString() + ":", 12, 154,
+                MachineScreenStyle.TEXT, false);
+        context.drawText(this.textRenderer, actual, 130, 154, MachineScreenStyle.TEXT_VALUE, false);
     }
 
 }

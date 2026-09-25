@@ -113,6 +113,9 @@ public class ModItems {
     public static final Item STEEL_HAMMER = register("steel_hammer",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
     public static final Item STEEL_CUTTER = register("steel_cutter",DurableCraftingTool::new, new Item.Settings().maxCount(1).maxDamage(120));
 
+    /** 万用表：右键电缆查看电网状态。 */
+    public static final Item METER = register("meter", com.myachi.mcdonaldsmod.machine.MeterItem::new, new Item.Settings().maxCount(1));
+
 
 
 

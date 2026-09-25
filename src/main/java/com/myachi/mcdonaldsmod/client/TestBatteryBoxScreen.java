@@ -67,11 +67,11 @@ public class TestBatteryBoxScreen extends MachineScreen<TestBatteryBoxScreenHand
         MachineScreenStyle.divider(context, 8, 118, PANEL_WIDTH - 16);
         String input = Text.translatable("gui.mcdonalds-mod.input").getString() + ":  "
                 + handler.get(TestBatteryBoxBlockEntity.INDEX_INPUT_VOLTAGE) + " V   "
-                + handler.get(TestBatteryBoxBlockEntity.INDEX_INPUT_CURRENT) + " A   "
+                + MachineNumbers.current(handler.getInputCurrentMilliAmps()) + "   "
                 + MachineNumbers.power(handler.getInputPower());
         String output = Text.translatable("gui.mcdonalds-mod.output").getString() + ":  "
                 + handler.get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_VOLTAGE) + " V   "
-                + handler.get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_CURRENT) + " A   "
+                + MachineNumbers.current(handler.getOutputCurrentMilliAmps()) + "   "
                 + MachineNumbers.power(handler.getOutputPower());
         context.drawText(this.textRenderer, input, 12, 126, MachineScreenStyle.TEXT_DIM, false);
         context.drawText(this.textRenderer, output, 12, 138, MachineScreenStyle.TEXT_DIM, false);

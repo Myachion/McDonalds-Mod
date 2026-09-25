@@ -53,11 +53,38 @@ public class TestBatteryBoxScreenHandler extends ScreenHandler {
     }
 
     public long getInputPower() {
-        return (long) get(TestBatteryBoxBlockEntity.INDEX_INPUT_VOLTAGE) * get(TestBatteryBoxBlockEntity.INDEX_INPUT_CURRENT);
+        return getInputPowerMilliWatts() / 1000L;
     }
 
     public long getOutputPower() {
-        return (long) get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_VOLTAGE) * get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_CURRENT);
+        return getOutputPowerMilliWatts() / 1000L;
+    }
+
+    /** 实测输入功率（mW）= 电压（V）× 电流（mA）。 */
+    public long getInputPowerMilliWatts() {
+        return (long) get(TestBatteryBoxBlockEntity.INDEX_INPUT_VOLTAGE)
+                * getInputCurrentMilliAmps();
+    }
+
+    /** 实测输入电流（mA）。 */
+    public int getInputCurrentMilliAmps() {
+        return (int) LongPropertyCodec.combine(
+                get(TestBatteryBoxBlockEntity.INDEX_INPUT_CURRENT_LOW),
+                get(TestBatteryBoxBlockEntity.INDEX_INPUT_CURRENT_MID),
+                get(TestBatteryBoxBlockEntity.INDEX_INPUT_CURRENT_HIGH));
+    }
+
+    /** 实测输出电流（mA）。 */
+    public int getOutputCurrentMilliAmps() {
+        return (int) LongPropertyCodec.combine(
+                get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_CURRENT_LOW),
+                get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_CURRENT_MID),
+                get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_CURRENT_HIGH));
+    }
+    /** 实测输出功率（mW）。 */
+    public long getOutputPowerMilliWatts() {
+        return (long) get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_VOLTAGE)
+                * getOutputCurrentMilliAmps();
     }
 
     @Override

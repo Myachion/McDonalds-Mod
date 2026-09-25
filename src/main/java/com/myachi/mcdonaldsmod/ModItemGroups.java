@@ -36,6 +36,7 @@ public class ModItemGroups {
                 entries.add(ModItems.GOLD_CABLE);
                 entries.add(ModItems.IRON_CABLE);
                 entries.add(ModItems.FIBERGLASS_CABLE);
+                entries.add(ModItems.METER);
 
                 entries.add(ModItems.IRIDIUM);
                 entries.add(ModItems.IRIDIUM_SHARD);
