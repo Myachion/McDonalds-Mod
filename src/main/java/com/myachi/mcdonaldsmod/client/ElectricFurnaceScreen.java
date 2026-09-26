@@ -1,6 +1,5 @@
 package com.myachi.mcdonaldsmod.client;
 
-import com.myachi.mcdonaldsmod.McDonaldsMod;
 import com.myachi.mcdonaldsmod.machine.ElectricFurnaceBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,10 +13,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 /**
- * 电炉界面：布局和原版熔炉一模一样，只把原版那个"火苗"换成闪电图标。
+ * 电炉界面：布局和原版熔炉一模一样，只把原版那个"火苗"换成 {@link EnergyBoltIcon 缓冲区闪电图标}。
  *
- * <p>图标取自素材 {@code resource/texture/gui/common.png} 里的那一对（7×13 像素）：
- * 灰色是底图，红色的按缓冲区电量比例从下往上盖，所以一眼就能看出还剩多少电。
+ * <p>这是"机器界面复用原版布局"的范例：继承对应的原版界面、只重画要改的部分。
+ * 以后新机器如果要完全自定义界面，参考 {@code TestGeneratorScreen} 那套（{@code MachineScreen} 基类）。
  */
 @Environment(EnvType.CLIENT)
 public class ElectricFurnaceScreen extends FurnaceScreen {
@@ -25,14 +24,7 @@ public class ElectricFurnaceScreen extends FurnaceScreen {
     private static final Identifier BACKGROUND = Identifier.ofVanilla("textures/gui/container/furnace.png");
     /** 原版烧制进度箭头。 */
     private static final Identifier BURN_PROGRESS = Identifier.ofVanilla("container/furnace/burn_progress");
-    private static final Identifier ENERGY_EMPTY =
-            Identifier.of(McDonaldsMod.MOD_ID, "textures/gui/electric_furnace/energy_empty.png");
-    private static final Identifier ENERGY_FILLED =
-            Identifier.of(McDonaldsMod.MOD_ID, "textures/gui/electric_furnace/energy_filled.png");
 
-    /** 图标原始尺寸（素材里那一小块）。 */
-    private static final int ICON_WIDTH = 7;
-    private static final int ICON_HEIGHT = 13;
     /** 原版火苗的位置与大小：相对界面左上角 (56, 36)，14×14。 */
     private static final int FLAME_X = 56;
     private static final int FLAME_Y = 36;
@@ -49,28 +41,25 @@ public class ElectricFurnaceScreen extends FurnaceScreen {
         super(handler, inventory, title);
     }
 
+    private int iconX() {
+        return this.x + FLAME_X + (FLAME_SIZE - EnergyBoltIcon.WIDTH) / 2;
+    }
+
+    private int iconY() {
+        return this.y + FLAME_Y + (FLAME_SIZE - EnergyBoltIcon.HEIGHT) / 2;
+    }
+
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         context.drawTexture(RenderPipelines.GUI_TEXTURED, BACKGROUND, this.x, this.y, 0.0F, 0.0F,
                 this.backgroundWidth, this.backgroundHeight, 256, 256);
 
         // 盖掉底板上原来那三簇火苗
-        context.fill(this.x + FLAME_X, this.y + FLAME_Y, this.x + FLAME_X + FLAME_SIZE, this.y + FLAME_Y + FLAME_SIZE,
-                PANEL_COLOR);
+        context.fill(this.x + FLAME_X, this.y + FLAME_Y,
+                this.x + FLAME_X + FLAME_SIZE, this.y + FLAME_Y + FLAME_SIZE, PANEL_COLOR);
 
-        // 图标摆进原来火苗的位置（居中）
-        int iconX = this.x + FLAME_X + (FLAME_SIZE - ICON_WIDTH) / 2;
-        int iconY = this.y + FLAME_Y + (FLAME_SIZE - ICON_HEIGHT) / 2;
-        // 底图：灰色闪电，电量为 0 时也能看到图标
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, ENERGY_EMPTY, iconX, iconY,
-                0.0F, 0.0F, ICON_WIDTH, ICON_HEIGHT, ICON_WIDTH, ICON_HEIGHT);
-        // 有电的部分：红色闪电从底部往上按比例裁切
-        int filled = MathHelper.ceil(this.handler.getFuelProgress() * ICON_HEIGHT);
-        if (filled > 0) {
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, ENERGY_FILLED,
-                    iconX, iconY + ICON_HEIGHT - filled,
-                    0.0F, ICON_HEIGHT - filled, ICON_WIDTH, filled, ICON_WIDTH, ICON_HEIGHT);
-        }
+        // 缓冲区电量：灰色闪电打底 + 红色按比例从下往上填
+        EnergyBoltIcon.draw(context, iconX(), iconY(), this.handler.getFuelProgress());
 
         // 烧制进度箭头：和原版一样
         int progress = MathHelper.ceil(this.handler.getCookProgress() * ARROW_WIDTH);
@@ -81,17 +70,14 @@ public class ElectricFurnaceScreen extends FurnaceScreen {
     @Override
     protected void drawMouseoverTooltip(DrawContext context, int mouseX, int mouseY) {
         super.drawMouseoverTooltip(context, mouseX, mouseY);
-        // 悬停闪电图标：显示缓冲区电量，例如 1356 J / 2500 J
-        int iconX = this.x + FLAME_X + (FLAME_SIZE - ICON_WIDTH) / 2;
-        int iconY = this.y + FLAME_Y + (FLAME_SIZE - ICON_HEIGHT) / 2;
-        // 注意 isPointWithinBounds 的 x/y 是相对界面左上角的，不是屏幕坐标
-        if (this.isPointWithinBounds(iconX - this.x - 2, iconY - this.y - 2, ICON_WIDTH + 4, ICON_HEIGHT + 4,
-                mouseX, mouseY)) {
+        // 注意 isPointWithinBounds 的 x/y 是相对界面左上角的
+        if (this.isPointWithinBounds(iconX() - this.x - EnergyBoltIcon.HOVER_MARGIN,
+                iconY() - this.y - EnergyBoltIcon.HOVER_MARGIN,
+                EnergyBoltIcon.WIDTH + EnergyBoltIcon.HOVER_MARGIN * 2,
+                EnergyBoltIcon.HEIGHT + EnergyBoltIcon.HOVER_MARGIN * 2, mouseX, mouseY)) {
             int storedJoules = Math.round(this.handler.getFuelProgress() * ElectricFurnaceBlockEntity.CAPACITY_JOULES);
-            context.drawTooltip(this.textRenderer,
-                    Text.translatable("gui.mcdonalds-mod.electric_furnace.energy",
-                            storedJoules, ElectricFurnaceBlockEntity.CAPACITY_JOULES),
-                    mouseX, mouseY);
+            EnergyBoltIcon.drawTooltip(context, this.textRenderer,
+                    storedJoules, ElectricFurnaceBlockEntity.CAPACITY_JOULES, mouseX, mouseY);
         }
     }
 }

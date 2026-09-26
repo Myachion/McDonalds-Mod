@@ -354,7 +354,7 @@ public class ModBlocks {
          * （data/mcdonalds-mod/tags/block/cable_connectable.json），效果同样是六面可连。
          */
         CableConnections.always(TEST_GENERATOR);
-        CableConnections.always(ELECTRIC_FURNACE);
+        // 电炉等继承 MachineBlock 的机器会在构造器里自动登记，不需要在这里写
     }
 
 }

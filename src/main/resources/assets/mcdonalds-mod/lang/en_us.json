@@ -38,7 +38,7 @@
 	"block.mcdonalds-mod.test_generator": "Test Generator",
 	"block.mcdonalds-mod.test_battery_box": "Test Battery Box",
 	"block.mcdonalds-mod.electric_furnace": "Electric Furnace",
-	"gui.mcdonalds-mod.electric_furnace.energy": "Buffer: %s J / %s J",
+	"gui.mcdonalds-mod.machine.energy": "Buffer: %s J / %s J",
 
 	"gui.mcdonalds-mod.test_generator.title": "Test Generator",
 	"gui.mcdonalds-mod.test_battery_box.title": "Test Battery Box",

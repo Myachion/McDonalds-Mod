@@ -17,9 +17,10 @@ import net.minecraft.screen.slot.Slot;
 public class ElectricFurnaceScreenHandler extends FurnaceScreenHandler {
     /** 服务端用：绑定到电炉方块实体。 */
     public ElectricFurnaceScreenHandler(int syncId, PlayerInventory playerInventory, ElectricFurnaceBlockEntity entity) {
-        super(syncId, playerInventory, entity, entity.getProperties());
+        super(syncId, playerInventory, entity.getInventory(), entity.getProperties());
         this.slots.set(ElectricFurnaceBlockEntity.SLOT_OUTPUT,
-                new ElectricFurnaceOutputSlot(playerInventory.player, entity, ElectricFurnaceBlockEntity.SLOT_OUTPUT, 116, 35));
+                new ElectricFurnaceOutputSlot(playerInventory.player, entity,
+                        entity.getInventory(), ElectricFurnaceBlockEntity.SLOT_OUTPUT, 116, 35));
     }
 
     /** 客户端用：内容与属性由服务端同步过来。 */
@@ -42,10 +43,11 @@ public class ElectricFurnaceScreenHandler extends FurnaceScreenHandler {
         private final PlayerEntity player;
         private final ElectricFurnaceBlockEntity furnace;
 
-        private ElectricFurnaceOutputSlot(PlayerEntity player, ElectricFurnaceBlockEntity inventory, int index, int x, int y) {
+        private ElectricFurnaceOutputSlot(PlayerEntity player, ElectricFurnaceBlockEntity furnace,
+                                          MachineInventory inventory, int index, int x, int y) {
             super(inventory, index, x, y);
             this.player = player;
-            this.furnace = inventory;
+            this.furnace = furnace;
         }
 
         @Override
