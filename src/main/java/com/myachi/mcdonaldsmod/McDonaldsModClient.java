@@ -30,8 +30,10 @@ public class McDonaldsModClient implements ClientModInitializer {
         BlockRenderLayerMap.putBlocks(BlockRenderLayer.CUTOUT,
                 ModBlocks.TIN_CABLE,
                 ModBlocks.COPPER_CABLE,
+                ModBlocks.COPPER_CABLE_X2,
                 ModBlocks.IRON_REFINED_CABLE,
                 ModBlocks.GOLD_CABLE,
+                ModBlocks.GOLD_CABLE_X2,
                 ModBlocks.IRON_CABLE,
                 ModBlocks.FIBERGLASS_CABLE);
 

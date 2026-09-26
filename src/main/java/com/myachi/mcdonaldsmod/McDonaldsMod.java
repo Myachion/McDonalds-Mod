@@ -3,6 +3,7 @@ package com.myachi.mcdonaldsmod;
 import com.myachi.mcdonaldsmod.beacon.ModBeaconFeatures;
 import com.myachi.mcdonaldsmod.energy.EnergyNetworks;
 import com.myachi.mcdonaldsmod.energy.EnergyConfig;
+import com.myachi.mcdonaldsmod.material.ModMaterials;
 import com.myachi.mcdonaldsmod.worldgen.ModOreGeneration;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -23,6 +24,8 @@ public class McDonaldsMod implements ModInitializer {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
+        // 材料族要在其它注册之前跑：ModItemGroups 会遍历 ModMaterials
+        ModMaterials.initialize();
         ModItems.initializeMod();
         ModItemGroups.initializeModItemGroups();
         ModBlocks.initializeModBlocks();

@@ -3,8 +3,10 @@
   "values": [
     "mcdonalds-mod:tin_cable",
     "mcdonalds-mod:copper_cable",
+    "mcdonalds-mod:copper_cable_x2",
     "mcdonalds-mod:iron_refined_cable",
     "mcdonalds-mod:gold_cable",
+    "mcdonalds-mod:gold_cable_x2",
     "mcdonalds-mod:iron_cable",
     "mcdonalds-mod:fiberglass_cable"
   ]

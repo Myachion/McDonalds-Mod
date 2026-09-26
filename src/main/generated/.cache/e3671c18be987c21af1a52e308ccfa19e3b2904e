@@ -1,0 +1,23 @@
+// 1.21.11	-999999999-01-01T00:00:00	McDonald's Mod/Material assets (models / loot / recipes)
+42f3bd4db095a1da130973ea324dd439e915a8d8 assets/mcdonalds-mod/blockstates/tin_block.json
+a3df38ce4ed03641783948dfe6249496303a2e39 assets/mcdonalds-mod/blockstates/tin_ore.json
+494c4dcb046e1b4a97467387994536e95201889f assets/mcdonalds-mod/items/raw_tin.json
+98c6896fa157932b7fbcd9a36d4575c3e60886b3 assets/mcdonalds-mod/items/tin_block.json
+e6fec94286d69a1e1bcb4268d74d3c2d4051f15b assets/mcdonalds-mod/items/tin_dust.json
+5a29c54b3b3fe13549683695aed74c08a924d82e assets/mcdonalds-mod/items/tin_ingot.json
+1316424d5688ed548160ee5297566cfb5913d5af assets/mcdonalds-mod/items/tin_ore.json
+572511564df5b39828075b83e840f9cc058a529b assets/mcdonalds-mod/items/tin_plate.json
+347a7cb142bb78f4dda02c428b70445853c7617c assets/mcdonalds-mod/models/block/tin_block.json
+fed8caece4c4bf7ff619eefbc1ff2120aac116e0 assets/mcdonalds-mod/models/block/tin_ore.json
+4902b2fac00f24a9dc4ab7a311dafdf643a92387 assets/mcdonalds-mod/models/item/raw_tin.json
+9652d6cc885a7fadd0c70a956176f0c56b44c965 assets/mcdonalds-mod/models/item/tin_dust.json
+f2f95f3074ba1643a6bf3272b8ee77809a025410 assets/mcdonalds-mod/models/item/tin_ingot.json
+50a08cca769f2ae2098faf4e6d62693f6c87f730 assets/mcdonalds-mod/models/item/tin_plate.json
+4adb196ac713661df2d3c07f33d4977f151a8dad data/mcdonalds-mod/loot_table/blocks/tin_block.json
+80959a0b7eccfce7effbf36316417a550c5bcfb1 data/mcdonalds-mod/loot_table/blocks/tin_ore.json
+ed6bab335f5466e4619215cfb30e481b216f36d1 data/mcdonalds-mod/recipe/blasting/tin_ingot.json
+751795900c50dce061daf3042a7d5785f0e78683 data/mcdonalds-mod/recipe/crafting/tin_block.json
+695434b827881c9371bd65a0d1456b63657b7666 data/mcdonalds-mod/recipe/crafting/tin_dust.json
+38ebfeab8473e7586f21e14dd3d5fd1c7223599a data/mcdonalds-mod/recipe/crafting/tin_ingot_from_block.json
+21a9b41e39b45f1e3162fd91005b70d8db935495 data/mcdonalds-mod/recipe/crafting/tin_plate.json
+0ae92e8910477b69beea16021d94a796e756eaf6 data/mcdonalds-mod/recipe/smelting/tin_ingot.json

@@ -9,10 +9,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
+import org.jspecify.annotations.Nullable;
 
 /**
  * 用电机器方块实体的公共底座，实现的是用户定下的"缓冲区模式"。
@@ -33,9 +35,12 @@ import net.minecraft.util.math.BlockPos;
  * <h2>子类要做的三件事</h2>
  * <ol>
  *     <li>构造器里把容量和额定值传给 super；</li>
- *     <li>实现 {@link #tickServer(ServerWorld)}（电网登记已经由基类做掉了）；</li>
+ *     <li>需要每 tick 干活就覆写 {@link #tickServer(ServerWorld)}（电网登记已经由基类做掉了）；</li>
  *     <li>需要界面就实现 {@code createMenu}（{@link NamedScreenHandlerFactory} 的方法）。</li>
  * </ol>
+ *
+ * <p>界面数值走 {@link #standardProperties()}（布局见 {@link MachineProperties}）；
+ * 机器自己的额外字段覆写 {@link #extraPropertyCount()} 与 {@link #extraProperty(int)}。
  *
  * <p>配套的方块请继承 {@link MachineBlock}，这样 tick 会自动转进来、正面贴图也会自动切换。
  */
@@ -59,6 +64,8 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity
 
     /** 机器自己的物品栏；没有物品栏的机器（纯机器类）就是 null。 */
     private MachineInventory inventory;
+    /** 标准界面属性表，第一次用到时才建（省得没有界面的机器也分配）。 */
+    private @Nullable PropertyDelegate properties;
 
     /** 纯用电器：只有输入，没有输出。 */
     protected AbstractMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state,
@@ -98,6 +105,37 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity
     protected MachineInventory createInventory(int size) {
         this.inventory = new MachineInventory(this, size);
         return this.inventory;
+    }
+
+    // ------------------------------------------------------------------
+    // 界面属性表（布局见 MachineProperties）
+    // ------------------------------------------------------------------
+
+    /**
+     * 标准界面属性表：电量 + 实测输入/输出 + 额定值，索引见 {@link MachineProperties}。
+     * 做成懒加载，是因为客户端侧的方块实体不需要它。
+     */
+    public PropertyDelegate standardProperties() {
+        if (this.properties == null) {
+            this.properties = MachineProperties.delegate(this);
+        }
+        return this.properties;
+    }
+
+    /**
+     * 机器自己的额外界面字段个数（接在 {@link MachineProperties#STANDARD_COUNT} 后面）。
+     * 默认 0；有额外字段的机器覆写它，并在 {@link #extraProperty(int)} 里给出取值。
+     */
+    protected int extraPropertyCount() {
+        return 0;
+    }
+
+    /**
+     * 读第 {@code index} 个额外字段（0 起，对应属性索引 {@code STANDARD_COUNT + index}）。
+     * 默认返回 0；数值直接读实例字段即可，写操作在子类自己的按钮处理方法里做。
+     */
+    protected int extraProperty(int index) {
+        return 0;
     }
 
     /** 机器物品栏（没有建就是 null）。 */
@@ -160,6 +198,33 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity
 
     public long getCapacityMilliJoules() {
         return this.capacityMilliJoules;
+    }
+
+    /** 缓冲区还剩多少空间（mJ）；无上限的机器返回一个很大的值。 */
+    public long getFreeCapacityMilliJoules() {
+        if (this.capacityMilliJoules == UNLIMITED) {
+            return Long.MAX_VALUE - this.storedEnergy;
+        }
+        return Math.max(0L, this.capacityMilliJoules - this.storedEnergy);
+    }
+
+    /**
+     * 这一 tick 想接收的功率（mW）= 缓冲区还能吃下的部分。
+     * 见 {@link EnergyStorage#getRequestedInputMilliWatts()}。
+     *
+     * <p>网络结算在 {@code END_WORLD_TICK}（所有方块实体 tick 之后）跑，所以：
+     * 缓冲区满但正在工作的机器，它的耗电已经把缓冲区"腾出"了同样多的空间，
+     * 这里算出来的需求正好等于它的耗电（例如 96 W）；
+     * 缓冲区满又不工作的机器腾不出空间，需求自然是 0。
+     */
+    @Override
+    public long getRequestedInputMilliWatts() {
+        if (!canReceiveEnergy()) {
+            return 0;
+        }
+        long free = getFreeCapacityMilliJoules();
+        // 缓冲区剩余空间换算成"一秒能灌满"的等效功率（1 tick = 1/20 s）
+        return free >= Long.MAX_VALUE / 20L ? Long.MAX_VALUE : free * 20L;
     }
 
     public boolean isFull() {
@@ -308,12 +373,16 @@ public abstract class AbstractMachineBlockEntity extends BlockEntity
         }
     }
 
-    /** 子类的服务端每 tick 逻辑（电网登记已经在基类做完了）。 */
-    protected abstract void tickServer(ServerWorld world);
+    /**
+     * 子类的服务端每 tick 逻辑（电网登记已经在基类做完了）。
+     * 默认什么都不做 —— 电池盒这种"只有缓冲区和界面"的机器不用覆写。
+     */
+    protected void tickServer(ServerWorld world) {
+    }
 
     /** 正在工作/没工作：切换方块的 lit 状态（正面激活贴图）。 */
     protected void setActive(boolean active) {
-        MachineBlock.setActive(this.world, this.pos, active);
+        MachineBlocks.setActive(this.world, this.pos, active);
     }
 
     // ------------------------------------------------------------------

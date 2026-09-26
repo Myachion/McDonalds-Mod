@@ -1,6 +1,9 @@
 package com.myachi.mcdonaldsmod;
 
+import com.myachi.mcdonaldsmod.material.MaterialFamily;
+import com.myachi.mcdonaldsmod.material.ModMaterials;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
@@ -19,60 +22,45 @@ public class ModItemGroups {
                 entries.add(ModBlocks.SALT_ORE);
                 entries.add(ModBlocks.DEEPSLATE_SALT_ORE);
                 entries.add(ModBlocks.IRON_REFINED_BLOCK);
-                entries.add(ModBlocks.ALUMINUM_BLOCK);
-                entries.add(ModBlocks.BRONZE_BLOCK);
                 entries.add(ModBlocks.CHARCOAL_BLOCK);
-                entries.add(ModBlocks.LEAD_BLOCK);
-                entries.add(ModBlocks.SILVER_BLOCK);
-                entries.add(ModBlocks.STEEL_BLOCK);
-                entries.add(ModBlocks.TIN_BLOCK);
-                entries.add(ModBlocks.URANIUM_BLOCK);
                 entries.add(ModBlocks.MACHINE_SHELL);
                 entries.add(ModBlocks.TEST_GENERATOR);
                 entries.add(ModBlocks.TEST_BATTERY_BOX);
                 entries.add(ModBlocks.ELECTRIC_FURNACE);
-                entries.add(ModBlocks.TIN_ORE);
-                entries.add(ModBlocks.LEAD_ORE);
-                entries.add(ModBlocks.DEEPSLATE_LEAD_ORE);
-                entries.add(ModBlocks.ALUMINUM_ORE);
-                entries.add(ModBlocks.SILVER_ORE);
-                entries.add(ModBlocks.DEEPSLATE_SILVER_ORE);
-                entries.add(ModBlocks.NETHER_ALUMINUM_ORE);
-                entries.add(ModBlocks.NETHER_SILVER_ORE);
-                entries.add(ModBlocks.URANIUM_ORE);
-                entries.add(ModBlocks.DEEPSLATE_URANIUM_ORE);
 
-                entries.add(ModItems.RAW_TIN);
-                entries.add(ModItems.RAW_LEAD);
-                entries.add(ModItems.RAW_ALUMINUM);
-                entries.add(ModItems.RAW_ALUMINUM_NUGGET);
-                entries.add(ModItems.RAW_SILVER);
-                entries.add(ModItems.RAW_SILVER_NUGGET);
-                entries.add(ModItems.RAW_URANIUM);
-                entries.add(ModItems.TIN_INGOT);
-                entries.add(ModItems.LEAD_INGOT);
-                entries.add(ModItems.ALUMINUM_INGOT);
-                entries.add(ModItems.URANIUM_INGOT);
-                entries.add(ModItems.BRONZE_INGOT);
-                entries.add(ModItems.SILVER_INGOT);
-                entries.add(ModItems.TIN_PLATE);
-                entries.add(ModItems.LEAD_PLATE);
-                entries.add(ModItems.ALUMINUM_PLATE);
-                entries.add(ModItems.BRONZE_PLATE);
-                entries.add(ModItems.SILVER_PLATE);
+                // ---- 材料族（定义见 ModMaterials）：矿石 → 材料块 → 粗矿/锭/板/粉 ----
+                for (MaterialFamily family : ModMaterials.all()) {
+                    for (MaterialFamily.Part part : new MaterialFamily.Part[]{
+                            MaterialFamily.Part.ORE, MaterialFamily.Part.DEEPSLATE_ORE, MaterialFamily.Part.NETHER_ORE}) {
+                        if (family.has(part)) {
+                            entries.add(family.block(part));
+                        }
+                    }
+                }
+                for (MaterialFamily family : ModMaterials.all()) {
+                    if (family.has(MaterialFamily.Part.BLOCK)) {
+                        entries.add(family.block(MaterialFamily.Part.BLOCK));
+                    }
+                }
+                for (MaterialFamily family : ModMaterials.all()) {
+                    for (MaterialFamily.Part part : new MaterialFamily.Part[]{
+                            MaterialFamily.Part.RAW, MaterialFamily.Part.RAW_NUGGET, MaterialFamily.Part.INGOT,
+                            MaterialFamily.Part.PLATE, MaterialFamily.Part.DUST}) {
+                        Item item = family.item(part);
+                        if (item != null) {
+                            entries.add(item);
+                        }
+                    }
+                }
+
                 entries.add(ModItems.GOLD_PLATE);
                 entries.add(ModItems.LAPIS_PLATE);
                 entries.add(ModItems.OBSIDIAN_PLATE);
                 entries.add(ModItems.REDSTONE_PLATE);
                 entries.add(ModItems.DIAMOND_PLATE);
-                entries.add(ModItems.ALUMINUM_DUST);
                 entries.add(ModItems.COPPER_DUST);
-                entries.add(ModItems.TIN_DUST);
-                entries.add(ModItems.LEAD_DUST);
-                entries.add(ModItems.SILVER_DUST);
                 entries.add(ModItems.GOLD_DUST);
                 entries.add(ModItems.IRON_DUST);
-                entries.add(ModItems.BRONZE_DUST);
                 entries.add(ModItems.CARBON_DUST);
                 entries.add(ModItems.WET_CARBON_DUST);
                 entries.add(ModItems.ASH_DUST);
@@ -99,8 +87,10 @@ public class ModItemGroups {
                 entries.add(ModItems.COPPER_STRIPS);
                 entries.add(ModItems.TIN_CABLE);
                 entries.add(ModItems.COPPER_CABLE);
+                entries.add(ModItems.COPPER_CABLE_X2);
                 entries.add(ModItems.IRON_REFINED_CABLE);
                 entries.add(ModItems.GOLD_CABLE);
+                entries.add(ModItems.GOLD_CABLE_X2);
                 entries.add(ModItems.IRON_CABLE);
                 entries.add(ModItems.FIBERGLASS_CABLE);
                 entries.add(ModItems.METER);

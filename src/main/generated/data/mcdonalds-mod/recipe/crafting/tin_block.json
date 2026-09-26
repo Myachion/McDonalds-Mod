@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": "mcdonalds-mod:tin_ingot"
+  },
+  "pattern": [
+    "WWW",
+    "WWW",
+    "WWW"
+  ],
+  "result": {
+    "count": 1,
+    "id": "mcdonalds-mod:tin_block"
+  }
+}

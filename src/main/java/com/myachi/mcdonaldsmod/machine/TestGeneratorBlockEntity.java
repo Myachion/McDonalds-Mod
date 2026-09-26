@@ -2,13 +2,9 @@ package com.myachi.mcdonaldsmod.machine;
 
 import com.myachi.mcdonaldsmod.ModBlockEntities;
 import com.myachi.mcdonaldsmod.ModScreenHandlers;
-import com.myachi.mcdonaldsmod.energy.EnergyNetworks;
-import com.myachi.mcdonaldsmod.energy.EnergyStorage;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
@@ -16,133 +12,104 @@ import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 /**
- * 测试发电机的数据。
+ * 测试发电机的数据。已经迁到 {@link AbstractMachineBlockEntity} 基类上：
+ * 缓冲区、额定输出、电网登记、存档、界面属性表都由基类管，这里只写"怎么发电"和按钮逻辑。
  *
  * <p>四个可调参数（发电电压/电流、输出电压/电流）加一个 100 kJ 的缓存池。
- * 发电机按"发电功率"往缓存里充电，对外输出时从缓存取电（见 {@link #tick()} 和
+ * 发电机按"发电功率"往缓存里充电，对外输出时从缓存取电（见 {@link #tickServer} 和
  * {@link #extractEnergy(long)}），这符合"缓冲区模式"：发出来的电先存进缓冲区，输出再从缓冲区扣。
  *
- * <p>单位：能量用毫焦（mJ），电流对外暴露用毫安（mA），功率由 V × mA = mW 直接得出。
- * 界面数据通过 {@link PropertyDelegate} 同步，能量是 long，拆成三个 15 位字段发过去。
+ * <p>界面字段 = {@link MachineProperties} 标准 15 个 + 自己的 2 个（发电电压/电流），
+ * 索引见下面两个 {@code INDEX_*} 常量。
  */
-public class TestGeneratorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory, EnergyStorage {
+public class TestGeneratorBlockEntity extends AbstractMachineBlockEntity {
     /** 缓存容量：100 kJ，换算成毫焦。 */
     public static final long CAPACITY = 100_000_000L;
 
-    public static final int INDEX_GENERATION_VOLTAGE = 0;
-    public static final int INDEX_GENERATION_CURRENT = 1;
-    public static final int INDEX_OUTPUT_VOLTAGE = 2;
-    public static final int INDEX_OUTPUT_CURRENT = 3;
-    public static final int INDEX_ENERGY_LOW = 4;
-    public static final int INDEX_ENERGY_MID = 5;
-    public static final int INDEX_ENERGY_HIGH = 6;
-    /** 下面两个是电网回填的"实际输出"，和上面那四个"设定值"区分开。 */
-    public static final int INDEX_MEASURED_OUTPUT_VOLTAGE = 7;
-    /** 实测电流可能超过 32767 mA（16 位同步上限），所以一样拆三个字段。 */
-    public static final int INDEX_MEASURED_CURRENT_LOW = 8;
-    public static final int INDEX_MEASURED_CURRENT_MID = 9;
-    public static final int INDEX_MEASURED_CURRENT_HIGH = 10;
-    public static final int PROPERTY_COUNT = 11;
+    /** 自己的界面字段（相对额外字段的编号）。 */
+    public static final int EXTRA_GENERATION_VOLTAGE = 0;
+    public static final int EXTRA_GENERATION_CURRENT = 1;
+    private static final int EXTRA_COUNT = 2;
+    /** 自己的界面字段（属性表里的绝对索引），界面读数据用这两个。 */
+    public static final int INDEX_GENERATION_VOLTAGE = MachineProperties.STANDARD_COUNT + EXTRA_GENERATION_VOLTAGE;
+    public static final int INDEX_GENERATION_CURRENT = MachineProperties.STANDARD_COUNT + EXTRA_GENERATION_CURRENT;
+    /** 属性字段总数：标准 15 + 自己的 2。 */
+    public static final int PROPERTY_COUNT = MachineProperties.STANDARD_COUNT + EXTRA_COUNT;
+
+    /** 初始输出档位 128 V / 0 A（和以前一致）。 */
+    private static final int DEFAULT_OUTPUT_VOLTAGE = 128;
 
     private int generationVoltage = 128;
     private int generationCurrent = 0;
-    private int outputVoltage = 128;
-    private int outputCurrent = 0;
-    /** 缓冲区能量，单位毫焦。 */
-    private long storedEnergy = 0;
-    /** 实际输出（由电网结算回填）：电压 V，电流 mA。 */
-    private int measuredOutputVoltage = 0;
-    private int measuredOutputCurrentMilliAmps = 0;
 
-    private final PropertyDelegate properties = new PropertyDelegate() {
-        @Override
-        public int get(int index) {
-            return switch (index) {
-                case INDEX_GENERATION_VOLTAGE -> TestGeneratorBlockEntity.this.generationVoltage;
-                case INDEX_GENERATION_CURRENT -> TestGeneratorBlockEntity.this.generationCurrent;
-                case INDEX_OUTPUT_VOLTAGE -> TestGeneratorBlockEntity.this.outputVoltage;
-                case INDEX_OUTPUT_CURRENT -> TestGeneratorBlockEntity.this.outputCurrent;
-                case INDEX_ENERGY_LOW -> LongPropertyCodec.field(TestGeneratorBlockEntity.this.storedEnergy, 0);
-                case INDEX_ENERGY_MID -> LongPropertyCodec.field(TestGeneratorBlockEntity.this.storedEnergy, 1);
-                case INDEX_ENERGY_HIGH -> LongPropertyCodec.field(TestGeneratorBlockEntity.this.storedEnergy, 2);
-                case INDEX_MEASURED_OUTPUT_VOLTAGE -> TestGeneratorBlockEntity.this.measuredOutputVoltage;
-                case INDEX_MEASURED_CURRENT_LOW ->
-                        LongPropertyCodec.field(TestGeneratorBlockEntity.this.measuredOutputCurrentMilliAmps, 0);
-                case INDEX_MEASURED_CURRENT_MID ->
-                        LongPropertyCodec.field(TestGeneratorBlockEntity.this.measuredOutputCurrentMilliAmps, 1);
-                case INDEX_MEASURED_CURRENT_HIGH ->
-                        LongPropertyCodec.field(TestGeneratorBlockEntity.this.measuredOutputCurrentMilliAmps, 2);
-                default -> 0;
-            };
-        }
-
-        @Override
-        public void set(int index, int value) {
-            switch (index) {
-                case INDEX_GENERATION_VOLTAGE -> TestGeneratorBlockEntity.this.generationVoltage = value;
-                case INDEX_GENERATION_CURRENT -> TestGeneratorBlockEntity.this.generationCurrent = value;
-                case INDEX_OUTPUT_VOLTAGE -> TestGeneratorBlockEntity.this.outputVoltage = value;
-                case INDEX_OUTPUT_CURRENT -> TestGeneratorBlockEntity.this.outputCurrent = value;
-                default -> {
-                    // 能量那几段只由服务端写，客户端只会往数组里存
-                }
-            }
-        }
-
-        @Override
-        public int size() {
-            return PROPERTY_COUNT;
-        }
-    };
+    private final PropertyDelegate properties = standardProperties();
 
     public TestGeneratorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.TEST_GENERATOR, pos, state);
+        // 额定输入 0：发电机不接受外部充电；额定输出（可调）就是"对外输出的电压/电流"
+        super(ModBlockEntities.TEST_GENERATOR, pos, state, CAPACITY,
+                0, 0, DEFAULT_OUTPUT_VOLTAGE, 0);
     }
 
     public PropertyDelegate getProperties() {
         return this.properties;
     }
 
+    /** 设定的输出功率（W）= 输出电压 × 输出电流。 */
     public long getOutputPower() {
-        return (long) this.outputVoltage * this.outputCurrent;
+        return (long) this.getRatedOutputVoltage() * this.getRatedOutputCurrent() / 1000L;
     }
 
+    /** 设定的发电功率（W）= 发电电压 × 发电电流。 */
     public long getGenerationPower() {
         return (long) this.generationVoltage * this.generationCurrent;
     }
 
+    @Override
+    protected int extraPropertyCount() {
+        return EXTRA_COUNT;
+    }
+
+    @Override
+    protected int extraProperty(int index) {
+        return switch (index) {
+            case EXTRA_GENERATION_VOLTAGE -> this.generationVoltage;
+            case EXTRA_GENERATION_CURRENT -> this.generationCurrent;
+            default -> 0;
+        };
+    }
+
     /**
-     * 服务端每 tick 一次：先把缓存充满（按发电功率），再把自己登记到电网上。
+     * 服务端每 tick 一次：先把缓存充满（按发电功率）。
      * 对外输出发生在 {@link #extractEnergy(long)}，由电网结算调用。
+     * （电网登记已经由基类的 tickMachine 做掉了。）
      */
-    public void tick() {
-        if (this.world == null || this.world.isClient()) {
+    @Override
+    protected void tickServer(ServerWorld world) {
+        long generationPowerMilliWatts = this.getGenerationPower() * 1000L;
+        if (generationPowerMilliWatts <= 0) {
             return;
         }
-        if (this.world instanceof ServerWorld serverWorld) {
-            EnergyNetworks.get(serverWorld).registerMachine(this.pos);
-        }
-        long power = this.getGenerationPower();
-        if (power <= 0 || this.storedEnergy >= CAPACITY) {
+        long room = this.getCapacityMilliJoules() - this.getStoredEnergyMilliJoules();
+        if (room <= 0) {
             return;
         }
-        // 1 W 持续一个 tick 相当于 50 mJ（1/20 秒）
-        this.storedEnergy = Math.min(CAPACITY, this.storedEnergy + Math.max(1L, power * 50L));
-        this.markDirty();
+        // 1 W 持续一个 tick 相当于 50 mJ；至少要塞进去 1 mJ，免得极小功率永远不动
+        long generated = Math.max(1L, milliJoulesPerTick(generationPowerMilliWatts));
+        this.addEnergy(Math.min(room, generated));
     }
 
     /** 把电压在等级表里往前/往后挪一格（超出两端就绕回去）。 */
     public void cycleVoltage(boolean output, int delta) {
-        int current = output ? this.outputVoltage : this.generationVoltage;
-        int next = EnergyLevels.cycle(EnergyLevels.VOLTAGE, current, delta);
         if (output) {
-            this.outputVoltage = next;
+            setRatedOutput(EnergyLevels.cycle(EnergyLevels.VOLTAGE, getRatedOutputVoltage(), delta),
+                    getRatedOutputCurrent());
         } else {
-            this.generationVoltage = next;
+            this.generationVoltage = EnergyLevels.cycle(EnergyLevels.VOLTAGE, this.generationVoltage, delta);
+            this.markDirty();
         }
-        this.markDirty();
     }
 
     /**
@@ -150,23 +117,13 @@ public class TestGeneratorBlockEntity extends BlockEntity implements NamedScreen
      * 50 A 再往上回到 0 A，0 A 再往下绕到 50 A。
      */
     public void cycleCurrent(boolean output, int delta) {
-        int current = output ? this.outputCurrent : this.generationCurrent;
-        int next = EnergyLevels.cycle(EnergyLevels.CURRENT, current, delta);
         if (output) {
-            this.outputCurrent = next;
+            setRatedOutput(getRatedOutputVoltage(),
+                    EnergyLevels.cycle(EnergyLevels.CURRENT, getRatedOutputCurrent() / 1000, delta) * 1000);
         } else {
-            this.generationCurrent = next;
+            this.generationCurrent = EnergyLevels.cycle(EnergyLevels.CURRENT, this.generationCurrent, delta);
+            this.markDirty();
         }
-        this.markDirty();
-    }
-
-    // ------------------------------------------------------------------
-    // 电网接口
-    // ------------------------------------------------------------------
-
-    @Override
-    public long getStoredEnergyMilliJoules() {
-        return this.storedEnergy;
     }
 
     /** 发电机不接受外部充电，缓存只由自己的发电填。 */
@@ -175,45 +132,9 @@ public class TestGeneratorBlockEntity extends BlockEntity implements NamedScreen
         return 0;
     }
 
-    @Override
-    public long extractEnergy(long millijoules) {
-        long taken = Math.min(millijoules, this.storedEnergy);
-        if (taken > 0) {
-            this.storedEnergy -= taken;
-            this.markDirty();
-        }
-        return taken;
-    }
-
-    @Override
-    public int getRatedInputVoltage() {
-        return 0;
-    }
-
-    @Override
-    public int getRatedInputCurrent() {
-        return 0;
-    }
-
-    @Override
-    public int getRatedOutputVoltage() {
-        return this.outputVoltage;
-    }
-
-    @Override
-    public int getRatedOutputCurrent() {
-        return this.outputCurrent * 1000;
-    }
-
-    @Override
-    public void setMeasuredOutput(int voltage, int currentMilliAmps) {
-        this.measuredOutputVoltage = voltage;
-        this.measuredOutputCurrentMilliAmps = currentMilliAmps;
-    }
-
     /** 发电机一律不能输入电流：六个面都只出不进。 */
     @Override
-    public boolean canReceiveEnergyOn(net.minecraft.util.math.Direction side) {
+    public boolean canReceiveEnergyOn(Direction side) {
         return false;
     }
 
@@ -222,18 +143,19 @@ public class TestGeneratorBlockEntity extends BlockEntity implements NamedScreen
         super.readData(view);
         this.generationVoltage = EnergyLevels.snap(EnergyLevels.VOLTAGE, view.getInt("generation_voltage", 128));
         this.generationCurrent = EnergyLevels.snap(EnergyLevels.CURRENT, view.getInt("generation_current", 0));
-        this.outputVoltage = EnergyLevels.snap(EnergyLevels.VOLTAGE, view.getInt("output_voltage", 128));
-        this.outputCurrent = EnergyLevels.snap(EnergyLevels.CURRENT, view.getInt("output_current", 0));
-        this.storedEnergy = Math.clamp(view.getLong("stored_energy", 0L), 0L, CAPACITY);
+        // 迁移到基类之前的存档：输出档位存在 output_voltage / output_current 里，电流单位是 A
+        int legacyVoltage = view.getInt("output_voltage", -1);
+        if (legacyVoltage > 0) {
+            setRatedOutput(EnergyLevels.snap(EnergyLevels.VOLTAGE, legacyVoltage),
+                    EnergyLevels.snap(EnergyLevels.CURRENT, view.getInt("output_current", 0)) * 1000);
+        }
     }
 
     @Override
     protected void writeData(WriteView view) {
+        super.writeData(view);
         view.putInt("generation_voltage", this.generationVoltage);
         view.putInt("generation_current", this.generationCurrent);
-        view.putInt("output_voltage", this.outputVoltage);
-        view.putInt("output_current", this.outputCurrent);
-        view.putLong("stored_energy", this.storedEnergy);
     }
 
     @Override

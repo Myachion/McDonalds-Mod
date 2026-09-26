@@ -28,43 +28,21 @@ public class ModItems {
     public static final Item IRON_PLATE = register("iron_plate",Item::new,new Item.Settings());
     public static final Item COPPER_PLATE = register("copper_plate",Item::new,new Item.Settings());
 
-    // 矿石产物：粗矿 + 锭。锡/铝没有深层矿石，铅/铀有。
-    public static final Item RAW_TIN = register("raw_tin",Item::new,new Item.Settings());
-    public static final Item RAW_LEAD = register("raw_lead",Item::new,new Item.Settings());
-    public static final Item RAW_ALUMINUM = register("raw_aluminum",Item::new,new Item.Settings());
-    public static final Item RAW_URANIUM = register("raw_uranium",Item::new,new Item.Settings());
-    public static final Item RAW_SILVER = register("raw_silver",Item::new,new Item.Settings());
-
-    // 粗矿粒：只在下界矿掉落，九个合成一个粗矿（同原版金粒/铁粒的用法）。
-    public static final Item RAW_ALUMINUM_NUGGET = register("raw_aluminum_nugget",Item::new,new Item.Settings());
-    public static final Item RAW_SILVER_NUGGET = register("raw_silver_nugget",Item::new,new Item.Settings());
-
-    public static final Item TIN_INGOT = register("tin_ingot",Item::new,new Item.Settings());
-    public static final Item LEAD_INGOT = register("lead_ingot",Item::new,new Item.Settings());
-    public static final Item ALUMINUM_INGOT = register("aluminum_ingot",Item::new,new Item.Settings());
-    public static final Item URANIUM_INGOT = register("uranium_ingot",Item::new,new Item.Settings());
-    public static final Item BRONZE_INGOT = register("bronze_ingot",Item::new,new Item.Settings());
-    public static final Item SILVER_INGOT = register("silver_ingot",Item::new,new Item.Settings());
+    // 金属材料（锡/铅/铝/银/青铜/铀/钢）的锭、板、粉、粗矿、粒、材料块、矿石
+    // 全部在 material/ModMaterials.java 里按"材料族"登记，这里不再逐条写。
 
     // 板材。青金石/黑曜石/红石/钻石这四种做不出来（暂时没有配方），只能靠其他途径获得。
-    public static final Item BRONZE_PLATE = register("bronze_plate",Item::new,new Item.Settings());
     public static final Item GOLD_PLATE = register("gold_plate",Item::new,new Item.Settings());
     public static final Item LAPIS_PLATE = register("lapis_plate",Item::new,new Item.Settings());
-    public static final Item LEAD_PLATE = register("lead_plate",Item::new,new Item.Settings());
     public static final Item OBSIDIAN_PLATE = register("obsidian_plate",Item::new,new Item.Settings());
     public static final Item REDSTONE_PLATE = register("redstone_plate",Item::new,new Item.Settings());
-    public static final Item SILVER_PLATE = register("silver_plate",Item::new,new Item.Settings());
-    public static final Item TIN_PLATE = register("tin_plate",Item::new,new Item.Settings());
-    public static final Item ALUMINUM_PLATE = register("aluminum_plate",Item::new,new Item.Settings());
     public static final Item DIAMOND_PLATE = register("diamond_plate",Item::new,new Item.Settings());
 
     /*
-     * 粉末。带配方的那批（铝/铜/绿宝石/末地石/金/铁/青金石/铅/地狱岩/下界石英/银/锡）
-     * 用研钵研磨对应材料得到，其余暂时只能从创造模式或以后的其他途径获取。
+     * 粉末。金属粉（铝/青铜/铅/银/锡）跟着材料族走，见 material/ModMaterials.java；
+     * 这里只剩非金属粉和用原版材料磨出来的粉。
      */
-    public static final Item ALUMINUM_DUST = register("aluminum_dust",Item::new,new Item.Settings());
     public static final Item ASH_DUST = register("ash_dust",Item::new,new Item.Settings());
-    public static final Item BRONZE_DUST = register("bronze_dust",Item::new,new Item.Settings());
     public static final Item CARBON_DUST = register("carbon_dust",Item::new,new Item.Settings());
     public static final Item CLAY_DUST = register("clay_dust",Item::new,new Item.Settings());
     public static final Item WET_CARBON_DUST = register("wet_carbon_dust",Item::new,new Item.Settings());
@@ -75,7 +53,6 @@ public class ModItems {
     public static final Item GOLD_DUST = register("gold_dust",Item::new,new Item.Settings());
     public static final Item IRON_DUST = register("iron_dust",Item::new,new Item.Settings());
     public static final Item LAPIS_DUST = register("lapis_dust",Item::new,new Item.Settings());
-    public static final Item LEAD_DUST = register("lead_dust",Item::new,new Item.Settings());
     public static final Item LITHIUM_DUST = register("lithium_dust",Item::new,new Item.Settings());
     public static final Item NETHERRACK_DUST = register("netherrack_dust",Item::new,new Item.Settings());
     public static final Item OBSIDIAN_DUST = register("obsidian_dust",Item::new,new Item.Settings());
@@ -83,16 +60,16 @@ public class ModItems {
     public static final Item QUARTZ_DUST = register("quartz_dust",Item::new,new Item.Settings());
     public static final Item RED_ALLOY_DUST = register("red_alloy_dust",Item::new,new Item.Settings());
     public static final Item SILICON_DIOXIDE_DUST = register("silicon_dioxide_dust",Item::new,new Item.Settings());
-    public static final Item SILVER_DUST = register("silver_dust",Item::new,new Item.Settings());
     public static final Item STONE_DUST = register("stone_dust",Item::new,new Item.Settings());
-    public static final Item TIN_DUST = register("tin_dust",Item::new,new Item.Settings());
 
     // 线缆按电压等级排列：锡 32V / 铜·钢 128V / 金 512V / 铁 2048V / 玻璃纤维 8192V
     // 电缆是可放置的方块，物品就是对应方块的 BlockItem（注册名不变）。
     public static final Item TIN_CABLE = ModBlocks.TIN_CABLE.asItem();
     public static final Item COPPER_CABLE = ModBlocks.COPPER_CABLE.asItem();
+    public static final Item COPPER_CABLE_X2 = ModBlocks.COPPER_CABLE_X2.asItem();
     public static final Item IRON_REFINED_CABLE = ModBlocks.IRON_REFINED_CABLE.asItem();
     public static final Item GOLD_CABLE = ModBlocks.GOLD_CABLE.asItem();
+    public static final Item GOLD_CABLE_X2 = ModBlocks.GOLD_CABLE_X2.asItem();
     public static final Item IRON_CABLE = ModBlocks.IRON_CABLE.asItem();
     public static final Item FIBERGLASS_CABLE = ModBlocks.FIBERGLASS_CABLE.asItem();
 
@@ -189,7 +166,7 @@ public class ModItems {
     private ModItems() {
     }
 
-    public static Item register(String path, Function<Item.Settings,Item> factory,Item.Settings settings) {
+    public static Item register(String path, Function<Item.Settings,Item> factory, Item.Settings settings) {
         final RegistryKey<Item> registerKey = RegistryKey.of(RegistryKeys.ITEM,Identifier.of(McDonaldsMod.MOD_ID,path));
         return Items.register(registerKey,factory,settings);
     }

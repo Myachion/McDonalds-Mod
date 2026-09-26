@@ -39,6 +39,21 @@ public interface EnergyStorage {
     /** 额定输出电流（mA）。 */
     int getRatedOutputCurrent();
 
+    /**
+     * 这台机器<b>这一 tick 需要</b>多少输入功率（mW）。
+     *
+     * <p>默认不限（返回 {@link Long#MAX_VALUE}），由网络按额定功率截断。
+     * "缓冲区模式"的机器（{@code AbstractMachineBlockEntity}）覆写成"缓冲区这一 tick 空出来的空间"：
+     * <ul>
+     *     <li>缓冲区满且不在工作 → 0（网络就一点都不用给它，也不会白白丢掉能量）；</li>
+     *     <li>缓冲区满但正在工作 → 正好等于它的耗电（例如 96 W：这一 tick 消耗掉多少，就空出多少）；</li>
+     *     <li>缓冲区没满 → 额定功率（一边供自己用电，一边慢慢把缓冲区灌满）。</li>
+     * </ul>
+     */
+    default long getRequestedInputMilliWatts() {
+        return Long.MAX_VALUE;
+    }
+
     /** 能不能当电源往外供电。 */
     default boolean canProvideEnergy() {
         return getRatedOutputCurrent() > 0;

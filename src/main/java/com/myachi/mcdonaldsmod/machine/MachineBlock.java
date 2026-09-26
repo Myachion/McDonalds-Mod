@@ -27,11 +27,17 @@ import org.jspecify.annotations.Nullable;
  *
  * <ul>
  *     <li>{@code facing}：正面（贴图上的操作面）朝向放置者，和熔炉一致；</li>
- *     <li>{@code lit}：正在工作时为 true，方块状态里换成激活贴图（见 {@link #setActive}）；</li>
+ *     <li>{@code lit}：正在工作时为 true，方块状态里换成激活贴图；</li>
  *     <li>六面都能接电缆：构造时自动登记 {@link CableConnections#always};</li>
  *     <li>右键开界面：方块实体只要实现 {@link NamedScreenHandlerFactory} 就会被打开；</li>
  *     <li>每 tick 转发：只转发给 {@link AbstractMachineBlockEntity} 的子类。</li>
  * </ul>
+ *
+ * <p><b>注意</b>：{@code lit} 属性是所有 {@code MachineBlock} 都有的（属性表在父类构造期间就要定下来，
+ * 没法按机器开关）。没有"激活贴图"的机器（如测试发电机）只要把方块状态 JSON 里
+ * {@code lit=false} 和 {@code lit=true} 都指向同一个模型即可，状态本身保持 false。
+ *
+ * <p>对称机器（不需要朝向，例如电池盒）请继承 {@link AbstractMachineBlock}。
  *
  * <p>子类通常只需要写自己的 {@code CODEC} 和 {@code createBlockEntity}，
  * 例如：
@@ -71,29 +77,11 @@ public abstract class MachineBlock extends HorizontalFacingBlock implements Bloc
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return (world1, pos, state1, blockEntity) -> {
-            if (blockEntity instanceof AbstractMachineBlockEntity machine) {
-                machine.tickMachine();
-            }
-        };
+        return MachineBlocks.ticker();
     }
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient() && world.getBlockEntity(pos) instanceof NamedScreenHandlerFactory factory) {
-            player.openHandledScreen(factory);
-        }
-        return ActionResult.SUCCESS;
-    }
-
-    /** 切换"正在工作"状态，正面贴图跟着变。方块实体里直接调 {@code setActive(...)} 即可。 */
-    public static void setActive(World world, BlockPos pos, boolean active) {
-        if (world == null) {
-            return;
-        }
-        BlockState state = world.getBlockState(pos);
-        if (state.getBlock() instanceof MachineBlock && state.get(LIT) != active) {
-            world.setBlockState(pos, state.with(LIT, active), Block.NOTIFY_LISTENERS);
-        }
+        return MachineBlocks.openScreen(world, pos, player);
     }
 }

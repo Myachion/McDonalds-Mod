@@ -1,24 +1,19 @@
 package com.myachi.mcdonaldsmod.machine;
 
-import com.myachi.mcdonaldsmod.ModBlocks;
 import com.myachi.mcdonaldsmod.ModScreenHandlers;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.jspecify.annotations.Nullable;
 
 /**
- * 测试发电机的界面逻辑。
+ * 测试发电机的界面逻辑：显示数据 + 按钮调参数。
  *
- * <p>没有任何物品槽，只负责把方块实体的数据读给界面，以及处理按钮点击。
+ * <p>没有物品槽，定位方块/权限校验/标准数值 getter 都在 {@link AbstractMachineScreenHandler} 里，
+ * 这里只管两件事：发电参数的两个额外字段怎么读、八个按钮点了做什么。
  * 按钮走原版 {@code ButtonClickC2SPacket} 通道，不需要自定义网络包。
  */
-public class TestGeneratorScreenHandler extends ScreenHandler {
+public class TestGeneratorScreenHandler extends AbstractMachineScreenHandler {
     public static final int BUTTON_GENERATION_VOLTAGE_DOWN = 0;
     public static final int BUTTON_GENERATION_VOLTAGE_UP = 1;
     public static final int BUTTON_GENERATION_CURRENT_DOWN = 2;
@@ -28,67 +23,36 @@ public class TestGeneratorScreenHandler extends ScreenHandler {
     public static final int BUTTON_OUTPUT_CURRENT_DOWN = 6;
     public static final int BUTTON_OUTPUT_CURRENT_UP = 7;
 
-    private final PropertyDelegate properties;
-    private final World world;
-    /** 客户端侧为 null（数据已经同步过来了，不需要再定位方块）。 */
-    private final @Nullable BlockPos pos;
-
-    /** 服务端构造：直接接到方块实体的 delegate 上。 */
+    /** 服务端构造：直接接到方块实体的属性表上。 */
     public TestGeneratorScreenHandler(int syncId, PlayerInventory playerInventory, BlockPos pos, PropertyDelegate properties) {
-        super(ModScreenHandlers.TEST_GENERATOR, syncId);
-        checkDataCount(properties, TestGeneratorBlockEntity.PROPERTY_COUNT);
-        this.properties = properties;
-        this.pos = pos;
-        this.world = playerInventory.player.getEntityWorld();
-        this.addProperties(properties);
+        super(ModScreenHandlers.TEST_GENERATOR, syncId, playerInventory, pos, properties, TestGeneratorBlockEntity.class);
     }
 
-    /** 客户端构造：空白 delegate，值由服务端每 tick 同步过来。 */
+    /** 客户端构造：数值由服务端每 tick 同步过来。 */
     public TestGeneratorScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, BlockPos.ORIGIN, new ArrayPropertyDelegate(TestGeneratorBlockEntity.PROPERTY_COUNT));
+        super(ModScreenHandlers.TEST_GENERATOR, syncId, playerInventory,
+                TestGeneratorBlockEntity.PROPERTY_COUNT, TestGeneratorBlockEntity.class);
     }
 
-    /** 界面每帧读这个值。 */
-    public int get(int index) {
-        return this.properties.get(index);
+    /** 发电电压（V），界面读这个。 */
+    public int generationVoltage() {
+        return get(TestGeneratorBlockEntity.INDEX_GENERATION_VOLTAGE);
     }
 
-    /** 缓存电量（毫焦）。三个 15 位字段在服务端拆开、客户端拼回来。 */
-    public long getStoredEnergyMilliJoules() {
-        return LongPropertyCodec.combine(
-                get(TestGeneratorBlockEntity.INDEX_ENERGY_LOW),
-                get(TestGeneratorBlockEntity.INDEX_ENERGY_MID),
-                get(TestGeneratorBlockEntity.INDEX_ENERGY_HIGH));
+    /** 发电电流（A），界面读这个。 */
+    public int generationCurrent() {
+        return get(TestGeneratorBlockEntity.INDEX_GENERATION_CURRENT);
     }
 
-    public long getOutputPower() {
-        return (long) get(TestGeneratorBlockEntity.INDEX_OUTPUT_VOLTAGE) * get(TestGeneratorBlockEntity.INDEX_OUTPUT_CURRENT);
-    }
-
-    public long getGenerationPower() {
-        return (long) get(TestGeneratorBlockEntity.INDEX_GENERATION_VOLTAGE) * get(TestGeneratorBlockEntity.INDEX_GENERATION_CURRENT);
-    }
-
-    /** 实际输出功率（mW）= 电网回填的实际输出电压 × 实际输出电流。 */
-    public long getMeasuredOutputPowerMilliWatts() {
-        return (long) get(TestGeneratorBlockEntity.INDEX_MEASURED_OUTPUT_VOLTAGE)
-                * getMeasuredOutputCurrentMilliAmps();
-    }
-
-    public int getMeasuredOutputVoltage() {
-        return get(TestGeneratorBlockEntity.INDEX_MEASURED_OUTPUT_VOLTAGE);
-    }
-
-    public int getMeasuredOutputCurrentMilliAmps() {
-        return (int) LongPropertyCodec.combine(
-                get(TestGeneratorBlockEntity.INDEX_MEASURED_CURRENT_LOW),
-                get(TestGeneratorBlockEntity.INDEX_MEASURED_CURRENT_MID),
-                get(TestGeneratorBlockEntity.INDEX_MEASURED_CURRENT_HIGH));
+    /** 设定的输出功率（W），界面读这个。 */
+    public long ratedOutputPowerWatts() {
+        return (long) ratedOutputVoltage() * ratedOutputCurrentAmps();
     }
 
     @Override
     public boolean onButtonClick(PlayerEntity player, int id) {
-        if (!(this.world.getBlockEntity(this.pos) instanceof TestGeneratorBlockEntity generator)) {
+        TestGeneratorBlockEntity generator = machine(TestGeneratorBlockEntity.class);
+        if (generator == null) {
             return false;
         }
         switch (id) {
@@ -105,20 +69,5 @@ public class TestGeneratorScreenHandler extends ScreenHandler {
             }
         }
         return true;
-    }
-
-    @Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean canUse(PlayerEntity player) {
-        if (this.pos == null || !(this.world.getBlockEntity(this.pos) instanceof TestGeneratorBlockEntity)) {
-            // 客户端侧没有 pos，直接放行
-            return true;
-        }
-        return this.world.getBlockState(this.pos).isOf(ModBlocks.TEST_GENERATOR)
-                && player.squaredDistanceTo(this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5) <= 64.0;
     }
 }

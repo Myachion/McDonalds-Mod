@@ -1,7 +1,6 @@
 package com.myachi.mcdonaldsmod.client;
 
 import com.myachi.mcdonaldsmod.machine.MachineNumbers;
-import com.myachi.mcdonaldsmod.machine.TestBatteryBoxBlockEntity;
 import com.myachi.mcdonaldsmod.machine.TestBatteryBoxScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -46,33 +45,33 @@ public class TestBatteryBoxScreen extends MachineScreen<TestBatteryBoxScreenHand
         MachineScreenStyle.centeredTitle(context, this.textRenderer, this.title, PANEL_WIDTH / 2, 10);
         MachineScreenStyle.divider(context, 8, 24, PANEL_WIDTH - 16);
 
-        long energy = handler.getStoredEnergy();
+        long energy = handler.storedEnergyMilliJoules();
         // 没有容量上限，所以不画进度条，只报数值
         MachineScreenStyle.label(context, this.textRenderer, "gui.mcdonalds-mod.stored_energy",
                 MachineNumbers.energy(energy), 12, 28);
 
         // 四行额定参数
         MachineScreenStyle.label(context, this.textRenderer, "gui.mcdonalds-mod.rated_input_voltage",
-                handler.get(TestBatteryBoxBlockEntity.INDEX_RATED_INPUT_VOLTAGE) + " V", 12, ROW_Y);
+                handler.ratedInputVoltage() + " V", 12, ROW_Y);
         MachineScreenStyle.label(context, this.textRenderer, "gui.mcdonalds-mod.rated_input_current",
-                handler.get(TestBatteryBoxBlockEntity.INDEX_RATED_INPUT_CURRENT) + " A", 12, ROW_Y + ROW_STEP);
+                handler.ratedInputCurrentAmps() + " A", 12, ROW_Y + ROW_STEP);
         MachineScreenStyle.label(context, this.textRenderer, "gui.mcdonalds-mod.rated_output_voltage",
-                handler.get(TestBatteryBoxBlockEntity.INDEX_RATED_OUTPUT_VOLTAGE) + " V", 12, ROW_Y + ROW_STEP * 2);
+                handler.ratedOutputVoltage() + " V", 12, ROW_Y + ROW_STEP * 2);
         MachineScreenStyle.label(context, this.textRenderer, "gui.mcdonalds-mod.rated_output_current",
-                handler.get(TestBatteryBoxBlockEntity.INDEX_RATED_OUTPUT_CURRENT) + " A", 12, ROW_Y + ROW_STEP * 3);
+                handler.ratedOutputCurrentAmps() + " A", 12, ROW_Y + ROW_STEP * 3);
 
         drawButtons(context, mouseX, mouseY);
 
         // 底部：当前实测读数（等电网接进来才会有值，先用灰色小字）
         MachineScreenStyle.divider(context, 8, 118, PANEL_WIDTH - 16);
         String input = Text.translatable("gui.mcdonalds-mod.input").getString() + ":  "
-                + handler.get(TestBatteryBoxBlockEntity.INDEX_INPUT_VOLTAGE) + " V   "
-                + MachineNumbers.current(handler.getInputCurrentMilliAmps()) + "   "
-                + MachineNumbers.power(handler.getInputPower());
+                + handler.inputVoltage() + " V   "
+                + MachineNumbers.current(handler.inputCurrentMilliAmps()) + "   "
+                + MachineNumbers.power(handler.inputPowerMilliWatts() / 1000L);
         String output = Text.translatable("gui.mcdonalds-mod.output").getString() + ":  "
-                + handler.get(TestBatteryBoxBlockEntity.INDEX_OUTPUT_VOLTAGE) + " V   "
-                + MachineNumbers.current(handler.getOutputCurrentMilliAmps()) + "   "
-                + MachineNumbers.power(handler.getOutputPower());
+                + handler.outputVoltage() + " V   "
+                + MachineNumbers.current(handler.outputCurrentMilliAmps()) + "   "
+                + MachineNumbers.power(handler.outputPowerMilliWatts() / 1000L);
         context.drawText(this.textRenderer, input, 12, 126, MachineScreenStyle.TEXT_DIM, false);
         context.drawText(this.textRenderer, output, 12, 138, MachineScreenStyle.TEXT_DIM, false);
     }

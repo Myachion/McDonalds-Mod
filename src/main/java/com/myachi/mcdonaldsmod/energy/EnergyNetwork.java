@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -38,6 +40,10 @@ import java.util.Set;
  * <p>电缆载流量、线路电损、过压烧毁都还没做。
  */
 public final class EnergyNetwork {
+    /** 临时诊断开关：启动参数加 {@code -Dmcdonalds.debug.energy=true} 就会每 20 tick 打一行结算明细。 */
+    private static final boolean DEBUG = Boolean.getBoolean("mcdonalds.debug.energy");
+    private static final Logger LOGGER = LoggerFactory.getLogger("mcdonalds-mod/energy");
+
     /** 每个提供能量的机器。 */
     private record Provider(BlockPos pos, EnergyStorage storage, long availableMilliWatts) {
     }
@@ -64,6 +70,8 @@ public final class EnergyNetwork {
     private long lastLossMilliWatts;
     /** 上次结算里超过额定电流的电缆。 */
     private final Set<BlockPos> overloaded = new LinkedHashSet<>();
+    /** 诊断日志用的计数（每张网各自计数，避免多张网共享静态计数器时漏打）。 */
+    private int debugTicks;
 
     EnergyNetwork(Set<BlockPos> cables, Map<BlockPos, Set<Direction>> machines) {
         this.cables = cables;
@@ -155,10 +163,17 @@ public final class EnergyNetwork {
         return found;
     }
 
-    public void tick(ServerWorld world) {
+    /**
+     * 结算这张网。
+     *
+     * @param readings 由 {@code EnergyNetworkManager} 传进来的汇总表：
+     *                 机器位置 -> [输入电压V, 输入电流mA, 输出电压V, 输出电流mA]。
+     *                 一台机器可能挂在多张网上（例如电池盒），所以这里只累加，最后由管理器统一写回。
+     */
+    public void tick(ServerWorld world, Map<BlockPos, long[]> readings) {
+        this.debugTicks++;
         List<Provider> providers = new ArrayList<>();
         List<Consumer> consumers = new ArrayList<>();
-        List<EnergyStorage> storages = new ArrayList<>();
         this.cableCurrents.clear();
 
         // 1. 网络电压 = 所有"能供电、且输出面接在网里"的机器里最高的额定输出电压
@@ -167,13 +182,14 @@ public final class EnergyNetwork {
             if (!(world.getBlockEntity(entry.getKey()) instanceof EnergyStorage storage)) {
                 continue;
             }
-            storages.add(storage);
             if (storage.canProvideEnergy() && canOutput(storage, entry.getValue())) {
                 networkVoltage = Math.max(networkVoltage, storage.getRatedOutputVoltage());
             }
         }
         if (networkVoltage <= 0) {
-            this.clearReadings(storages);
+            this.cableCurrents.clear();
+            this.measureLossAndOverload(world, networkVoltage);
+            debugSummary(0, 0, 0, 0);
             record(0, 0, 0, 0);
             return;
         }
@@ -196,7 +212,10 @@ public final class EnergyNetwork {
             }
         }
 
-        // 3. 负载
+        // 3. 负载：需求 = min(额定功率, 它这一 tick 真正需要补的电)
+        //    "真正需要补的电" = 缓冲区空出来的空间（见 EnergyStorage#getRequestedInputMilliWatts）。
+        //    结算在所有方块实体 tick 之后跑，所以工作的机器已经消耗掉一部分缓冲区，
+        //    空出来的空间正好等于它的耗电（例如 96 W）；缓冲区满又不工作的机器空间是 0。
         long totalDemand = 0;
         for (Map.Entry<BlockPos, Set<Direction>> entry : this.machines.entrySet()) {
             if (!(world.getBlockEntity(entry.getKey()) instanceof EnergyStorage storage)
@@ -205,7 +224,9 @@ public final class EnergyNetwork {
                 continue;
             }
             int voltage = Math.min(networkVoltage, storage.getRatedInputVoltage());
-            long demand = (long) voltage * storage.getRatedInputCurrent();
+            long rated = (long) voltage * storage.getRatedInputCurrent();
+            long requested = Math.max(0L, storage.getRequestedInputMilliWatts());
+            long demand = Math.min(rated, requested);
             if (demand > 0) {
                 consumers.add(new Consumer(entry.getKey(), storage, voltage, demand));
                 totalDemand += demand;
@@ -214,49 +235,83 @@ public final class EnergyNetwork {
 
         long delivered = Math.min(totalSupply, totalDemand);
         if (delivered <= 0) {
-            this.clearReadings(storages);
             this.cableCurrents.clear();
             this.measureLossAndOverload(world, networkVoltage);
+            debugSummary(networkVoltage, totalSupply, totalDemand, 0);
             record(networkVoltage, totalSupply, totalDemand, 0);
             return;
         }
 
-        // 4. 按额定功率比例分给负载，记下每台机器实际吃进的电流
+        // 4. 按需求比例分给负载，记下每台机器实际吃进的电流
         List<LoadFlow> flows = new ArrayList<>();
+        long acceptedTotal = 0;
         for (Consumer consumer : consumers) {
             long share = consumer.demandMilliWatts() * delivered / totalDemand;
             long energy = share / 20L;
             if (energy <= 0) {
-                consumer.storage().setMeasuredInput(0, 0);
                 continue;
             }
             long accepted = consumer.storage().insertEnergy(energy);
-            int current = consumer.voltage() > 0
+            if (DEBUG && this.debugTicks % 20 == 0) {
+                LOGGER.info("[Energy] 负载 {} 分到 {} mJ / 吃进 {} mJ（需求 {} mW，{} V）",
+                        consumer.pos().toShortString(), energy, accepted, consumer.demandMilliWatts(), consumer.voltage());
+            }
+            acceptedTotal += accepted;
+            // 机器侧读数：机器自己的额定输入电压 × 电流（用户定的规则：真实输入按机器额定电压走）
+            int machineCurrent = consumer.voltage() > 0
                     ? (int) Math.min(Integer.MAX_VALUE, accepted * 20L / consumer.voltage())
                     : 0;
-            consumer.storage().setMeasuredInput(consumer.voltage(), current);
-            if (current > 0) {
+            addInput(readings, consumer.pos(), consumer.voltage(), machineCurrent);
+            // 线路侧电流：同一份功率在网络电压下的电流（升/降压不凭空造能量，万用表的功率才对得上）
+            int cableCurrent = networkVoltage > 0
+                    ? (int) Math.min(Integer.MAX_VALUE, accepted * 20L / networkVoltage)
+                    : 0;
+            if (cableCurrent > 0) {
                 Set<BlockPos> cables = connectedCables(consumer.pos(), this.machines.get(consumer.pos()),
                         consumer.storage(), true);
-                flows.add(new LoadFlow(new ArrayList<>(cables), current));
+                flows.add(new LoadFlow(new ArrayList<>(cables), cableCurrent));
             }
         }
 
-        // 5. 电源按可用功率比例扣缓冲区（额外多扣一份线路损耗），并把实际输出记到界面上
+        // 谁都没吃进去就一点电都不该扣（避免"分出去了但没人接收"的能量凭空消失）
+        if (acceptedTotal <= 0) {
+            this.cableCurrents.clear();
+            this.measureLossAndOverload(world, networkVoltage);
+            debugSummary(networkVoltage, totalSupply, totalDemand, 0);
+            record(networkVoltage, totalSupply, totalDemand, 0);
+            return;
+        }
+
+        // 5. 电源按"负载实际吃进去的能量 + 线路损耗"扣缓冲区（按可用功率比例分摊），
+        //    并把实际输出记到界面上。只扣实际送出的部分，多出来的留在电源缓冲区里。
+        long lossEnergy = this.lastLossMilliWatts / 20L;
+        long toExtract = acceptedTotal + lossEnergy;
         for (Provider provider : providers) {
             long share = provider.availableMilliWatts() * delivered / totalSupply;
-            long lossShare = delivered > 0 ? this.lastLossMilliWatts * share / delivered : 0;
-            long energy = (share + lossShare) / 20L;
+            long energy = delivered > 0 ? toExtract * share / delivered : 0;
             long taken = energy > 0 ? provider.storage().extractEnergy(energy) : 0;
             int current = networkVoltage > 0
                     ? (int) Math.min(Integer.MAX_VALUE, taken * 20L / networkVoltage)
                     : 0;
-            provider.storage().setMeasuredOutput(networkVoltage, current);
+            addOutput(readings, provider.pos(), networkVoltage, current);
         }
 
         traceCableCurrents(world, providers, flows);
+        debugSummary(networkVoltage, totalSupply, totalDemand, acceptedTotal);
         measureLossAndOverload(world, networkVoltage);
-        record(networkVoltage, totalSupply, totalDemand, delivered);
+        record(networkVoltage, totalSupply, totalDemand, acceptedTotal * 20L);
+    }
+
+    /** 诊断日志：每 20 tick 打一行这张网的结算明细（`-Dmcdonalds.debug.energy=true`）。 */
+    private void debugSummary(int voltage, long supply, long demand, long acceptedEnergy) {
+        if (!DEBUG || this.debugTicks % 20 != 0) {
+            return;
+        }
+        StringBuilder cables = new StringBuilder();
+        this.cableCurrents.forEach((pos, current) ->
+                cables.append(pos.toShortString()).append('=').append(current).append("mA "));
+        LOGGER.info("[Energy] 供电={} mW 需求={} mW 实收={} mJ/tick 损耗={} mW 电压={}V 电缆: {}",
+                supply, demand, acceptedEnergy, this.lastLossMilliWatts, voltage, cables);
     }
 
     /**
@@ -288,66 +343,92 @@ public final class EnergyNetwork {
     }
 
     /**
-     * 把每台负载吃到的电流按 BFS 生成树回推到电源，于是每根电缆得到"它下游的总电流"。
-     * 离负载最近的电源负责供它，路径就是生成树上的父链。
+     * 逐电源统计每根电缆上的电流。
+     *
+     * <p>做法：对<b>每一台电源</b>各跑一次 BFS 生成树，然后按可用功率比例，
+     * 把每台负载吃到的电流拆成"这台电源承担的那一份"，沿它自己的父链累加。
+     *
+     * <p>为什么不能像以前那样"从负载回推到最近的电源"：那样多台电源并联时，
+     * 只有离负载最近的那台电源的路径会被经过，其它电源的支线永远是 0 A
+     * （表现为"新加的电池盒前面那根线没电"）。逐电源分摊才能让每台电源的支线
+     * 显示它真正送出的那部分，主干也自然是所有电源之和。
      */
     private void traceCableCurrents(ServerWorld world, List<Provider> providers, List<LoadFlow> flows) {
-        if (flows.isEmpty()) {
+        if (flows.isEmpty() || providers.isEmpty()) {
             return;
         }
-        Map<BlockPos, BlockPos> parent = new HashMap<>();
-        Map<BlockPos, Integer> distance = new HashMap<>();
-        Deque<BlockPos> queue = new ArrayDeque<>();
-
-        // 多源 BFS：所有电源紧挨着的电缆作为起点
+        long totalAvailable = 0;
         for (Provider provider : providers) {
+            totalAvailable += provider.availableMilliWatts();
+        }
+        if (totalAvailable <= 0) {
+            return;
+        }
+
+        for (Provider provider : providers) {
+            // 单源 BFS：从这台电源紧挨着的电缆出发，得到它到全网电缆的最短路径树
+            Map<BlockPos, BlockPos> parent = new HashMap<>();
+            Map<BlockPos, Integer> distance = new HashMap<>();
+            Deque<BlockPos> queue = new ArrayDeque<>();
             for (Direction direction : Direction.values()) {
                 BlockPos cable = provider.pos().offset(direction);
                 if (this.cables.contains(cable) && distance.putIfAbsent(cable, 0) == null) {
                     queue.add(cable);
                 }
             }
-        }
-        while (!queue.isEmpty()) {
-            BlockPos current = queue.poll();
-            int nextDistance = distance.get(current) + 1;
-            for (Direction direction : Direction.values()) {
-                BlockPos next = current.offset(direction);
-                if (!this.cables.contains(next) || distance.containsKey(next)) {
+            while (!queue.isEmpty()) {
+                BlockPos current = queue.poll();
+                int nextDistance = distance.get(current) + 1;
+                for (Direction direction : Direction.values()) {
+                    BlockPos next = current.offset(direction);
+                    if (!this.cables.contains(next) || distance.containsKey(next)) {
+                        continue;
+                    }
+                    distance.put(next, nextDistance);
+                    parent.put(next, current);
+                    queue.add(next);
+                }
+            }
+
+            // 这台电源按可用功率比例，承担每台负载的一部分电流，并沿自己的路径累加
+            for (LoadFlow flow : flows) {
+                long share = flow.currentMilliAmps() * provider.availableMilliWatts() / totalAvailable;
+                if (share <= 0) {
                     continue;
                 }
-                distance.put(next, nextDistance);
-                parent.put(next, current);
-                queue.add(next);
-            }
-        }
-
-        // 每个负载沿父链回传自己的电流
-        for (LoadFlow flow : flows) {
-            BlockPos best = null;
-            int bestDistance = Integer.MAX_VALUE;
-            for (BlockPos cable : flow.cables()) {
-                Integer dist = distance.get(cable);
-                if (dist != null && dist < bestDistance) {
-                    bestDistance = dist;
-                    best = cable;
+                BlockPos best = null;
+                int bestDistance = Integer.MAX_VALUE;
+                for (BlockPos cable : flow.cables()) {
+                    Integer dist = distance.get(cable);
+                    if (dist != null && dist < bestDistance) {
+                        bestDistance = dist;
+                        best = cable;
+                    }
                 }
-            }
-            while (best != null) {
-                this.cableCurrents.merge(best, flow.currentMilliAmps(), Long::sum);
-                best = parent.get(best);
+                while (best != null) {
+                    this.cableCurrents.merge(best, share, Long::sum);
+                    best = parent.get(best);
+                }
             }
         }
     }
 
-    private void clearReadings(List<EnergyStorage> storages) {
-        for (EnergyStorage storage : storages) {
-            storage.setMeasuredInput(0, 0);
-            storage.setMeasuredOutput(0, 0);
+    /** 往汇总表里累加"这台机器吃到的输入"。电压取多张网里最大的那个，电流直接相加。 */
+    private static void addInput(Map<BlockPos, long[]> readings, BlockPos pos, int voltage, long currentMilliAmps) {
+        long[] reading = readings.computeIfAbsent(pos, key -> new long[4]);
+        if (voltage > reading[0]) {
+            reading[0] = voltage;
         }
-        this.cableCurrents.clear();
-        this.overloaded.clear();
-        this.lastLossMilliWatts = 0;
+        reading[1] += currentMilliAmps;
+    }
+
+    /** 往汇总表里累加"这台机器给出的输出"。 */
+    private static void addOutput(Map<BlockPos, long[]> readings, BlockPos pos, int voltage, long currentMilliAmps) {
+        long[] reading = readings.computeIfAbsent(pos, key -> new long[4]);
+        if (voltage > reading[2]) {
+            reading[2] = voltage;
+        }
+        reading[3] += currentMilliAmps;
     }
 
     static Set<BlockPos> newCableSet() {

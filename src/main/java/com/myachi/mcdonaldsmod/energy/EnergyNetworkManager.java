@@ -46,6 +46,13 @@ public final class EnergyNetworkManager {
     private final Map<BlockPos, EnergyNetwork> cableToNetwork = new HashMap<>();
     /** 每根电缆已经连续过载了多少 tick。 */
     private final Map<BlockPos, Integer> overloadTicks = new HashMap<>();
+    /**
+     * 本 tick 每台机器的读数累积：[输入电压V, 输入电流mA, 输出电压V, 输出电流mA]。
+     *
+     * <p>为什么要汇总：一台机器可以同时挂在两张网上（例如电池盒：上/下面那张网给它充电、
+     * 侧面那张网让它放电）。逐网络直接往机器里写会把另一张网的读数覆盖掉，所以先汇总、最后统一写回。
+     */
+    private final Map<BlockPos, long[]> readings = new HashMap<>();
 
     EnergyNetworkManager(ServerWorld world) {
         this.world = world;
@@ -70,9 +77,11 @@ public final class EnergyNetworkManager {
         if (this.dirty) {
             rebuild();
         }
+        this.readings.clear();
         for (EnergyNetwork network : this.networks) {
-            network.tick(this.world);
+            network.tick(this.world, this.readings);
         }
+        applyReadings();
         if (EnergyConfig.isOverloadBurnoutEnabled()) {
             // 必须把所有网络的过载电缆汇总起来一起算：逐网络处理的话，
             // 空网络的"降温"会把别的网络正在计时的电缆清掉。
@@ -81,6 +90,26 @@ public final class EnergyNetworkManager {
                 allOverloaded.addAll(network.getOverloadedCables());
             }
             applyOverloadBurnout(allOverloaded);
+        }
+    }
+
+    /** 把本 tick 汇总出来的读数写回机器；一张网都没碰到的机器清零（免得界面停在旧值）。 */
+    private void applyReadings() {
+        for (Map.Entry<BlockPos, long[]> entry : this.readings.entrySet()) {
+            if (this.world.getBlockEntity(entry.getKey()) instanceof EnergyStorage storage) {
+                long[] reading = entry.getValue();
+                storage.setMeasuredInput((int) reading[0], (int) Math.min(Integer.MAX_VALUE, reading[1]));
+                storage.setMeasuredOutput((int) reading[2], (int) Math.min(Integer.MAX_VALUE, reading[3]));
+            }
+        }
+        for (BlockPos pos : this.machines) {
+            if (this.readings.containsKey(pos)) {
+                continue;
+            }
+            if (this.world.getBlockEntity(pos) instanceof EnergyStorage storage) {
+                storage.setMeasuredInput(0, 0);
+                storage.setMeasuredOutput(0, 0);
+            }
         }
     }
 
@@ -156,19 +185,67 @@ public final class EnergyNetworkManager {
         this.cables.removeIf(pos -> this.isLoaded(pos) && !this.world.getBlockState(pos).isIn(ModBlockTags.CABLE));
         this.machines.removeIf(pos -> this.isLoaded(pos) && !(this.world.getBlockEntity(pos) instanceof EnergyStorage));
 
-        Set<BlockPos> visited = new HashSet<>();
-        List<EnergyNetwork> built = new ArrayList<>();
-        this.cableToNetwork.clear();
+        /*
+         * 网络 = 一段"电缆之间互相连通"的组件 + 贴着这段电缆的机器。
+         *
+         * 关键点：机器**不导通**，而且一台机器可以同时属于多张网。
+         * 比如"发电机 — 电缆 — 电池盒（上面进电、侧面出电）— 电缆 — 电炉"：
+         * 电池盒上面那截电缆和侧面那截电缆是两个组件，电池盒同时属于两张网
+         * （一张网里当负载充电、另一张网里当电源放电）。
+         * 以前用"从机器出发的洪水填充 + 全局 visited"会把机器只分给先遍历到的那张网，
+         * 另一张网就凭空少了一台机器（表现为：发电机实际输出 0、电池盒→电炉的线 0 W）。
+         */
+        // 种子电缆：已登记的电缆 + "贴着已知机器"的电缆。
+        // 后者很关键：电缆只在被放下时登记一次，服务器/区块重新加载后不会自己回来；
+        // 而机器每 tick 都会登记，所以靠机器把它们身边的电缆重新发现一遍，电网就不会在重载后"消失"。
+        Set<BlockPos> seeds = new LinkedHashSet<>(this.cables);
         for (BlockPos machine : this.machines) {
-            if (!visited.contains(machine)) {
-                EnergyNetwork network = flood(machine, visited);
-                if (network != null) {
-                    built.add(network);
+            for (Direction direction : Direction.values()) {
+                BlockPos cable = machine.offset(direction);
+                if (this.world.getBlockState(cable).isIn(ModBlockTags.CABLE)) {
+                    seeds.add(cable);
                 }
             }
         }
-        for (EnergyNetwork network : built) {
-            for (BlockPos cable : network.getCables()) {
+
+        Set<BlockPos> visited = new HashSet<>();
+        List<EnergyNetwork> built = new ArrayList<>();
+        this.cableToNetwork.clear();
+        for (BlockPos start : seeds) {
+            if (visited.contains(start)) {
+                continue;
+            }
+            Set<BlockPos> component = EnergyNetwork.newCableSet();
+            Map<BlockPos, Set<Direction>> componentMachines = EnergyNetwork.newMachineMap();
+            Deque<BlockPos> queue = new ArrayDeque<>();
+            queue.add(start);
+            visited.add(start);
+            while (!queue.isEmpty()) {
+                BlockPos cable = queue.poll();
+                component.add(cable);
+                for (Direction direction : Direction.values()) {
+                    BlockPos next = cable.offset(direction);
+                    // 跨未加载区块就断开
+                    if (!this.isLoaded(next)) {
+                        continue;
+                    }
+                    BlockState state = this.world.getBlockState(next);
+                    if (state.isIn(ModBlockTags.CABLE)) {
+                        // 顺便补登记：重载后这些电缆原本不在 this.cables 里
+                        this.cables.add(next);
+                        if (visited.add(next)) {
+                            queue.add(next);
+                        }
+                    } else if (this.world.getBlockEntity(next) instanceof EnergyStorage) {
+                        // 记下"机器被接在哪一面"：direction 是电缆指向机器的方向，取反才是机器的面
+                        componentMachines.computeIfAbsent(next, key -> new LinkedHashSet<>())
+                                .add(direction.getOpposite());
+                    }
+                }
+            }
+            EnergyNetwork network = new EnergyNetwork(component, componentMachines);
+            built.add(network);
+            for (BlockPos cable : component) {
                 this.cableToNetwork.put(cable, network);
             }
         }
@@ -180,51 +257,4 @@ public final class EnergyNetworkManager {
         return this.world.isChunkLoaded(pos.getX() >> 4, pos.getZ() >> 4);
     }
 
-    /** 从一台机器出发，沿电缆铺开，收集连通的电缆和其它机器。 */
-    private EnergyNetwork flood(BlockPos start, Set<BlockPos> visited) {
-        Set<BlockPos> foundCables = EnergyNetwork.newCableSet();
-        Map<BlockPos, Set<Direction>> foundMachines = EnergyNetwork.newMachineMap();
-        Deque<BlockPos> queue = new ArrayDeque<>();
-        queue.add(start);
-        visited.add(start);
-        Set<Direction> startSides = new LinkedHashSet<>();
-        foundMachines.put(start, startSides);
-        // 起点机器接在哪些面：看它哪几面贴着电缆
-        for (Direction direction : Direction.values()) {
-            BlockPos next = start.offset(direction);
-            if (this.world.getBlockState(next).isIn(ModBlockTags.CABLE)) {
-                startSides.add(direction);
-            }
-        }
-
-        while (!queue.isEmpty()) {
-            BlockPos pos = queue.poll();
-            for (Direction direction : Direction.values()) {
-                BlockPos next = pos.offset(direction);
-                if (visited.contains(next)) {
-                    continue;
-                }
-                // 跨未加载区块就断开
-                if (!this.isLoaded(next)) {
-                    continue;
-                }
-                BlockState state = this.world.getBlockState(next);
-                if (state.isIn(ModBlockTags.CABLE)) {
-                    visited.add(next);
-                    foundCables.add(next);
-                    queue.add(next);
-                } else if (this.world.getBlockEntity(next) instanceof EnergyStorage) {
-                    visited.add(next);
-                    // 记下"机器被接在哪一面"：direction 是电缆指向机器的方向，取反才是机器的面
-                    foundMachines.computeIfAbsent(next, key -> new LinkedHashSet<>()).add(direction.getOpposite());
-                }
-            }
-        }
-
-        // 只有一台机器、又没连着电缆的，不算一个网络
-        if (foundCables.isEmpty()) {
-            return null;
-        }
-        return new EnergyNetwork(foundCables, foundMachines);
-    }
 }

@@ -2,24 +2,18 @@ package com.myachi.mcdonaldsmod.machine;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.jspecify.annotations.Nullable;
 
 /**
- * 测试电池盒：右键打开界面，显示储电量和输入/输出的电压、电流、功率。
- * 六面都能接电缆（走数据包标签 {@code mcdonalds-mod:cable_connectable}）。
+ * 测试电池盒：一个对称的储能方块，右键打开界面。
+ *
+ * <p>它没有朝向、也没有激活贴图，所以继承的是 {@link AbstractMachineBlock}
+ * （接电缆、tick 转发、右键开界面照样白拿）。
  */
-public class TestBatteryBoxBlock extends Block implements BlockEntityProvider {
+public class TestBatteryBoxBlock extends AbstractMachineBlock {
     public static final MapCodec<TestBatteryBoxBlock> CODEC = createCodec(TestBatteryBoxBlock::new);
 
     public TestBatteryBoxBlock(AbstractBlock.Settings settings) {
@@ -35,22 +29,5 @@ public class TestBatteryBoxBlock extends Block implements BlockEntityProvider {
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new TestBatteryBoxBlockEntity(pos, state);
-    }
-
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if (type != com.myachi.mcdonaldsmod.ModBlockEntities.TEST_BATTERY_BOX) {
-            return null;
-        }
-        return (world1, pos, state1, blockEntity) -> ((TestBatteryBoxBlockEntity) blockEntity).tick();
-    }
-
-    @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient() && world.getBlockEntity(pos) instanceof TestBatteryBoxBlockEntity battery) {
-            player.openHandledScreen(battery);
-        }
-        return ActionResult.SUCCESS;
     }
 }

@@ -37,17 +37,10 @@ public class ModBlocks {
 
     /*
      * 材料块：九个锭压成一个块，也能拆回九个锭。
-     * 钢块目前没有配方（钢锭还没添加），只作为方块存在。
+     * 金属材料（铝/青铜/铅/银/钢/锡/铀）的材料块已经在 material/ModMaterials.java
+     * 里跟着材料族登记；这里只剩木炭块这种不属于任何材料族的方块。
      * 木炭块和原版煤炭块一样可以当燃料烧 16000 tick。
      */
-    public static final Block ALUMINUM_BLOCK = register(
-            "aluminum_block", Block::new,
-            metalBlockSettings(MapColor.LIGHT_BLUE_GRAY));
-
-    public static final Block BRONZE_BLOCK = register(
-            "bronze_block", Block::new,
-            metalBlockSettings(MapColor.ORANGE));
-
     public static final Block CHARCOAL_BLOCK = register(
             "charcoal_block", Block::new,
             AbstractBlock.Settings.create()
@@ -56,26 +49,6 @@ public class ModBlocks {
                     .requiresTool()
                     .strength(5.0F, 6.0F)
                     .sounds(BlockSoundGroup.STONE));
-
-    public static final Block LEAD_BLOCK = register(
-            "lead_block", Block::new,
-            metalBlockSettings(MapColor.DEEPSLATE_GRAY));
-
-    public static final Block SILVER_BLOCK = register(
-            "silver_block", Block::new,
-            metalBlockSettings(MapColor.LIGHT_GRAY));
-
-    public static final Block STEEL_BLOCK = register(
-            "steel_block", Block::new,
-            metalBlockSettings(MapColor.IRON_GRAY));
-
-    public static final Block TIN_BLOCK = register(
-            "tin_block", Block::new,
-            metalBlockSettings(MapColor.WHITE_GRAY));
-
-    public static final Block URANIUM_BLOCK = register(
-            "uranium_block", Block::new,
-            metalBlockSettings(MapColor.LICHEN_GREEN));
 
     public static final Block SALT_ORE = register(
             "salt_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 1), settings),
@@ -94,54 +67,11 @@ public class ModBlocks {
     );
 
     /*
-     * 金属矿石。全部用 ExperienceDroppingBlock 注册，挖掉会掉经验（原版矿石同样如此：
-     * 煤 0~2、青金石 2~5、钻石 3~7…），数值就写在构造函数里。
-     * 锡和铝不做深层变种，铅、铀、银有；铝和银另外各有一张下界矿。
+     * 金属矿石（锡/铅/铝/银/铀及其深层、下界变种）在 material/ModMaterials.java 里
+     * 由材料族用 ExperienceDroppingBlock 注册（挖掉掉经验，数值写在材料族定义里）。
+     * 这里只剩盐矿这种不属于材料族的矿石。
      * 生成参数见 ModOreGeneration 和 worldgen 下的数据文件。
      */
-    public static final Block TIN_ORE = register(
-            "tin_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
-            oreSettings());
-
-    public static final Block LEAD_ORE = register(
-            "lead_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
-            oreSettings());
-
-    public static final Block DEEPSLATE_LEAD_ORE = register(
-            "deepslate_lead_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
-            deepslateOreSettings());
-
-    public static final Block ALUMINUM_ORE = register(
-            "aluminum_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
-            oreSettings());
-
-    /** 银矿：主世界（含深层变种）。每区块次数比铅少，比金多。 */
-    public static final Block SILVER_ORE = register(
-            "silver_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 3), settings),
-            oreSettings());
-
-    public static final Block DEEPSLATE_SILVER_ORE = register(
-            "deepslate_silver_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 3), settings),
-            deepslateOreSettings());
-
-    public static final Block URANIUM_ORE = register(
-            "uranium_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 4), settings),
-            oreSettings());
-
-    public static final Block DEEPSLATE_URANIUM_ORE = register(
-            "deepslate_uranium_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 4), settings),
-            deepslateOreSettings());
-
-    /*
-     * 下界矿石：嵌在地狱岩里，掉对应的粗金属粒（4~7 个），掉落表见 loot_table/blocks/。
-     */
-    public static final Block NETHER_ALUMINUM_ORE = register(
-            "nether_aluminum_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 2), settings),
-            netherOreSettings());
-
-    public static final Block NETHER_SILVER_ORE = register(
-            "nether_silver_ore", settings -> new ExperienceDroppingBlock(UniformIntProvider.create(0, 3), settings),
-            netherOreSettings());
 
     public static final Block MACHINE_SHELL = register(
             "machine_shell", Block::new ,
@@ -151,7 +81,7 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.IRON)
     );
 
-    // 电网测试用的两个方块：数据暂时照抄机器外壳，暂时没有任何交互。
+    // 电网测试用的两个方块：硬度和音效照抄机器外壳，交互是各自的界面（右键打开）。
     public static final Block TEST_GENERATOR = register(
             "test_generator", TestGeneratorBlock::new,
             AbstractBlock.Settings.create()
@@ -169,7 +99,7 @@ public class ModBlocks {
     );
 
     /**
-     * 电炉：额定输入 32 V / 2 A，缓冲区 5 kJ，烧制功率 32 W（从缓冲区取电），
+     * 电炉：额定输入 32 V / 4 A，缓冲区 2.5 kJ，烧制功率 96 W（从缓冲区取电），
      * 速度和高炉一致；能烧的东西和熔炉一样。六面都能接电缆。
      */
     public static final Block ELECTRIC_FURNACE = register(
@@ -183,44 +113,60 @@ public class ModBlocks {
     /*
      * 电缆方块：细杆状小方块，六向自动连接。
      * 参数依次是：额定电压(V) / 横截面(像素) / 额定电流(A) / 每格电阻(毫欧)。
-     * 目前加入的六种（额定电流整体翻倍）：锡 32V 16A / 铜 128V 32A / 精炼铁 512V 32A /
-     * 金 512V 64A / 铁 2048V 128A / 玻璃纤维 8192V 128A。
-     * （铝、超导、以及各种"x2"加粗版还没做。）
+     * 目前加入的八种（额定电流整体翻倍，电损按用户 2026-09 定的新表）：
+     * 锡 32V 16A 0.05Ω / 铜 128V 32A 0.02Ω / 铜x2 128V 128A 0.01Ω / 精炼铁 512V 32A 0.05Ω /
+     * 金 512V 64A 0.02Ω / 金x2 512V 256A 0.01Ω / 铁 2048V 128A 0.04Ω / 玻璃纤维 8192V 256A 0.005Ω。
+     * x2 是同一材质的加粗版（横截面 6 像素，和铁导线一样粗），载流量更大、电阻更低。
+     * （铝、超导还没做。）
      * 物品形式就是这些方块的 BlockItem，注册名和以前的导线物品完全一样。
      */
     public static final Block TIN_CABLE = register(
             "tin_cable",
-            settings -> new CableBlock(32, CableBlock.THIN, 16, 100, settings),
+            settings -> new CableBlock(32, CableBlock.THIN, 16, 50, settings),
             cableSettings(MapColor.LIGHT_GRAY)
     );
 
     public static final Block COPPER_CABLE = register(
             "copper_cable",
-            settings -> new CableBlock(128, CableBlock.THIN, 32, 50, settings),
+            settings -> new CableBlock(128, CableBlock.THIN, 32, 20, settings),
+            cableSettings(MapColor.ORANGE)
+    );
+
+    /** 2x 铜导线：加粗版，载流量翻两番（128 A）、电阻减半。 */
+    public static final Block COPPER_CABLE_X2 = register(
+            "copper_cable_x2",
+            settings -> new CableBlock(128, CableBlock.THICK, 128, 10, settings),
             cableSettings(MapColor.ORANGE)
     );
 
     public static final Block IRON_REFINED_CABLE = register(
             "iron_refined_cable",
-            settings -> new CableBlock(512, CableBlock.THICK, 32, 100, settings),
+            settings -> new CableBlock(512, CableBlock.THICK, 32, 50, settings),
             cableSettings(MapColor.IRON_GRAY)
     );
 
     public static final Block GOLD_CABLE = register(
             "gold_cable",
-            settings -> new CableBlock(512, CableBlock.THIN, 64, 50, settings),
+            settings -> new CableBlock(512, CableBlock.THIN, 64, 20, settings),
+            cableSettings(MapColor.GOLD)
+    );
+
+    /** 2x 金导线：加粗版，载流量翻两番（256 A）、电阻减半。 */
+    public static final Block GOLD_CABLE_X2 = register(
+            "gold_cable_x2",
+            settings -> new CableBlock(512, CableBlock.THICK, 256, 10, settings),
             cableSettings(MapColor.GOLD)
     );
 
     public static final Block IRON_CABLE = register(
             "iron_cable",
-            settings -> new CableBlock(2048, CableBlock.THICK, 128, 60, settings),
+            settings -> new CableBlock(2048, CableBlock.THICK, 128, 40, settings),
             cableSettings(MapColor.STONE_GRAY)
     );
 
     public static final Block FIBERGLASS_CABLE = register(
             "fiberglass_cable",
-            settings -> new CableBlock(8192, CableBlock.THIN, 128, 10, settings),
+            settings -> new CableBlock(8192, CableBlock.THIN, 256, 5, settings),
             cableSettings(MapColor.LIGHT_BLUE)
     );
 
@@ -262,7 +208,7 @@ public class ModBlocks {
     );
 
 
-    private static Block register(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
+    public static Block register(String path, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
         final Identifier identifier = Identifier.of(McDonaldsMod.MOD_ID, path);
         final RegistryKey<Block> registryKey = RegistryKey.of(RegistryKeys.BLOCK, identifier);
 
@@ -294,7 +240,7 @@ public class ModBlocks {
     }
 
     /** 金属材料块：硬度、抗爆、音色都和原版铁块一致，需要镐子才掉落。 */
-    private static AbstractBlock.Settings metalBlockSettings(MapColor mapColor) {
+    public static AbstractBlock.Settings metalBlockSettings(MapColor mapColor) {
         return AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .instrument(NoteBlockInstrument.IRON_XYLOPHONE)
@@ -304,7 +250,7 @@ public class ModBlocks {
     }
 
     /** 石头里的矿石：和原版石头矿一致的硬度与音效。 */
-    private static AbstractBlock.Settings oreSettings() {
+    public static AbstractBlock.Settings oreSettings() {
         return AbstractBlock.Settings.create()
                 .requiresTool()
                 .strength(3.0F, 3.0F)
@@ -312,7 +258,7 @@ public class ModBlocks {
     }
 
     /** 深板岩里的矿石：和原版深层矿一致。 */
-    private static AbstractBlock.Settings deepslateOreSettings() {
+    public static AbstractBlock.Settings deepslateOreSettings() {
         return AbstractBlock.Settings.create()
                 .requiresTool()
                 .strength(4.5F, 3.0F)
@@ -320,7 +266,7 @@ public class ModBlocks {
     }
 
     /** 下界矿石：嵌在地狱岩里，音效同原版下界矿。 */
-    private static AbstractBlock.Settings netherOreSettings() {
+    public static AbstractBlock.Settings netherOreSettings() {
         return AbstractBlock.Settings.create()
                 .requiresTool()
                 .strength(3.0F, 3.0F)
@@ -343,18 +289,17 @@ public class ModBlocks {
 
     public static void initializeModBlocks() {
         /*
-         * 电缆接线登记：想让新机器能被电缆连接，在这里加一行就行。
+         * 电缆接线登记：继承 MachineBlock / AbstractMachineBlock 的机器会在构造器里
+         * 自动登记"六面可接"，一般不用在这里写。要限制端口、或者给不是这两个基类的
+         * 方块登记时，才在这里加一行：
          *
-         *   CableConnections.always(ModBlocks.MY_MACHINE);                 // 六面都能接
          *   CableConnections.only(ModBlocks.MY_MACHINE, Direction.UP);     // 只有顶面能接
          *   CableConnections.custom(ModBlocks.MY_MACHINE,                  // 只有正面能接
          *           CableConnectable.facing(MyMachineBlock.FACING));
          *
-         * 不登记 = 不能接电缆。测试电池盒走的是数据包标签那一套
-         * （data/mcdonalds-mod/tags/block/cable_connectable.json），效果同样是六面可连。
+         * 不登记 = 不能接电缆（也可以把方块写进数据包标签 mcdonalds-mod:cable_connectable，
+         * 测试电池盒就在那里留了一份）。
          */
-        CableConnections.always(TEST_GENERATOR);
-        // 电炉等继承 MachineBlock 的机器会在构造器里自动登记，不需要在这里写
     }
 
 }
