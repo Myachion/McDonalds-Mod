@@ -10,6 +10,7 @@ import com.myachi.mcdonaldsmod.energy.CableBlock;
 import com.myachi.mcdonaldsmod.energy.CableConnections;
 import com.myachi.mcdonaldsmod.machine.TestGeneratorBlock;
 import com.myachi.mcdonaldsmod.machine.TestBatteryBoxBlock;
+import com.myachi.mcdonaldsmod.machine.ElectricFurnaceBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.block.piston.PistonBehavior;
@@ -167,46 +168,59 @@ public class ModBlocks {
                     .sounds(BlockSoundGroup.IRON)
     );
 
+    /**
+     * 电炉：额定输入 32 V / 2 A，缓冲区 5 kJ，烧制功率 32 W（从缓冲区取电），
+     * 速度和高炉一致；能烧的东西和熔炉一样。六面都能接电缆。
+     */
+    public static final Block ELECTRIC_FURNACE = register(
+            "electric_furnace", ElectricFurnaceBlock::new,
+            AbstractBlock.Settings.create()
+                    .requiresTool()
+                    .strength(3.0F, 3.0F)
+                    .sounds(BlockSoundGroup.IRON)
+    );
+
     /*
      * 电缆方块：细杆状小方块，六向自动连接。
      * 参数依次是：额定电压(V) / 横截面(像素) / 额定电流(A) / 每格电阻(毫欧)。
-     * 目前加入的六种：锡 32V / 铜 128V / 钢 512V / 金 512V / 铁 2048V / 玻璃纤维 8192V。
+     * 目前加入的六种（额定电流整体翻倍）：锡 32V 16A / 铜 128V 32A / 精炼铁 512V 32A /
+     * 金 512V 64A / 铁 2048V 128A / 玻璃纤维 8192V 128A。
      * （铝、超导、以及各种"x2"加粗版还没做。）
      * 物品形式就是这些方块的 BlockItem，注册名和以前的导线物品完全一样。
      */
     public static final Block TIN_CABLE = register(
             "tin_cable",
-            settings -> new CableBlock(32, CableBlock.THIN, 8, 100, settings),
+            settings -> new CableBlock(32, CableBlock.THIN, 16, 100, settings),
             cableSettings(MapColor.LIGHT_GRAY)
     );
 
     public static final Block COPPER_CABLE = register(
             "copper_cable",
-            settings -> new CableBlock(128, CableBlock.THIN, 16, 50, settings),
+            settings -> new CableBlock(128, CableBlock.THIN, 32, 50, settings),
             cableSettings(MapColor.ORANGE)
     );
 
     public static final Block IRON_REFINED_CABLE = register(
             "iron_refined_cable",
-            settings -> new CableBlock(512, CableBlock.THICK, 16, 100, settings),
+            settings -> new CableBlock(512, CableBlock.THICK, 32, 100, settings),
             cableSettings(MapColor.IRON_GRAY)
     );
 
     public static final Block GOLD_CABLE = register(
             "gold_cable",
-            settings -> new CableBlock(512, CableBlock.THIN, 32, 50, settings),
+            settings -> new CableBlock(512, CableBlock.THIN, 64, 50, settings),
             cableSettings(MapColor.GOLD)
     );
 
     public static final Block IRON_CABLE = register(
             "iron_cable",
-            settings -> new CableBlock(2048, CableBlock.THICK, 64, 60, settings),
+            settings -> new CableBlock(2048, CableBlock.THICK, 128, 60, settings),
             cableSettings(MapColor.STONE_GRAY)
     );
 
     public static final Block FIBERGLASS_CABLE = register(
             "fiberglass_cable",
-            settings -> new CableBlock(8192, CableBlock.THIN, 64, 10, settings),
+            settings -> new CableBlock(8192, CableBlock.THIN, 128, 10, settings),
             cableSettings(MapColor.LIGHT_BLUE)
     );
 
@@ -340,6 +354,7 @@ public class ModBlocks {
          * （data/mcdonalds-mod/tags/block/cable_connectable.json），效果同样是六面可连。
          */
         CableConnections.always(TEST_GENERATOR);
+        CableConnections.always(ELECTRIC_FURNACE);
     }
 
 }

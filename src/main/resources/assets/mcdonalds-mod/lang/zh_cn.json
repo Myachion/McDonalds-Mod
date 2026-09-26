@@ -37,6 +37,8 @@
 	"item.mcdonalds-mod.cable.resistance": "每格电阻: %s Ω",
 	"block.mcdonalds-mod.test_generator": "测试发电机",
 	"block.mcdonalds-mod.test_battery_box": "测试电池盒",
+	"block.mcdonalds-mod.electric_furnace": "电炉",
+	"gui.mcdonalds-mod.electric_furnace.energy": "缓冲区：%s J / %s J",
 
 	"gui.mcdonalds-mod.test_generator.title": "测试发电机",
 	"gui.mcdonalds-mod.test_battery_box.title": "测试电池盒",

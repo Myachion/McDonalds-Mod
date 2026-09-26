@@ -1,6 +1,7 @@
 package com.myachi.mcdonaldsmod;
 
 import com.myachi.mcdonaldsmod.machine.TestBatteryBoxBlockEntity;
+import com.myachi.mcdonaldsmod.machine.ElectricFurnaceBlockEntity;
 import com.myachi.mcdonaldsmod.machine.TestGeneratorBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntityType;
@@ -19,6 +20,12 @@ public class ModBlockEntities {
             Registries.BLOCK_ENTITY_TYPE,
             Identifier.of(McDonaldsMod.MOD_ID, "test_battery_box"),
             FabricBlockEntityTypeBuilder.create(TestBatteryBoxBlockEntity::new, ModBlocks.TEST_BATTERY_BOX).build()
+    );
+
+    public static final BlockEntityType<ElectricFurnaceBlockEntity> ELECTRIC_FURNACE = Registry.register(
+            Registries.BLOCK_ENTITY_TYPE,
+            Identifier.of(McDonaldsMod.MOD_ID, "electric_furnace"),
+            FabricBlockEntityTypeBuilder.create(ElectricFurnaceBlockEntity::new, ModBlocks.ELECTRIC_FURNACE).build()
     );
 
     public static void initializeModBlockEntities() {

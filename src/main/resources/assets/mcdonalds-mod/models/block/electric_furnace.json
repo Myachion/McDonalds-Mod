@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "front": "mcdonalds-mod:block/electric_furnace/front",
+    "side": "mcdonalds-mod:block/electric_furnace/side",
+    "top": "mcdonalds-mod:block/electric_furnace/top",
+    "bottom": "mcdonalds-mod:block/electric_furnace/bottom"
+  }
+}

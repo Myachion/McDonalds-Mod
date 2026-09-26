@@ -30,6 +30,7 @@ public class ModItemGroups {
                 entries.add(ModBlocks.MACHINE_SHELL);
                 entries.add(ModBlocks.TEST_GENERATOR);
                 entries.add(ModBlocks.TEST_BATTERY_BOX);
+                entries.add(ModBlocks.ELECTRIC_FURNACE);
                 entries.add(ModBlocks.TIN_ORE);
                 entries.add(ModBlocks.LEAD_ORE);
                 entries.add(ModBlocks.DEEPSLATE_LEAD_ORE);

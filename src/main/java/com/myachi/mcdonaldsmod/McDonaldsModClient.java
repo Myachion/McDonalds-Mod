@@ -3,6 +3,7 @@ package com.myachi.mcdonaldsmod;
 import com.myachi.mcdonaldsmod.beacon.BeaconNetwork;
 import com.myachi.mcdonaldsmod.client.TestBatteryBoxScreen;
 import com.myachi.mcdonaldsmod.client.TestGeneratorScreen;
+import com.myachi.mcdonaldsmod.client.ElectricFurnaceScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -37,6 +38,8 @@ public class McDonaldsModClient implements ClientModInitializer {
         // 机器界面
         HandledScreens.register(ModScreenHandlers.TEST_GENERATOR, TestGeneratorScreen::new);
         HandledScreens.register(ModScreenHandlers.TEST_BATTERY_BOX, TestBatteryBoxScreen::new);
+        // 电炉界面：布局照抄熔炉，火苗换成缓冲区闪电图标
+        HandledScreens.register(ModScreenHandlers.ELECTRIC_FURNACE, ElectricFurnaceScreen::new);
 
         // Declaring a receiver on this channel tells the server this client knows the
         // mod, which is what allows it to safely receive the beacon flight effect.
