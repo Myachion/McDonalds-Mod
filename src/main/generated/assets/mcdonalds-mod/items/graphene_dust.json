@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "mcdonalds-mod:block/steel_block"
+    "model": "mcdonalds-mod:item/graphene_dust"
   }
 }

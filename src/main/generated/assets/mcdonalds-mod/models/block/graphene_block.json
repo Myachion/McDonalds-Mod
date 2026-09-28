@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "mcdonalds-mod:block/steel_block"
+    "all": "mcdonalds-mod:block/graphene_block"
   }
 }

@@ -19,16 +19,9 @@ public class ModItemGroups {
             .icon(()->new ItemStack(ModItems.CHEESE_HAMBURGER))
             .displayName(Text.translatable("itemGroup.mcdonalds-mod.mcdonald_group"))
             .entries((context,entries)-> {
+                // ================= 1. 矿石 =================
                 entries.add(ModBlocks.SALT_ORE);
                 entries.add(ModBlocks.DEEPSLATE_SALT_ORE);
-                entries.add(ModBlocks.IRON_REFINED_BLOCK);
-                entries.add(ModBlocks.CHARCOAL_BLOCK);
-                entries.add(ModBlocks.MACHINE_SHELL);
-                entries.add(ModBlocks.TEST_GENERATOR);
-                entries.add(ModBlocks.TEST_BATTERY_BOX);
-                entries.add(ModBlocks.ELECTRIC_FURNACE);
-
-                // ---- 材料族（定义见 ModMaterials）：矿石 → 材料块 → 粗矿/锭/板/粉 ----
                 for (MaterialFamily family : ModMaterials.all()) {
                     for (MaterialFamily.Part part : new MaterialFamily.Part[]{
                             MaterialFamily.Part.ORE, MaterialFamily.Part.DEEPSLATE_ORE, MaterialFamily.Part.NETHER_ORE}) {
@@ -37,15 +30,12 @@ public class ModItemGroups {
                         }
                     }
                 }
-                for (MaterialFamily family : ModMaterials.all()) {
-                    if (family.has(MaterialFamily.Part.BLOCK)) {
-                        entries.add(family.block(MaterialFamily.Part.BLOCK));
-                    }
-                }
+
+                // ================= 2. 粗矿 / 粗矿粒 =================
+                entries.add(ModItems.RAW_SALT);
                 for (MaterialFamily family : ModMaterials.all()) {
                     for (MaterialFamily.Part part : new MaterialFamily.Part[]{
-                            MaterialFamily.Part.RAW, MaterialFamily.Part.RAW_NUGGET, MaterialFamily.Part.INGOT,
-                            MaterialFamily.Part.PLATE, MaterialFamily.Part.DUST}) {
+                            MaterialFamily.Part.RAW, MaterialFamily.Part.RAW_NUGGET}) {
                         Item item = family.item(part);
                         if (item != null) {
                             entries.add(item);
@@ -53,14 +43,52 @@ public class ModItemGroups {
                     }
                 }
 
+                // ================= 3. 材料块 =================
+                entries.add(ModBlocks.IRON_REFINED_BLOCK);
+                entries.add(ModBlocks.CHARCOAL_BLOCK);
+                for (MaterialFamily family : ModMaterials.all()) {
+                    if (family.has(MaterialFamily.Part.BLOCK)) {
+                        entries.add(family.block(MaterialFamily.Part.BLOCK));
+                    }
+                }
+
+                // ================= 4. 锭 =================
+                entries.add(ModItems.IRON_REFINED_INGOT);
+                for (MaterialFamily family : ModMaterials.all()) {
+                    Item ingot = family.item(MaterialFamily.Part.INGOT);
+                    if (ingot != null) {
+                        entries.add(ingot);
+                    }
+                }
+
+                // ================= 5. 板 =================
+                for (MaterialFamily family : ModMaterials.all()) {
+                    Item plate = family.item(MaterialFamily.Part.PLATE);
+                    if (plate != null) {
+                        entries.add(plate);
+                    }
+                }
+                entries.add(ModItems.IRON_REFINED_PLATE);
+                entries.add(ModItems.IRON_PLATE);
+                entries.add(ModItems.COPPER_PLATE);
                 entries.add(ModItems.GOLD_PLATE);
                 entries.add(ModItems.LAPIS_PLATE);
                 entries.add(ModItems.OBSIDIAN_PLATE);
                 entries.add(ModItems.REDSTONE_PLATE);
                 entries.add(ModItems.DIAMOND_PLATE);
+                entries.add(ModItems.IRIDIUM_PLATE);
+
+                // ================= 6. 粉 =================
+                for (MaterialFamily family : ModMaterials.all()) {
+                    Item dust = family.item(MaterialFamily.Part.DUST);
+                    if (dust != null) {
+                        entries.add(dust);
+                    }
+                }
                 entries.add(ModItems.COPPER_DUST);
                 entries.add(ModItems.GOLD_DUST);
                 entries.add(ModItems.IRON_DUST);
+                entries.add(ModItems.COAL_DUST);
                 entries.add(ModItems.CARBON_DUST);
                 entries.add(ModItems.WET_CARBON_DUST);
                 entries.add(ModItems.ASH_DUST);
@@ -78,13 +106,13 @@ public class ModItemGroups {
                 entries.add(ModItems.RED_ALLOY_DUST);
                 entries.add(ModItems.SILICON_DIOXIDE_DUST);
 
-                entries.add(ModItems.COAL_DUST);
-                entries.add(ModItems.RAW_SALT);
-                entries.add(ModItems.IRON_REFINED_INGOT);
-                entries.add(ModItems.IRON_REFINED_PLATE);
-                entries.add(ModItems.IRON_PLATE);
-                entries.add(ModItems.COPPER_PLATE);
-                entries.add(ModItems.COPPER_STRIPS);
+                // ================= 7. 机器 =================
+                entries.add(ModBlocks.MACHINE_SHELL);
+                entries.add(ModBlocks.TEST_GENERATOR);
+                entries.add(ModBlocks.TEST_BATTERY_BOX);
+                entries.add(ModBlocks.ELECTRIC_FURNACE);
+
+                // ================= 8. 电缆 =================
                 entries.add(ModItems.TIN_CABLE);
                 entries.add(ModItems.COPPER_CABLE);
                 entries.add(ModItems.COPPER_CABLE_X2);
@@ -95,11 +123,18 @@ public class ModItemGroups {
                 entries.add(ModItems.FIBERGLASS_CABLE);
                 entries.add(ModItems.METER);
 
+                // ================= 9. 工具与零件 =================
+                entries.add(ModItems.STONE_MORTAR);
+                entries.add(ModItems.IRON_REFINED_MORTAR);
+                entries.add(ModItems.NETHERITE_MORTAR);
+                entries.add(ModItems.IRON_REFINED_HAMMER);
+                entries.add(ModItems.IRON_REFINED_CUTTER);
+                entries.add(ModItems.COPPER_STRIPS);
                 entries.add(ModItems.IRIDIUM);
                 entries.add(ModItems.IRIDIUM_SHARD);
-                entries.add(ModItems.IRIDIUM_PLATE);
                 entries.add(ModItems.CIRCUIT_BOARD);
 
+                // ================= 10. 食物 =================
                 entries.add(ModItems.SALT);
                 entries.add(ModItems.VEGETABLE_OIL);
                 entries.add(ModItems.TOMATO);
@@ -160,17 +195,8 @@ public class ModItemGroups {
                 entries.add(ModItems.FLOUR);
                 entries.add(ModItems.CHUM);
                 entries.add(ModItems.CHUM_ON_STICK);
-                entries.add(ModItems.STONE_MORTAR);
-                entries.add(ModItems.IRON_REFINED_MORTAR);
-                entries.add(ModItems.NETHERITE_MORTAR);
-                entries.add(ModItems.IRON_REFINED_HAMMER);
-                entries.add(ModItems.IRON_REFINED_CUTTER);
                 entries.add(ModItems.FIJI_CUP);
                 entries.add(ModItems.FULL_FIJI_CUP);
-
-
-
-
             })
             .build();
 

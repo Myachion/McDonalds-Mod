@@ -72,7 +72,7 @@ $env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
 | 情况 | 写法 | 例子 |
 |---|---|---|
 | 没有某个部件 | 不调用对应的 `.xxx()` | 铀没有板：`ModMaterials.URANIUM` |
-| 有部件但没有配方 | `.blockRecipe(false)` / `.plateRecipe(false)` / `.dustRecipe(false)` | 钢块：`STEEL` 只有 `.block().blockRecipe(false)` |
+| 有部件但没有配方 | `.blockRecipe(false)` / `.plateRecipe(false)` / `.dustRecipe(false)` | 石墨烯 / 钨 / 钨钢：有板和粉的部件，但 `.plateRecipe(false).dustRecipe(false)` |
 | 锭不是自己的（用原版锭） | `.ingotFrom(Items.COPPER_INGOT)` | 铜/金/铁板那种（还没迁，见下） |
 | 粉的来源不是自己的锭 | `.dustFrom(Items.LAPIS_LAZULI)` | 青金石粉那种 |
 | 粉能烧回锭 | `.dustSmelting(true)` | **青铜**（目前唯一有这条配方的） |
@@ -131,12 +131,24 @@ $env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
 | 材料族 | Java 注册 | 资源 |
 |---|---|---|
 | 锡 `tin` | ✅ 材料族 | ✅ datagen 生成（模型/掉落/配方） |
+| 钢 `steel` | ✅ 材料族 | ✅ datagen 生成 |
+| 石墨烯 `graphene` | ✅ 材料族 | ✅ datagen 生成 |
+| 钨 `tungsten` | ✅ 材料族 | ✅ datagen 生成 |
+| 钨钢 `tungsten_steel` | ✅ 材料族 | ✅ datagen 生成 |
 | 铅 `lead` | ✅ 材料族 | ⏳ 手写（`noGeneratedAssets()`） |
 | 铝 `aluminum` | ✅ 材料族 | ⏳ 手写 |
 | 银 `silver` | ✅ 材料族 | ⏳ 手写 |
 | 青铜 `bronze` | ✅ 材料族 | ⏳ 手写 |
 | 铀 `uranium` | ✅ 材料族 | ⏳ 手写 |
-| 钢 `steel`（只有块） | ✅ 材料族 | ⏳ 手写 |
+
+> 石墨烯 / 钢 / 钨 / 钨钢这四族都只有 **块 ↔ 锭** 两条配方（9 ↕ 1），
+> 其中**只有钢**额外有"钢锭 + 精炼铁锤 → 2 钢板""钢锭 + 研钵 → 1 钢粉"，
+> 以及"钢粉 →(熔炉 200 t / 高炉 100 t，0.7 经验)→ 钢锭"。
+> 其余三族的板和粉没有获取途径（和青金石/黑曜石/红石/钻石板一样的"有物品无配方"）。
+>
+> 钢块原来是手写资源（`noGeneratedAssets()` + `blockRecipe(false)`），
+> 这次已经按第 3 节流程迁移：删掉 4 个手写文件、去掉开关、跑 `runDatagen`，
+> 生成结果与手写版语义一致。
 
 还没进材料族的（属于"和材料族形状不同"的那批，需要时再抽象）：
 精炼铁（带锤子/剪子工具）、原版锭派生的铜/金/铁板与粉、
