@@ -4,23 +4,21 @@
 	"itemGroup.mcdonalds-mod.misc": "其他",
 	"itemGroup.mcdonalds-mod.mcdonald_misc": "其他",
 	"itemGroup.mcdonalds-mod.mcdonald_food": "食物与农作物",
-"itemGroup.mcdonalds-mod.mcdonald_group": "材料",
-
+	"itemGroup.mcdonalds-mod.mcdonald_group": "材料",
 	"item.mcdonalds-mod.iron_refined_ingot": "精炼铁锭",
 	"item.mcdonalds-mod.iron_refined_ingot.tooltip": "其由铁锭在高炉中炼制",
 	"item.mcdonalds-mod.iridium": "铱",
 	"item.mcdonalds-mod.iridium_shard": "铱碎片",
-
 	"item.mcdonalds-mod.iron_refined_plate": "精炼铁板",
 	"item.mcdonalds-mod.iron_plate": "铁板",
 	"item.mcdonalds-mod.copper_plate": "铜板",
 	"block.mcdonalds-mod.iron_refined_cable": "精炼铁线缆",
 	"block.mcdonalds-mod.iron_cable": "铁线缆",
-"block.mcdonalds-mod.copper_cable": "铜线缆",
-"block.mcdonalds-mod.copper_cable_x2": "2x 铜线缆",
+	"block.mcdonalds-mod.copper_cable": "铜线缆",
+	"block.mcdonalds-mod.copper_cable_x2": "2x 铜线缆",
 	"block.mcdonalds-mod.tin_cable": "锡线缆",
-"block.mcdonalds-mod.gold_cable": "金线缆",
-"block.mcdonalds-mod.gold_cable_x2": "2x 金线缆",
+	"block.mcdonalds-mod.gold_cable": "金线缆",
+	"block.mcdonalds-mod.gold_cable_x2": "2x 金线缆",
 	"block.mcdonalds-mod.fiberglass_cable": "玻璃纤维线缆",
 	"item.mcdonalds-mod.meter": "万用表",
 	"item.mcdonalds-mod.meter.header": "── 电网状态 ──",
@@ -46,7 +44,6 @@
 	"block.mcdonalds-mod.test_battery_box": "测试电池盒",
 	"block.mcdonalds-mod.electric_furnace": "电炉",
 	"gui.mcdonalds-mod.machine.energy": "缓冲区：%s J / %s J",
-
 	"gui.mcdonalds-mod.test_generator.title": "测试发电机",
 	"gui.mcdonalds-mod.test_battery_box.title": "测试电池盒",
 	"gui.mcdonalds-mod.energy_buffer": "缓存能量",
@@ -68,14 +65,11 @@
 	"gui.mcdonalds-mod.voltage": "电压",
 	"gui.mcdonalds-mod.current": "电流",
 	"gui.mcdonalds-mod.power": "功率",
-	"item.mcdonalds-mod.copper_strips": "铜条",
 	"item.mcdonalds-mod.iridium_plate": "铱板",
 	"item.mcdonalds-mod.circuit_board": "电路板",
 	"item.mcdonalds-mod.coal_dust": "煤粉",
-
 	"item.mcdonalds-mod.salt": "食盐",
 	"item.mcdonalds-mod.raw_salt": "粗盐",
-
 	"item.mcdonalds-mod.flour": "面粉",
 	"item.mcdonalds-mod.dough": "面团",
 	"item.mcdonalds-mod.sugary_dough": "甜面团",
@@ -86,7 +80,6 @@
 	"item.mcdonalds-mod.milk_chocolate": "牛奶巧克力",
 	"item.mcdonalds-mod.cereal": "麦片",
 	"item.mcdonalds-mod.porridge": "粥",
-
 	"item.mcdonalds-mod.cheese": "奶酪",
 	"item.mcdonalds-mod.tomato": "番茄",
 	"item.mcdonalds-mod.onion": "洋葱",
@@ -106,12 +99,10 @@
 	"item.mcdonalds-mod.soybean_meal": "豆粕",
 	"item.mcdonalds-mod.tofu": "豆腐",
 	"item.mcdonalds-mod.baked_beans": "焗豆",
-
 	"item.mcdonalds-mod.tomato_seeds": "番茄种子",
 	"item.mcdonalds-mod.onion_seeds": "洋葱种子",
 	"item.mcdonalds-mod.corn_seeds": "玉米种子",
 	"item.mcdonalds-mod.blueberry_bush": "蓝莓丛",
-
 	"item.mcdonalds-mod.cheese_hamburger": "芝士汉堡",
 	"item.mcdonalds-mod.chicken_burger": "鸡肉汉堡",
 	"item.mcdonalds-mod.hot_dog": "热狗",
@@ -127,19 +118,15 @@
 	"item.mcdonalds-mod.vegetable_soup": "蔬菜汤",
 	"item.mcdonalds-mod.pumpkin_soup": "南瓜汤",
 	"item.mcdonalds-mod.beef_stew": "炖牛肉",
-
 	"item.mcdonalds-mod.chum": "海霸肉",
 	"item.mcdonalds-mod.chum_on_stick": "海霸棒",
-
 	"item.mcdonalds-mod.stone_mortar": "石研钵",
 	"item.mcdonalds-mod.iron_refined_mortar": "精炼铁研钵",
 	"item.mcdonalds-mod.netherite_mortar": "下界合金研钵",
 	"item.mcdonalds-mod.iron_refined_hammer": "精炼铁锤",
 	"item.mcdonalds-mod.iron_refined_cutter": "精炼铁剪",
-
 	"item.mcdonalds-mod.fiji_cup": "斐济杯",
 	"item.mcdonalds-mod.full_fiji_cup": "满的斐济杯",
-
 	"block.mcdonalds-mod.iron_refined_block": "精炼铁块",
 	"block.mcdonalds-mod.salt_ore": "盐矿石",
 	"block.mcdonalds-mod.deepslate_salt_ore": "深层盐矿石",
@@ -280,10 +267,22 @@
 	"item.mcdonalds-mod.pure_crushed_gold": "纯净的粉碎金矿石",
 	"block.mcdonalds-mod.cheese_cake": "芝士蛋糕",
 	"block.mcdonalds-mod.chocolate_cake": "巧克力蛋糕",
-
 	"effect.mcdonalds-mod.flight": "飞行",
 	"gamerule.mcdonalds-mod.beacon_flight": "信标飞行",
 	"gamerule.mcdonalds-mod.beacon_flight.description": "满级 16 层信标是否提供创造模式飞行。",
 	"mcdonalds-mod.beacon.level_requirement": " | 需要 %s 级",
-	"block.minecraft.beacon.tertiary": "三级效果"
+	"block.minecraft.beacon.tertiary": "三级效果",
+	"item.mcdonalds-mod.tin_casing": "锡质外壳",
+	"item.mcdonalds-mod.lead_casing": "铅质外壳",
+	"item.mcdonalds-mod.copper_casing": "铜质外壳",
+	"item.mcdonalds-mod.gold_casing": "金质外壳",
+	"item.mcdonalds-mod.iron_casing": "铁质外壳",
+	"item.mcdonalds-mod.steel_casing": "钢质外壳",
+	"item.mcdonalds-mod.aluminum_casing": "铝质外壳",
+	"item.mcdonalds-mod.silver_casing": "银质外壳",
+	"item.mcdonalds-mod.bronze_casing": "青铜外壳",
+	"item.mcdonalds-mod.iron_refined_casing": "精炼铁外壳",
+	"item.mcdonalds-mod.tungsten_casing": "钨质外壳",
+	"item.mcdonalds-mod.tungsten_steel_casing": "钨钢外壳",
+	"item.mcdonalds-mod.graphene_casing": "石墨烯外壳"
 }

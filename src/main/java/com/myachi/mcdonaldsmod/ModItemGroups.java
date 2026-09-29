@@ -1,5 +1,6 @@
 package com.myachi.mcdonaldsmod;
 
+import com.myachi.mcdonaldsmod.item.CasingItems;
 import com.myachi.mcdonaldsmod.item.CrushedOres;
 import com.myachi.mcdonaldsmod.item.ModSmallDusts;
 import com.myachi.mcdonaldsmod.material.MaterialFamily;
@@ -246,9 +247,13 @@ public final class ModItemGroups {
                 entries.add(ModItems.IRON_REFINED_CUTTER);
 
                 // ---- 零件 ----
-                entries.add(ModItems.COPPER_STRIPS);
                 entries.add(ModItems.IRIDIUM_SHARD);
                 entries.add(ModItems.CIRCUIT_BOARD);
+
+                // ---- 外壳 ----
+                for (CasingItems.Entry casing : CasingItems.all()) {
+                    entries.add(CasingItems.get(casing.material()));
+                }
             })
             .build();
 

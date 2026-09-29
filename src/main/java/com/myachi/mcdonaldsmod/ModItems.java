@@ -86,7 +86,6 @@ public class ModItems {
     public static final Item IRON_CABLE = ModBlocks.IRON_CABLE.asItem();
     public static final Item FIBERGLASS_CABLE = ModBlocks.FIBERGLASS_CABLE.asItem();
 
-    public static final Item COPPER_STRIPS = register("copper_strips",Item::new,new Item.Settings());
     public static final Item COAL_DUST = register("coal_dust",Item::new,new Item.Settings());
     public static final Item IRIDIUM_PLATE = register("iridium_plate",Item::new,new Item.Settings());
     public static final Item CIRCUIT_BOARD = register("circuit_board",Item::new,new Item.Settings());

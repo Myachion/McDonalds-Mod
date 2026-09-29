@@ -3,6 +3,7 @@ package com.myachi.mcdonaldsmod;
 import com.myachi.mcdonaldsmod.beacon.ModBeaconFeatures;
 import com.myachi.mcdonaldsmod.energy.EnergyNetworks;
 import com.myachi.mcdonaldsmod.energy.EnergyConfig;
+import com.myachi.mcdonaldsmod.item.CasingItems;
 import com.myachi.mcdonaldsmod.item.CrushedOres;
 import com.myachi.mcdonaldsmod.item.ModSmallDusts;
 import com.myachi.mcdonaldsmod.material.ModMaterials;
@@ -33,6 +34,8 @@ public class McDonaldsMod implements ModInitializer {
         ModSmallDusts.initialize();
         // 粉碎矿要用到材料族/原版的粗矿，排在材料族之后
         CrushedOres.initialize();
+        // 外壳：独立物品，贴图由用户提供
+        CasingItems.initialize();
         ModItemGroups.initializeModItemGroups();
         ModBlocks.initializeModBlocks();
         ModBlockEntities.initializeModBlockEntities();

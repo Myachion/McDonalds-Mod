@@ -1,0 +1,27 @@
+// 1.21.11	-999999999-01-01T00:00:00	McDonald's Mod/Casing assets (definitions / models)
+1d144ca1d1462d8f3a4dcd7ea4e9faec7d99ed50 assets/mcdonalds-mod/items/aluminum_casing.json
+72f1c8b9579ef5bbca9a8c5207c098f41b2013a1 assets/mcdonalds-mod/items/bronze_casing.json
+30b8ced5adbc87ac41e693075ebecdf82c31f165 assets/mcdonalds-mod/items/copper_casing.json
+1658b9607a5ac88cb35228fec6d3b7d8c13219c3 assets/mcdonalds-mod/items/gold_casing.json
+241337c62f0412d0eb160ce5e7583234f1d45bae assets/mcdonalds-mod/items/graphene_casing.json
+c5557da56f60e272d3876b8ba87d93a19285e1a0 assets/mcdonalds-mod/items/iron_casing.json
+3f8d259c73d0b5182bbaa5de4fab0f290ce0ee6e assets/mcdonalds-mod/items/iron_refined_casing.json
+617c975dd3b3e5c8a0e8e3bbc7f367be450ec996 assets/mcdonalds-mod/items/lead_casing.json
+14fecd9b11d79d140f6b1d8f9291bada3a229f82 assets/mcdonalds-mod/items/silver_casing.json
+6cef46346508d8a8b3f41ffa2705c528bcd94ec4 assets/mcdonalds-mod/items/steel_casing.json
+f13055785232b50c95560ceec432b9bb71021101 assets/mcdonalds-mod/items/tin_casing.json
+45ef0b8400650950da7f161356e988b636f95ebf assets/mcdonalds-mod/items/tungsten_casing.json
+d62212d98a8ad85eaf0e9f8d97462f44609b1e99 assets/mcdonalds-mod/items/tungsten_steel_casing.json
+75fe7e6dd594f6e20effdb83c1cc8e802ceb3514 assets/mcdonalds-mod/models/item/aluminum_casing.json
+4b689651b6493036deab5f147d5d79a5baa6e233 assets/mcdonalds-mod/models/item/bronze_casing.json
+206ddfaf556d15ccc6e4b5bb6cfe2a13a0c4d68f assets/mcdonalds-mod/models/item/copper_casing.json
+a748b230b671b07a04c89696f25d9f8c68103665 assets/mcdonalds-mod/models/item/gold_casing.json
+4dbdfb0c0f164ade87fa83f980ef1c2af537f341 assets/mcdonalds-mod/models/item/graphene_casing.json
+390c4ca8b3621505d4ba7644268201b0a2591496 assets/mcdonalds-mod/models/item/iron_casing.json
+8f7a326c3c4ba17c518905d56d8b9101b8a821e6 assets/mcdonalds-mod/models/item/iron_refined_casing.json
+edd2f2e393c5c4da0bdfad7a3169eaa4090620aa assets/mcdonalds-mod/models/item/lead_casing.json
+71d6537fd495c039b289d2222574aaee592071c2 assets/mcdonalds-mod/models/item/silver_casing.json
+e9134149809763f1cfe95b1db311193802c9d9dc assets/mcdonalds-mod/models/item/steel_casing.json
+b734f409eda3eae318fd867795b99d0b6084f27f assets/mcdonalds-mod/models/item/tin_casing.json
+8f2ee84c829872e04683acd2f814e5a01c4f8682 assets/mcdonalds-mod/models/item/tungsten_casing.json
+1973605ece5711c0ac07ad65b75f4aff3b10266e assets/mcdonalds-mod/models/item/tungsten_steel_casing.json

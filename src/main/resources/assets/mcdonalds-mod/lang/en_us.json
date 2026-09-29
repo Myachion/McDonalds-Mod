@@ -4,23 +4,21 @@
 	"itemGroup.mcdonalds-mod.misc": "Miscellaneous",
 	"itemGroup.mcdonalds-mod.mcdonald_misc": "Miscellaneous",
 	"itemGroup.mcdonalds-mod.mcdonald_food": "Food & Crops",
-"itemGroup.mcdonalds-mod.mcdonald_group": "Materials",
-
+	"itemGroup.mcdonalds-mod.mcdonald_group": "Materials",
 	"item.mcdonalds-mod.iron_refined_ingot": "Refined Iron Ingot",
 	"item.mcdonalds-mod.iron_refined_ingot.tooltip": "It is refined from iron ingots in a blast furnace",
 	"item.mcdonalds-mod.iridium": "Iridium",
 	"item.mcdonalds-mod.iridium_shard": "Iridium Shard",
-
 	"item.mcdonalds-mod.iron_refined_plate": "Refined Iron Plate",
 	"item.mcdonalds-mod.iron_plate": "Iron Plate",
 	"item.mcdonalds-mod.copper_plate": "Copper Plate",
 	"block.mcdonalds-mod.iron_refined_cable": "Refined Iron Cable",
 	"block.mcdonalds-mod.iron_cable": "Iron Cable",
-"block.mcdonalds-mod.copper_cable": "Copper Cable",
-"block.mcdonalds-mod.copper_cable_x2": "2x Copper Cable",
+	"block.mcdonalds-mod.copper_cable": "Copper Cable",
+	"block.mcdonalds-mod.copper_cable_x2": "2x Copper Cable",
 	"block.mcdonalds-mod.tin_cable": "Tin Cable",
-"block.mcdonalds-mod.gold_cable": "Gold Cable",
-"block.mcdonalds-mod.gold_cable_x2": "2x Gold Cable",
+	"block.mcdonalds-mod.gold_cable": "Gold Cable",
+	"block.mcdonalds-mod.gold_cable_x2": "2x Gold Cable",
 	"block.mcdonalds-mod.fiberglass_cable": "Fiberglass Cable",
 	"item.mcdonalds-mod.meter": "Multimeter",
 	"item.mcdonalds-mod.meter.header": "── Grid Status ──",
@@ -46,7 +44,6 @@
 	"block.mcdonalds-mod.test_battery_box": "Test Battery Box",
 	"block.mcdonalds-mod.electric_furnace": "Electric Furnace",
 	"gui.mcdonalds-mod.machine.energy": "Buffer: %s J / %s J",
-
 	"gui.mcdonalds-mod.test_generator.title": "Test Generator",
 	"gui.mcdonalds-mod.test_battery_box.title": "Test Battery Box",
 	"gui.mcdonalds-mod.energy_buffer": "Energy Buffer",
@@ -68,14 +65,11 @@
 	"gui.mcdonalds-mod.voltage": "Voltage",
 	"gui.mcdonalds-mod.current": "Current",
 	"gui.mcdonalds-mod.power": "Power",
-	"item.mcdonalds-mod.copper_strips": "Copper Strips",
 	"item.mcdonalds-mod.iridium_plate": "Iridium Plate",
 	"item.mcdonalds-mod.circuit_board": "Circuit Board",
 	"item.mcdonalds-mod.coal_dust": "Coal Dust",
-
 	"item.mcdonalds-mod.salt": "Salt",
 	"item.mcdonalds-mod.raw_salt": "Raw Salt",
-
 	"item.mcdonalds-mod.flour": "Flour",
 	"item.mcdonalds-mod.dough": "Dough",
 	"item.mcdonalds-mod.sugary_dough": "Sugary Dough",
@@ -86,7 +80,6 @@
 	"item.mcdonalds-mod.milk_chocolate": "Milk Chocolate",
 	"item.mcdonalds-mod.cereal": "Cereal",
 	"item.mcdonalds-mod.porridge": "Porridge",
-
 	"item.mcdonalds-mod.cheese": "Cheese",
 	"item.mcdonalds-mod.tomato": "Tomato",
 	"item.mcdonalds-mod.onion": "Onion",
@@ -106,12 +99,10 @@
 	"item.mcdonalds-mod.soybean_meal": "Soybean Meal",
 	"item.mcdonalds-mod.tofu": "Tofu",
 	"item.mcdonalds-mod.baked_beans": "Baked Beans",
-
 	"item.mcdonalds-mod.tomato_seeds": "Tomato Seeds",
 	"item.mcdonalds-mod.onion_seeds": "Onion Seeds",
 	"item.mcdonalds-mod.corn_seeds": "Corn Seeds",
 	"item.mcdonalds-mod.blueberry_bush": "Blueberry Bush",
-
 	"item.mcdonalds-mod.cheese_hamburger": "Cheeseburger",
 	"item.mcdonalds-mod.chicken_burger": "Chicken Burger",
 	"item.mcdonalds-mod.hot_dog": "Hot Dog",
@@ -127,19 +118,15 @@
 	"item.mcdonalds-mod.vegetable_soup": "Vegetable Soup",
 	"item.mcdonalds-mod.pumpkin_soup": "Pumpkin Soup",
 	"item.mcdonalds-mod.beef_stew": "Beef Stew",
-
 	"item.mcdonalds-mod.chum": "Chum",
 	"item.mcdonalds-mod.chum_on_stick": "Chum on a Stick",
-
 	"item.mcdonalds-mod.stone_mortar": "Stone Mortar",
 	"item.mcdonalds-mod.iron_refined_mortar": "Refined Iron Mortar",
 	"item.mcdonalds-mod.netherite_mortar": "Netherite Mortar",
 	"item.mcdonalds-mod.iron_refined_hammer": "Refined Iron Hammer",
 	"item.mcdonalds-mod.iron_refined_cutter": "Refined Iron Cutter",
-
 	"item.mcdonalds-mod.fiji_cup": "Fiji Cup",
 	"item.mcdonalds-mod.full_fiji_cup": "Full Fiji Cup",
-
 	"block.mcdonalds-mod.iron_refined_block": "Refined Iron Block",
 	"block.mcdonalds-mod.salt_ore": "Salt Ore",
 	"block.mcdonalds-mod.deepslate_salt_ore": "Deepslate Salt Ore",
@@ -280,10 +267,22 @@
 	"item.mcdonalds-mod.pure_crushed_gold": "Purified Crushed Gold Ore",
 	"block.mcdonalds-mod.cheese_cake": "Cheese Cake",
 	"block.mcdonalds-mod.chocolate_cake": "Chocolate Cake",
-
 	"effect.mcdonalds-mod.flight": "Flight",
 	"gamerule.mcdonalds-mod.beacon_flight": "Beacon flight",
 	"gamerule.mcdonalds-mod.beacon_flight.description": "Whether a full 16 level beacon grants creative flight.",
 	"mcdonalds-mod.beacon.level_requirement": " | Level %s",
-	"block.minecraft.beacon.tertiary": "Tertiary Power"
+	"block.minecraft.beacon.tertiary": "Tertiary Power",
+	"item.mcdonalds-mod.tin_casing": "Tin Casing",
+	"item.mcdonalds-mod.lead_casing": "Lead Casing",
+	"item.mcdonalds-mod.copper_casing": "Copper Casing",
+	"item.mcdonalds-mod.gold_casing": "Gold Casing",
+	"item.mcdonalds-mod.iron_casing": "Iron Casing",
+	"item.mcdonalds-mod.steel_casing": "Steel Casing",
+	"item.mcdonalds-mod.aluminum_casing": "Aluminum Casing",
+	"item.mcdonalds-mod.silver_casing": "Silver Casing",
+	"item.mcdonalds-mod.bronze_casing": "Bronze Casing",
+	"item.mcdonalds-mod.iron_refined_casing": "Refined Iron Casing",
+	"item.mcdonalds-mod.tungsten_casing": "Tungsten Casing",
+	"item.mcdonalds-mod.tungsten_steel_casing": "Tungsten Steel Casing",
+	"item.mcdonalds-mod.graphene_casing": "Graphene Casing"
 }
