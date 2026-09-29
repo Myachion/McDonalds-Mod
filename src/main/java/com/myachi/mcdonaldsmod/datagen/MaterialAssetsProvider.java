@@ -46,6 +46,12 @@ public final class MaterialAssetsProvider implements DataProvider {
     private static final Identifier HAMMER = Identifier.of(McDonaldsMod.MOD_ID, "iron_refined_hammer");
     /** 研钵标签，配方里写成 {@code #mcdonalds-mod:mortar}。 */
     private static final String MORTAR_TAG = "#" + McDonaldsMod.MOD_ID + ":mortar";
+    /** 下界矿掉的粗矿粒数量范围。 */
+    private static final int NETHER_DROP_MIN = 4;
+    private static final int NETHER_DROP_MAX = 7;
+    /** 末地矿（富矿）掉的粗矿数量范围：比主世界矿多，但不给新物品。 */
+    private static final int END_DROP_MIN = 2;
+    private static final int END_DROP_MAX = 3;
 
     private final FabricDataOutput output;
 
@@ -101,14 +107,18 @@ public final class MaterialAssetsProvider implements DataProvider {
             tasks.add(asset(writer, "blockstates", id, blockState(blockModel(id))));
             tasks.add(asset(writer, "models/block", id, cubeAll(Identifier.of(id.getNamespace(), "block/" + id.getPath()))));
             tasks.add(asset(writer, "items", id, itemDefinition(blockModel(id))));
-            if (part == MaterialFamily.Part.NETHER_ORE) {
+            Identifier raw = itemId(family, MaterialFamily.Part.RAW);
+            Identifier rawNugget = itemId(family, MaterialFamily.Part.RAW_NUGGET);
+            if (part == MaterialFamily.Part.NETHER_ORE && rawNugget != null) {
                 // 下界矿：4~7 个粗矿粒（时运加成），精准采集掉方块
-                tasks.add(data(writer, "loot_table/blocks", id,
-                        oreLoot(id, itemId(family, MaterialFamily.Part.RAW_NUGGET), 4, 7)));
+                tasks.add(data(writer, "loot_table/blocks", id, oreLoot(id, rawNugget, NETHER_DROP_MIN, NETHER_DROP_MAX)));
+            } else if (part == MaterialFamily.Part.END_ORE) {
+                // 末地矿是"富矿"：2~3 个粗矿（时运加成），精准采集掉方块。
+                // 没有粗矿粒的族（例如钨）也走这条，不会凭空要求一个不存在的物品。
+                tasks.add(data(writer, "loot_table/blocks", id, oreLoot(id, raw, END_DROP_MIN, END_DROP_MAX)));
             } else {
                 // 主世界矿：1 个粗矿（时运 ore_drops），精准采集掉方块
-                tasks.add(data(writer, "loot_table/blocks", id,
-                        oreLoot(id, itemId(family, MaterialFamily.Part.RAW), -1, -1)));
+                tasks.add(data(writer, "loot_table/blocks", id, oreLoot(id, raw, -1, -1)));
             }
             return;
         }

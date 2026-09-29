@@ -62,6 +62,19 @@ public class ModItems {
     public static final Item SILICON_DIOXIDE_DUST = register("silicon_dioxide_dust",Item::new,new Item.Settings());
     public static final Item STONE_DUST = register("stone_dust",Item::new,new Item.Settings());
 
+    /*
+     * 下面这些粉是补的（原本没有物品，物品栏里是缺材质的空位）：
+     * 贴图来自 {@code resource/texture/item/add_dust/}，模型由 datagen 生成
+     * （见 datagen/SmallDustAssetsProvider —— 这些粉没有手写模型文件）。
+     * 目前它们和别的粉一样只有物品、没有获取途径，等以后的加工链决定来源。
+     */
+    public static final Item SULFUR_DUST = register("sulfur_dust",Item::new,new Item.Settings());
+    public static final Item BERYLLIUM_DUST = register("beryllium_dust",Item::new,new Item.Settings());
+    public static final Item IRIDIUM_DUST = register("iridium_dust",Item::new,new Item.Settings());
+    public static final Item FLINT_DUST = register("flint_dust",Item::new,new Item.Settings());
+    /** 能量水晶粉：材料本体（能量水晶）以后再加。 */
+    public static final Item ENERGIUM_DUST = register("energium_dust",Item::new,new Item.Settings());
+
     // 线缆按电压等级排列：锡 32V / 铜·钢 128V / 金 512V / 铁 2048V / 玻璃纤维 8192V
     // 电缆是可放置的方块，物品就是对应方块的 BlockItem（注册名不变）。
     public static final Item TIN_CABLE = ModBlocks.TIN_CABLE.asItem();

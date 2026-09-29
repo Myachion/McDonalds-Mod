@@ -305,6 +305,12 @@ public class MyMachineBlockEntity extends AbstractMachineBlockEntity {
 1. **方块 / 方块实体操作必须在服务端线程**：客户端线程里直接操作经常不通，命令会报"该位置尚未被加载"。
    正确写法：`client.getServer().execute(() -> { ... })`。
 2. **物品模型**：1.21.4+ 每个方块物品都要有 `assets/<ns>/items/<id>.json`，否则物品是紫黑块。
+   普通物品则**两样都写才保险**：`items/<id>.json`（物品定义）+ `models/item/<id>.json`（模型兜底）。
+   排查紫黑块的顺序：① `build/resources/main` 里这两个文件在不在（**客户端加载的是 build 里那份**，
+   不是 `src/`）② 模型里的 `layer0`/`all` 引用的贴图文件在不在 ③ 贴图路径要写
+   `<ns>:item/<id>`（命名空间根下的相对路径），写错会去 `textures/<id>.png` 找而找不到。
+   > 另外注意：**物品模型是资源包，改完必须重启客户端**（或 F3+T 重载资源）才生效；
+   > 只重跑 `build` 不重启的话，客户端仍在用旧资源包，会看到"改了但还是紫黑块"的假象。
 3. **配方查询**：`world.getRecipeManager().getFirstMatch(RecipeType.SMELTING, new SingleStackRecipeInput(stack), world)`；
    配方结果只能通过 `recipe.craft(input, world.getRegistryManager())` 拿（没有 `getResult()`）。
 4. **界面类型**：继承原版 `ScreenHandler` 时它会把类型写死成原版类型，

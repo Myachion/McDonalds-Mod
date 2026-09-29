@@ -274,6 +274,17 @@ public class ModBlocks {
     }
 
     /**
+     * 末地矿石：嵌在末地石里。
+     * 末地石没有专属音效组，硬度/抗爆按它替换掉的方块（原版末地石 3.0 / 9.0）走，音效用石头。
+     */
+    public static AbstractBlock.Settings endOreSettings() {
+        return AbstractBlock.Settings.create()
+                .requiresTool()
+                .strength(3.0F, 9.0F)
+                .sounds(BlockSoundGroup.STONE);
+    }
+
+    /**
      * 电缆方块属性：不遮光、一挖就掉，被活塞推动时直接破坏而不是推走。
       * 碰撞箱不在这里设置——{@link CableBlock#getCollisionShape} 会跟着连接状态返回
       * 与外形完全一致的形状（中心块 + 已连接的臂）。

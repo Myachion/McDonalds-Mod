@@ -77,10 +77,12 @@ public final class MaterialFamily {
         /** 深板岩矿石：{@code deepslate_<材料>_ore}。 */
         DEEPSLATE_ORE,
         /** 下界矿石：{@code nether_<材料>_ore}。 */
-        NETHER_ORE;
+        NETHER_ORE,
+        /** 末地矿石：{@code end_<材料>_ore}（长在末地石里）。 */
+        END_ORE;
 
         public boolean isOre() {
-            return this == ORE || this == DEEPSLATE_ORE || this == NETHER_ORE;
+            return this == ORE || this == DEEPSLATE_ORE || this == NETHER_ORE || this == END_ORE;
         }
 
         public boolean isBlock() {
@@ -157,6 +159,12 @@ public final class MaterialFamily {
                     case DEEPSLATE_ORE -> ModBlocks.register(path,
                             settings -> new ExperienceDroppingBlock(UniformIntProvider.create(xp[0], xp[1]), settings),
                             ModBlocks.deepslateOreSettings());
+                    case NETHER_ORE -> ModBlocks.register(path,
+                            settings -> new ExperienceDroppingBlock(UniformIntProvider.create(xp[0], xp[1]), settings),
+                            ModBlocks.netherOreSettings());
+                    case END_ORE -> ModBlocks.register(path,
+                            settings -> new ExperienceDroppingBlock(UniformIntProvider.create(xp[0], xp[1]), settings),
+                            ModBlocks.endOreSettings());
                     default -> ModBlocks.register(path,
                             settings -> new ExperienceDroppingBlock(UniformIntProvider.create(xp[0], xp[1]), settings),
                             ModBlocks.netherOreSettings());
@@ -198,6 +206,7 @@ public final class MaterialFamily {
             case ORE -> this.id + "_ore";
             case DEEPSLATE_ORE -> "deepslate_" + this.id + "_ore";
             case NETHER_ORE -> "nether_" + this.id + "_ore";
+            case END_ORE -> "end_" + this.id + "_ore";
             case BLOCK -> this.id + "_block";
             case INGOT -> this.id + "_ingot";
             case NUGGET -> this.id + "_nugget";
@@ -304,6 +313,10 @@ public final class MaterialFamily {
         return block(Part.NETHER_ORE);
     }
 
+    public @Nullable Block endOre() {
+        return block(Part.END_ORE);
+    }
+
     /** 这个族登记过的所有部件（按枚举顺序）。 */
     public List<Part> parts() {
         List<Part> list = new ArrayList<>();
@@ -352,6 +365,7 @@ public final class MaterialFamily {
             case ORE -> "Ore";
             case DEEPSLATE_ORE -> "Deepslate Ore";
             case NETHER_ORE -> "Nether Ore";
+            case END_ORE -> "End Ore";
         };
     }
 
@@ -367,6 +381,7 @@ public final class MaterialFamily {
             case ORE -> "矿石";
             case DEEPSLATE_ORE -> "深层矿石";
             case NETHER_ORE -> "下界矿石";
+            case END_ORE -> "末地矿石";
         };
     }
 
@@ -487,6 +502,18 @@ public final class MaterialFamily {
         public Builder netherOre(int experienceMin, int experienceMax) {
             this.parts.add(Part.NETHER_ORE);
             this.oreExperience.put(Part.NETHER_ORE, new int[]{experienceMin, experienceMax});
+            return this;
+        }
+
+        /**
+         * 末地矿石（长在末地石里）。
+         *
+         * <p>数值和主世界矿石一样只是"挖掉给多少经验"；<b>生成密度/高度不在这里</b>，
+         * 仍然写在 {@code worldgen/} 下的 placed_feature 里。
+         */
+        public Builder endOre(int experienceMin, int experienceMax) {
+            this.parts.add(Part.END_ORE);
+            this.oreExperience.put(Part.END_ORE, new int[]{experienceMin, experienceMax});
             return this;
         }
 

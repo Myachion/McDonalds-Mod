@@ -18,6 +18,8 @@
     "mcdonalds-mod:nether_silver_ore",
     "mcdonalds-mod:uranium_ore",
     "mcdonalds-mod:deepslate_uranium_ore",
+    "mcdonalds-mod:tungsten_ore",
+    "mcdonalds-mod:end_tungsten_ore",
     "mcdonalds-mod:aluminum_block",
     "mcdonalds-mod:bronze_block",
     "mcdonalds-mod:charcoal_block",
@@ -25,6 +27,9 @@
     "mcdonalds-mod:silver_block",
     "mcdonalds-mod:steel_block",
     "mcdonalds-mod:tin_block",
-    "mcdonalds-mod:uranium_block"
+    "mcdonalds-mod:uranium_block",
+    "mcdonalds-mod:graphene_block",
+    "mcdonalds-mod:tungsten_block",
+    "mcdonalds-mod:tungsten_steel_block"
   ]
 }

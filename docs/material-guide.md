@@ -62,8 +62,54 @@ $env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
 | 石头矿 | `.ore(xpMin, xpMax)` | `<材料>_ore` | 掉落表：精准采集掉方块，否则 1 粗矿 + 时运 |
 | 深层矿 | `.deepslateOre(...)` | `deepslate_<材料>_ore` | 同上 |
 | 下界矿 | `.netherOre(...)` | `nether_<材料>_ore` | 掉落表：精准采集掉方块，否则 4~7 粗矿粒 + 时运 |
+| 末地矿 | `.endOre(...)` | `end_<材料>_ore` | 掉落表：精准采集掉方块，否则 **2~3 粗矿** + 时运 |
 
 矿石方块是 `ExperienceDroppingBlock`，挖掉会掉经验，范围就是括号里那两个数。
+
+**末地矿（2026-09 加入，目前只有钨用）**：长在**末地石**里（`minecraft:end_stone`），
+比主世界矿富（2~3 个粗矿而不是 1 个）；没有粗矿粒的族也照常工作，不会要求一个不存在的物品。
+方块属性走 `ModBlocks.endOreSettings()`（硬 3.0 / 抗爆 9.0，和它替换掉的末地石一致）。
+**生成密度/高度仍然手写在 `worldgen/`**，材料族不管这一层。
+
+### 1.5 小撮粉（tiny pile）
+
+每种粉都配一个 1/9 的小份，**9 小撮粉 ↔ 1 粉**双向（共 29 种）。
+命名：中文"小撮 x 粉"、英文"Tiny Pile of x Dust"。
+
+| | 位置 |
+|---|---|
+| 清单/注册 | `item/ModSmallDusts.java` —— 注册名默认 `small_<粉的注册名>` |
+| 资源生成 | `datagen/SmallDustAssetsProvider.java` —— 物品定义 + 模型 + 两条配方 |
+| 贴图 | `textures/item/<小撮粉注册名>.png`，**素材由用户提供**在 `resource/texture/item/small_dust/` |
+
+- 材料族里的粉（`.dust()`）**自动收集**：给某个族加上 `.dust()` 就会自动多出一个对应小撮粉；
+- 非材料族的粉在 `ModSmallDusts.initialize()` 里逐条 `add(...)`；
+- **盐和糖没有自己的粉物品**，用 `add(物品, "注册名")` 显式指定（默认规则会拼成
+  `small_salt` / `small_sugar`，和要的名字不一致）：
+  - `mcdonalds-mod:salt`（食盐）→ `small_salt_dust`
+  - `minecraft:sugar`（原版糖）→ `small_sugar_dust`
+  - 注册名一律以 `ModSmallDusts.pathOf(...)` 为准，**datagen 不许自己按粉名拼**；
+- 素材命名有两处历史拼写，映射表在安装脚本里：
+  `small_alumuinium → small_aluminum_dust`、`small_endstone → small_end_stone_dust`、
+  `small_tungstensteel → small_tungsten_steel_dust`；
+- 模型里 `layer0` 必须写 **`mcdonalds-mod:item/<id>`**（带 `item/` 前缀），
+  写成 `mcdonalds-mod:<id>` 会去 `textures/<id>.png` 找，结果是紫黑块。
+
+**贴图尺寸**：mod 的物品贴图一律 **16×16**。素材区里小撮粉有不少是 128×128 的
+（原包把 16×16 放大 8 倍存的），装之前要按现有流程 **NEAREST 缩到 16×16**
+（`detect_downscale.py` 用 9 组成对样本验证过，一致率 100%）。
+
+### 1.6 补出来的几种粉（没有手写模型的那批）
+
+`beryllium_dust` / `iridium_dust` / `sulfur_dust` / `flint_dust` / `energium_dust`（能量水晶粉）
+是后来补的，贴图来自 `resource/texture/item/add_dust/`，**没有手写模型文件**，
+所以物品定义与模型都交给 `SmallDustAssetsProvider` 生成（不生成的话物品栏里就是紫黑块）。
+
+- 早先那批粉（铜/铁/金/煤/…）的模型在 `src/main/resources/models/item/` 里，是手写的，不归 provider 管；
+- 1.21.4+ 里 `items/<id>.json`（物品定义）**不是必需的** —— 没有它时游戏会回退到
+  `models/item/<id>.json`，早先那批手写粉就是这么工作的（所以它们能正常显示）；
+- **改物品贴图/模型后必须重启客户端**（或 F3+T 重载资源），只跑 `gradlew build` 不重启的话，
+  客户端仍在用旧资源包，会出现"改了但还是紫黑块"的假象。
 
 ---
 
@@ -133,7 +179,7 @@ $env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
 | 锡 `tin` | ✅ 材料族 | ✅ datagen 生成（模型/掉落/配方） |
 | 钢 `steel` | ✅ 材料族 | ✅ datagen 生成 |
 | 石墨烯 `graphene` | ✅ 材料族 | ✅ datagen 生成 |
-| 钨 `tungsten` | ✅ 材料族 | ✅ datagen 生成 |
+| 钨 `tungsten` | ✅ 材料族 | ✅ datagen 生成（**另有粗钨 + 主世界矿 + 末地矿**） |
 | 钨钢 `tungsten_steel` | ✅ 材料族 | ✅ datagen 生成 |
 | 铅 `lead` | ✅ 材料族 | ⏳ 手写（`noGeneratedAssets()`） |
 | 铝 `aluminum` | ✅ 材料族 | ⏳ 手写 |
@@ -149,6 +195,11 @@ $env:JAVA_HOME = "C:\Program Files\Java\jdk-21"
 > 钢块原来是手写资源（`noGeneratedAssets()` + `blockRecipe(false)`），
 > 这次已经按第 3 节流程迁移：删掉 4 个手写文件、去掉开关、跑 `runDatagen`，
 > 生成结果与手写版语义一致。
+>
+> **钨（2026-09 追加）**：加了 `.raw().ore(0,3).endOre(0,3)`，
+> 所以它比另外三族多出粗钨物品、矿石掉落表与两种矿石方块；
+> 但用户明确要求**暂时不做**粗钨熔炼和板/粉配方，所以定义里是
+> `.plateRecipe(false).dustRecipe(false).rawSmelting(false)`。
 
 还没进材料族的（属于"和材料族形状不同"的那批，需要时再抽象）：
 精炼铁（带锤子/剪子工具）、原版锭派生的铜/金/铁板与粉、

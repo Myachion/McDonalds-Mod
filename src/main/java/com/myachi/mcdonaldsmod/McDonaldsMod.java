@@ -3,6 +3,7 @@ package com.myachi.mcdonaldsmod;
 import com.myachi.mcdonaldsmod.beacon.ModBeaconFeatures;
 import com.myachi.mcdonaldsmod.energy.EnergyNetworks;
 import com.myachi.mcdonaldsmod.energy.EnergyConfig;
+import com.myachi.mcdonaldsmod.item.ModSmallDusts;
 import com.myachi.mcdonaldsmod.material.ModMaterials;
 import com.myachi.mcdonaldsmod.worldgen.ModOreGeneration;
 import net.fabricmc.api.ModInitializer;
@@ -27,6 +28,8 @@ public class McDonaldsMod implements ModInitializer {
         // 材料族要在其它注册之前跑：ModItemGroups 会遍历 ModMaterials
         ModMaterials.initialize();
         ModItems.initializeMod();
+        // 小撮粉跟着粉走，必须在 ModItems 之后（要用到粉的物品实例）
+        ModSmallDusts.initialize();
         ModItemGroups.initializeModItemGroups();
         ModBlocks.initializeModBlocks();
         ModBlockEntities.initializeModBlockEntities();

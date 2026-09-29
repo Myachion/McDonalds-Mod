@@ -21,8 +21,10 @@ import java.util.List;
  *     <li>铀没有板 → 不写 {@code .plate()}；</li>
  *     <li>青铜没有粗矿/矿石 → 不写 {@code .raw()} / {@code .ore(...)}；</li>
  *     <li>银、铝的粒挂在粗矿上 → {@code .rawNugget()} 而不是 {@code .nugget()}；</li>
- *     <li>石墨烯 / 钨 / 钨钢有板和粉、但暂时没有配方 → {@code .plateRecipe(false)} + {@code .dustRecipe(false)}；</li>
- *     <li>石墨烯/钢/钨/钨钢四种新材料的资源全部走 datagen，没有 {@code noGeneratedAssets()}。</li>
+ *     <li>石墨烯 / 钨钢有板和粉、但暂时没有配方 → {@code .plateRecipe(false)} + {@code .dustRecipe(false)}；</li>
+ *     <li>石墨烯/钢/钨/钨钢四种新材料的资源全部走 datagen，没有 {@code noGeneratedAssets()}；</li>
+ *     <li>末地矿 → {@code .endOre(经验下限, 上限)}，命名 {@code end_<材料>_ore}，
+ *         长在末地石里、掉落 2~3 个粗矿（比主世界矿富）。</li>
  * </ul>
  */
 public final class ModMaterials {
@@ -97,13 +99,26 @@ public final class ModMaterials {
             .dustRecipe(false)
             .build();
 
-    /** 钨：四种形态都有，但只有块 ↔ 锭互转；板和粉暂时没有获取途径。 */
+    /**
+     * 钨：锭/板/粉/块 + 粗钨 + 主世界矿 + 末地矿。
+     *
+     * <p>矿石分两处产：主世界<b>极稀有</b>、末地<b>比较丰富</b>（密度与高度是用户拍板的数值，
+     * 写在 {@code worldgen/placed_feature/tungsten_ore.json} 与 {@code end_tungsten_ore.json}）。
+     * 掉落：主世界矿 1 个粗钨、末地矿 2~3 个粗钨（都吃时运，精准采集掉方块）。
+     *
+     * <p><b>暂时不做</b>（用户 2026-09 明确要求）：粗钨熔炼成锭、钨锭打板 / 磨粉。
+     * 所以这里只有 {@code .raw()}（粗钨物品 + 矿石掉落），板和粉仍然沿用"有物品无配方"
+     * 的老状态（{@code plateRecipe(false)} / {@code dustRecipe(false)}），
+     * 粗钨目前的用途就是打粉的材料储备。
+     */
     public static final MaterialFamily TUNGSTEN = MaterialFamily.builder("tungsten")
             .mapColor(MapColor.DEEPSLATE_GRAY)
             .name("钨", "Tungsten")
             .ingot().plate().dust().block()
+            .raw().ore(0, 3).endOre(0, 3)
             .plateRecipe(false)
             .dustRecipe(false)
+            .rawSmelting(false)
             .build();
 
     /** 钨钢：四种形态都有，但只有块 ↔ 锭互转；板和粉暂时没有获取途径。 */

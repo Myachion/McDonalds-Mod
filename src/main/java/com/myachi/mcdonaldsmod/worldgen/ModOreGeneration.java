@@ -50,6 +50,16 @@ public final class ModOreGeneration {
     public static final RegistryKey<PlacedFeature> NETHER_ALUMINUM_ORE = placedFeature("nether_aluminum_ore");
     /** 下界银：size 6 / count 4 / 高度 10~(顶-10)。 */
     public static final RegistryKey<PlacedFeature> NETHER_SILVER_ORE = placedFeature("nether_silver_ore");
+    /**
+     * 钨（主世界）：全 mod 最稀有的主世界矿 —— size 4 / count 1 / 高度 -64~24 三角分布。
+     * 不生成深层变种（Y&lt;0 直接把石头版换上去），实测约 1~2 块 / 区块。
+     */
+    public static final RegistryKey<PlacedFeature> TUNGSTEN_ORE = placedFeature("tungsten_ore");
+    /**
+     * 钨（末地）：富矿 —— size 9 / count 6 / 高度 0~120 均匀分布，
+     * 约 40 块 / 区块（主世界的 20~30 倍），是钨的主要来源。
+     */
+    public static final RegistryKey<PlacedFeature> END_TUNGSTEN_ORE = placedFeature("end_tungsten_ore");
 
     public static final TagKey<Biome> DENSE_BIOMES = biomeTag("salt_ore_dense");
     public static final TagKey<Biome> NORMAL_BIOMES = biomeTag("salt_ore_normal");
@@ -69,6 +79,9 @@ public final class ModOreGeneration {
         addOverworldFeature(ALUMINUM_ORE);
         addOverworldFeature(SILVER_ORE);
         addOverworldFeature(URANIUM_ORE);
+        // 钨：主世界极稀有 + 末地富矿（两处用不同的 placed_feature）
+        addOverworldFeature(TUNGSTEN_ORE);
+        addEndFeature(END_TUNGSTEN_ORE);
 
         // 下界矿石：全下界生物群系
         addNetherFeature(NETHER_ALUMINUM_ORE);
@@ -88,6 +101,15 @@ public final class ModOreGeneration {
     private static void addNetherFeature(RegistryKey<PlacedFeature> placedFeature) {
         BiomeModifications.addFeature(
                 BiomeSelectors.foundInTheNether(),
+                GenerationStep.Feature.UNDERGROUND_ORES,
+                placedFeature
+        );
+    }
+
+    /** 末地矿石：全末地生物群系（末地只有末地石，替换目标写在 configured_feature 里）。 */
+    private static void addEndFeature(RegistryKey<PlacedFeature> placedFeature) {
+        BiomeModifications.addFeature(
+                BiomeSelectors.foundInTheEnd(),
                 GenerationStep.Feature.UNDERGROUND_ORES,
                 placedFeature
         );
