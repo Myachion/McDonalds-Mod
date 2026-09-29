@@ -1,5 +1,6 @@
 package com.myachi.mcdonaldsmod;
 
+import com.myachi.mcdonaldsmod.item.CrushedOres;
 import com.myachi.mcdonaldsmod.item.ModSmallDusts;
 import com.myachi.mcdonaldsmod.material.MaterialFamily;
 import com.myachi.mcdonaldsmod.material.ModMaterials;
@@ -55,6 +56,14 @@ public final class ModItemGroups {
                             entries.add(item);
                         }
                     }
+                }
+
+                // ---- 粉碎矿 / 纯净粉碎矿 ----
+                for (CrushedOres.Entry crushed : CrushedOres.all()) {
+                    entries.add(CrushedOres.crushed(crushed.material()));
+                }
+                for (CrushedOres.Entry crushed : CrushedOres.all()) {
+                    entries.add(CrushedOres.pure(crushed.material()));
                 }
 
                 // ---- 材料块 ----

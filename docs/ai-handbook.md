@@ -80,10 +80,20 @@
 - 粉：34 种（铝、灰烬、铍、青铜、碳、粘土、湿润碳、煤、铜、钻石、绿宝石、末地石、燧石、石墨烯、金、铁、
   青金石、铅、锂、地狱岩、黑曜石、磷、下界石英、红色合金、二氧化硅、银、钢、石、硫、锡、钨、钨钢、铱、**能量水晶**）
   （石墨烯粉 / 钨粉 / 钨钢粉也有物品，但没有配方）。
-- **小撮粉**：29 种，**9 小撮粉 ↔ 1 粉**双向配方，中文名"小撮 x 粉"、英文名"Tiny Pile of x Dust"。
+- **小撮粉**：28 种，**9 小撮粉 ↔ 1 粉**双向配方，中文名"小撮 x 粉"、英文名"Tiny Pile of x Dust"。
   清单与注册在 `item/ModSmallDusts.java`，资源由 `datagen/SmallDustAssetsProvider` 生成，
   贴图**由用户提供**在 `resource/texture/item/small_dust/`（128×128 的要 NEAREST 缩到 16×16）。
   **盐和糖没有自己的粉物品**：小盐粉对应 `mcdonalds-mod:salt`、小糖粉对应原版 `minecraft:sugar`。
+- **粉碎矿 / 纯净粉碎矿**：9 种材料 × 2 = 18 个物品
+  （锡、铅、铝、银、铀、钨、铜、铁、金）。
+  - 注册名 `crushed_<材料>` / `pure_crushed_<材料>`，中文名"粉碎 x 矿石"/"纯净的粉碎 x 矿石"，
+    英文名 "Crushed x Ore" / "Purified Crushed x Ore"；
+  - 铜/铁/金用的是**原版矿石与粗矿**（`minecraft:raw_copper` 等），中文名沿用原版；
+  - 注册在 `item/CrushedOres.java`，资源与配方由 `datagen/CrushedOreAssetsProvider` 生成；
+  - 目前只有一条配方：**粗矿 + 研钵（`#mcdonalds-mod:mortar`）→ 粉碎矿**，无序合成。
+    纯净粉碎矿**暂时没有配方**（等下一步的加工链）。
+  - 贴图在 `resource/texture/item/crushed_ore/` 与 `pure_crushed_ore/`
+    （铝、钨那两张是照现有 7 张的模板画的：石基用原版石头四档灰，矿物色取自对应矿石方块）。
 - 材料块：铝 / 青铜 / 石墨烯 / 木炭 / 铅 / 银 / 钢 / 锡 / 钨 / 钨钢 / 铀
   （9 锭 ↔ 1 块；木炭块可当燃料）。
 
